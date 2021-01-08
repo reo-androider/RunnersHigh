@@ -8,11 +8,8 @@ import androidx.fragment.app.Fragment
 import com.reo.running.runnershigh.R
 
 class Fragment1 : Fragment() {
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        super.onCreateView(inflater, container, savedInstanceState)
         return inflater.inflate(R.layout.fragment_1, container, false)
     }
 }
