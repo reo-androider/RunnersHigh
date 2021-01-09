@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navGraph
+<navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_graph"
@@ -15,9 +15,9 @@
 
     <fragment android:id="@+id/navi_flight"
         android:name="com.reo.running.runnershigh.fragments.Fragment4"
-        android:label="Fragment4"/>
+        android:label="Fragment3"/>
 
     <fragment android:id="@+id/navi_sun"
         android:name="com.reo.running.runnershigh.fragments.Fragment3"
-        android:label="Fragment3"/>
-</navGraph>
+        android:label="Fragment4"/>
+</navigation>
