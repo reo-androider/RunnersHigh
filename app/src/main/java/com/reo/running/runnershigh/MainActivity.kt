@@ -5,9 +5,10 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import androidx.navigation.fragment.NavHostFragment
+import com.google.android.gms.maps.GoogleMap;
 
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
