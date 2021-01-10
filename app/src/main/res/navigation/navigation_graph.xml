@@ -6,8 +6,12 @@
     app:startDestination="@id/navi_smile">
 
     <fragment android:id="@+id/navi_smile"
-        android:name="com.reo.running.runnershigh.fragments.Fragment1"
-        android:label="Fragment1"/>
+        android:name="com.reo.running.runnershigh.fragments.FragmentGO"
+        android:label="Fragment1">
+        <action
+            android:id="@+id/action_navi_smile_to_fragment12"
+            app:destination="@id/fragment12" />
+    </fragment>
 
     <fragment android:id="@+id/navi_pets"
         android:name="com.reo.running.runnershigh.fragments.Fragment2"
@@ -20,4 +24,8 @@
     <fragment android:id="@+id/navi_sun"
         android:name="com.reo.running.runnershigh.fragments.Fragment3"
         android:label="Fragment4"/>
+    <fragment
+        android:id="@+id/fragment12"
+        android:name="com.reo.running.runnershigh.fragments.Fragment1"
+        android:label="Fragment1" />
 </navigation>
