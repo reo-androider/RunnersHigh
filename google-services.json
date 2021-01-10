@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "138950510960",
+    "firebase_url": "https://reo-project-b123a.firebaseio.com",
+    "project_id": "reo-project-b123a",
+    "storage_bucket": "reo-project-b123a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138950510960:android:009d0b6f97eaad9d21e7b5",
+        "android_client_info": {
+          "package_name": "com.reo.running.runnershigh"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138950510960-kfcsg8p3e7ch94rqe01ikcumf2cfbttc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlNzjr6VPi7LICqUkKhhCx088yTNsAmmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138950510960-kfcsg8p3e7ch94rqe01ikcumf2cfbttc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138950510960:android:038ecd9ed520991a21e7b5",
+        "android_client_info": {
+          "package_name": "com.reo.running.runningactivity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138950510960-kfcsg8p3e7ch94rqe01ikcumf2cfbttc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDlNzjr6VPi7LICqUkKhhCx088yTNsAmmA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138950510960-kfcsg8p3e7ch94rqe01ikcumf2cfbttc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
