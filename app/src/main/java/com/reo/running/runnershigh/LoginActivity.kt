@@ -6,10 +6,16 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.gms.auth.api.Auth
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
+
+    companion object {
+
+        private const val RC_SIGN_IN = 123
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -38,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == RC_SIGH_IN) {
+        if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
 
             if (requestCode == Activity.RESULT_OK) {
@@ -97,15 +103,10 @@ class LoginActivity : AppCompatActivity() {
                         .createSignInIntentBuilder()
                         .setAvailableProviders(providers)
                         .setTosAndPrivacyPolicyUrls(
-                                "https://news.google.com/topstories?hl=ja&gl=JP&ceid=JP:ja"
+                                "https://news.google.com/topstories?hl=ja&gl=JP&ceid=JP:ja",
                                 "https://www.youtube.com/")
                         .build(),
                 RC_SIGN_IN)
         // [END auth_fui_pp_tos]
-    }
-
-    companion object {
-
-        private const val RC_SIGH_IN = 123
     }
 }
