@@ -4,6 +4,9 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
     dependencies {
         classpath "com.android.tools.build:gradle:4.1.1"
@@ -21,7 +24,12 @@ allprojects {
         google()
         jcenter()
         mavenCentral()
+        // Required for 'com.firebaseui:firebase-ui:1.1.1'
+        maven {
+            url 'https://maven.fabric.io/public'
+        }
     }
+
 }
 
 task clean(type: Delete) {
