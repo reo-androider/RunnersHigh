@@ -5,6 +5,13 @@ plugins {
     id 'com.google.gms.google-services'
 }
 
+
+ext {
+    lifecycle_version = "2.2.0"
+    nav_version = "2.3.1"
+}
+
+
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
@@ -40,53 +47,41 @@ android {
 }
 
 dependencies {
-    implementation 'com.google.android.gms:play-services-maps:11.0.2' // GoogleMapを使うために追加する
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation 'com.google.android.gms:play-services-maps:17.0.0' // GoogleMapを使うために追加する
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.4.21"
     implementation 'androidx.core:core-ktx:1.3.2'
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'com.google.android.material:material:1.2.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
-    implementation 'com.google.firebase:firebase-auth:20.0.1'
-    testImplementation 'junit:junit:4.+'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     def nav_version = '2.3.2'
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-    implementation 'com.google.android.material:material:1.1.0-alpha06'
+    implementation 'com.google.android.material:material:1.3.0-beta01'
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.1.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0'
+    testImplementation 'junit:junit:4.13.1'
+    androidTestImplementation 'androidx.test:runner:1.3.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
     implementation 'com.mapbox.mapboxsdk:mapbox-android-plugin-markerview-v9:0.4.0'
 
-    // ここがJetPackのプラグインなり
+    // jetpack
     def lifecycle_version = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
 
-    // Import the Firebase BoM
-    implementation platform('com.google.firebase:firebase-bom:26.1.1')
-    // Required only if Facebook login support is required
-    // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
-    implementation 'com.facebook.android:facebook-android-sdk:4.x'
-    // Required only if Twitter login support is required
-    // Find the latest Twitter SDK releases here: https://goo.gl/E5wZvQ
-    implementation 'com.twitter.sdk.android:twitter-core:3.x'
+    implementation platform('com.google.firebase:firebase-bom:26.2.0')
+    implementation 'com.facebook.android:facebook-android-sdk:4.42.0'
+    implementation 'com.twitter.sdk.android:twitter-core:3.2.0'
     implementation 'org.twitter4j:twitter4j-core:4.0.7'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5'
-    // [START gradle_firebase_ui_auth]
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
     implementation 'com.firebaseui:firebase-ui-auth:7.1.0'
-    implementation 'com.facebook.android:facebook-login:4.30.0'
-    compile 'com.facebook.android:facebook-android-sdk:4.26.0'
+    implementation 'com.google.firebase:firebase-auth:20.0.1'
+    implementation 'com.facebook.android:facebook-login:4.42.0'
     implementation 'com.google.firebase:firebase-auth-ktx:20.0.1'
-    //Required only if Facebook login support is required
-    // Find the latest Facebook SDK releases here: https://goo.gl/Ce5L94
-    implementation "com.facebook.android:facebook-android-sdk:4.42.0"
-    //implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
 }
 
