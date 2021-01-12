@@ -18,7 +18,7 @@
         android:theme="@style/Theme.RunnersHigh"
         tools:node="replace"
         tools:replace="android:supportsRtl">
-        <activity android:name=".LoginActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
 
         <uses-library
             android:name="com.google.android.gms.maps"
@@ -31,7 +31,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDsSoDaztJc63_pd77AlHC6poIZxXHHBMY" />
 
-        <activity android:name=".MainActivity">
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
