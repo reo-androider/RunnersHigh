@@ -10,6 +10,13 @@ import com.google.android.gms.auth.api.Auth
 import com.google.firebase.auth.FirebaseAuth
 
 class LoginActivity : AppCompatActivity() {
+
+    companion object {
+
+        private const val RC_SIGN_IN = 123
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -102,10 +109,5 @@ class LoginActivity : AppCompatActivity() {
                         .build(),
                 RC_SIGN_IN)
         // [END auth_fui_pp_tos]
-    }
-
-    companion object {
-
-        private const val RC_SIGH_IN = 123
     }
 }
