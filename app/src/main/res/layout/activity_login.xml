@@ -4,15 +4,21 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facLog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Login Auth"
-        android:textSize="50sp"
-        android:textStyle="bold"
-        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="60dp"
+        app:layout_constraintBottom_toTopOf="@id/twiLog"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        android:id="@+id/twiLog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
