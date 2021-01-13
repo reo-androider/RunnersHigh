@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import kotlinx.android.synthetic.main.activity_main.*
 import androidx.navigation.ui.NavigationUI.setupWithNavController
-import com.google.android.gms.maps.GoogleMap;
+
 
 class MainActivity : AppCompatActivity() {
 
