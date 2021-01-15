@@ -2,6 +2,8 @@ package com.reo.running.runnershigh.fragments
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.drawable.Icon
+import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.view.LayoutInflater
@@ -13,12 +15,15 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptor
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 
-class Fragment1 : Fragment(),OnMapReadyCallback {
+class Fragment1 : Fragment() {
+    
     var map:GoogleMap? = null
+    val bitmapDescriptor:BitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.in_trace)
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -47,6 +52,10 @@ class Fragment1 : Fragment(),OnMapReadyCallback {
             interval = 1                                   //最遅の更新間隔（ただし正確ではない）
             fastestInterval = 1                              //最短の更新間隔
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY   //精度重視
+            //切り替え実装
+            //ピンの間隔で距離計計測
+            //marker 緯度経度から距離を計算する
+            //足跡付ける
         }
 
         //コールバック
@@ -54,14 +63,17 @@ class Fragment1 : Fragment(),OnMapReadyCallback {
             override fun onLocationResult(locationResult: LocationResult?) {
                 //更新直後の位置が格納されているはず
                 val location = locationResult?.lastLocation ?: return
+                Location.distanceBetween()//lastlocation
 //                Toast.makeText(
 //                    context, "緯度:${location.latitude}" +
 //                            " 経度:${location.longitude}", Toast.LENGTH_LONG
 //                ).show()
                 //TODO currentLocationをonMapReadyに渡したい！
-                map?.addMarker(MarkerOptions()
-                        .position(LatLng(location.latitude,location.longitude))
-                        .visible(true))
+                binding.mapView.getMapAsync{
+                    it.addMarker(MarkerOptions()
+                            .position(LatLng(location.latitude,location.longitude))
+                            .icon(Icon))
+                }
             }
         }
 
@@ -84,16 +96,8 @@ class Fragment1 : Fragment(),OnMapReadyCallback {
                 // for ActivityCompat#requestPermissions for more details.
                 return
             }
-
-
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,Looper.myLooper())
         }
-    }
-
-    //Map上の現在地にマーカーを指す
-    override fun onMapReady(googleMap : GoogleMap) {
-        //map?.addMarker(MarkerOptions().position(location.latitude,location.))      //positionの引数に緯度と経度を渡したい！
-        map = googleMap
     }
 
 //    緯度と経度を渡す
