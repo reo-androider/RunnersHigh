@@ -14,11 +14,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="false"
-        android:theme="@style/Theme.RunnersHigh"
-        tools:node="replace"
-        tools:replace="android:supportsRtl">
-        <activity android:name=".MainActivity"></activity>
+        android:theme="@style/Theme.RunnersHigh">
+        <activity android:name=".LoginActivity"></activity>
 
         <uses-library
             android:name="com.google.android.gms.maps"
@@ -31,7 +28,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyDsSoDaztJc63_pd77AlHC6poIZxXHHBMY" />
 
-        <activity android:name=".LoginActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

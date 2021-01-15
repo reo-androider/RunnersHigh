@@ -4,7 +4,7 @@
 
     <string name="facebook_application_id" translatable="false">1532495356921211</string>
     <string name="facebook_login_protocol_scheme" translatable="false">1532495356921211</string>
-    <string name="twitter_consumer_key">xZIjBdSGoYDXveTBkuEGtHSPt</string>
-    <string name="twitter_consumer_secret">19gmqmhu5Y4itMIku4Gg4zxJNzqtB7WmrPQlM3LwBar0eFjQZN</string>
+    <string name="twitter_consumer_key" translatable="false">xZIjBdSGoYDXveTBkuEGtHSPt</string>
+    <string name="twitter_consumer_secret" translatable="false">19gmqmhu5Y4itMIku4Gg4zxJNzqtB7WmrPQlM3LwBar0eFjQZN</string>
 
 </resources>

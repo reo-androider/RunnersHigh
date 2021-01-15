@@ -8,12 +8,27 @@ import com.google.firebase.auth.FirebaseAuth
 import com.firebase.ui.auth.IdpResponse
 import android.app.Activity
 import android.content.Intent
+import android.util.Log
+import com.reo.running.runnershigh.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
-        setContentView(R.layout.activity_login)
+    private lateinit var binding:ActivityLoginBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        Log.d("kotlin","kotlin")
+
+        binding.button.setOnClickListener {
+
+            signOut()
+            createSignInIntent()
+
+        }
+
     }
     private fun createSignInIntent() {
         // [START auth_fui_create_intent]
@@ -44,6 +59,9 @@ class LoginActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 // Successfully signed in
                 val user = FirebaseAuth.getInstance().currentUser
+                // intent-->main UI/UX
+                // オンボーディング 一部利用 選択肢減らす
+                // animation chatに難あり
                 // ...
             } else {
                 // Sign in failed. If response is null the user canceled the

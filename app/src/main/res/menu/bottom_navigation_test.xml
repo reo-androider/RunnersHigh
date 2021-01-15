@@ -8,11 +8,11 @@
     <item
         android:id="@+id/navi_pets"
         android:icon="@drawable/ic_train"
-        android:title="TRAIN"/>
+        android:title="Trip"/>
     <item
         android:id="@+id/navi_flight"
-        android:icon="@drawable/ic_height"
-        android:title="HEIGHT"/>
+        android:icon="@drawable/ic_calorie"
+        android:title="calorie"/>
 
     <item
         android:id="@+id/navi_sun"
