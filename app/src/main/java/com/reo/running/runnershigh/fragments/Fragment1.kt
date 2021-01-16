@@ -51,9 +51,9 @@ class Fragment1 : Fragment() {
 
             //精度重視と省電力重視を両立するため2種類の更新間隔を指定
             //今回は公式のサンプル通りにする
-            val interval = 3                                   //最遅の更新間隔（ただし正確ではない）
-            val fastestInterval = 3                             //最短の更新間隔
-            val priority = LocationRequest.PRIORITY_HIGH_ACCURACY   //精度重視
+             interval = 3                                   //最遅の更新間隔（ただし正確ではない）
+             fastestInterval = 3                             //最短の更新間隔
+             priority = LocationRequest.PRIORITY_HIGH_ACCURACY   //精度重視
             //切り替え実装
             //ピンの間隔で距離計計測
             //marker 緯度経度から距離を計算する
