@@ -10,20 +10,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdate
+//import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.BitmapDescriptor
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
+import com.mapbox.mapboxsdk.style.expressions.Expression.color
+import com.mapbox.mapboxsdk.style.expressions.Expression.id
+import com.reo.running.runnershigh.BitmapHelper
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 
 class Fragment1 : Fragment() {
-    
     var map:GoogleMap? = null
-    val bitmapDescriptor:BitmapDescriptor = BitmapDescriptorFactory.fromResource(R.drawable.in_trace)
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
@@ -49,9 +51,9 @@ class Fragment1 : Fragment() {
 
             //精度重視と省電力重視を両立するため2種類の更新間隔を指定
             //今回は公式のサンプル通りにする
-            interval = 1                                   //最遅の更新間隔（ただし正確ではない）
-            fastestInterval = 1                              //最短の更新間隔
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY   //精度重視
+            val interval = 3                                   //最遅の更新間隔（ただし正確ではない）
+            val fastestInterval = 3                             //最短の更新間隔
+            val priority = LocationRequest.PRIORITY_HIGH_ACCURACY   //精度重視
             //切り替え実装
             //ピンの間隔で距離計計測
             //marker 緯度経度から距離を計算する
@@ -61,18 +63,14 @@ class Fragment1 : Fragment() {
         //コールバック
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
+                super.onLocationResult(locationResult)
                 //更新直後の位置が格納されているはず
-                val location = locationResult?.lastLocation ?: return
-                Location.distanceBetween()//lastlocation
-//                Toast.makeText(
-//                    context, "緯度:${location.latitude}" +
-//                            " 経度:${location.longitude}", Toast.LENGTH_LONG
-//                ).show()
-                //TODO currentLocationをonMapReadyに渡したい！
+                 val location = locationResult?.lastLocation ?: return
+               // Location.distanceBetween()//lastlocation
                 binding.mapView.getMapAsync{
                     it.addMarker(MarkerOptions()
-                            .position(LatLng(location.latitude,location.longitude))
-                            .icon(Icon))
+                            .position(LatLng(location.latitude,location.longitude)))
+//                    it.moveCamera(CameraUpdateFactory())
                 }
             }
         }
@@ -87,23 +85,11 @@ class Fragment1 : Fragment() {
                     Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PackageManager.PERMISSION_GRANTED
             ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return
             }
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback,Looper.myLooper())
         }
     }
-
-//    緯度と経度を渡す
-//    private fun transfer(currentLocation:Array<Double>) {
-//
-//    }
 
     override fun onStart() {
         super.onStart()
