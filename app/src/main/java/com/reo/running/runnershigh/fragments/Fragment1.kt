@@ -3,31 +3,23 @@ package com.reo.running.runnershigh.fragments
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.drawable.Icon
-import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdate
-//import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.*
-import com.mapbox.mapboxsdk.style.expressions.Expression.color
-import com.mapbox.mapboxsdk.style.expressions.Expression.id
-import com.reo.running.runnershigh.BitmapHelper
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 
 class Fragment1 : Fragment() {
     var map:GoogleMap? = null
     private lateinit var binding: Fragment1Binding
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var fusedLocationClient:FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,7 +62,7 @@ class Fragment1 : Fragment() {
                 binding.mapView.getMapAsync{
                     it.addMarker(MarkerOptions()
                             .position(LatLng(location.latitude,location.longitude)))
-//                    it.moveCamera(CameraUpdateFactory())
+                    it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),15f))
                 }
             }
         }
