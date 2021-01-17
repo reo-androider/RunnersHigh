@@ -75,6 +75,7 @@ class Fragment1 : Fragment() {
                         it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
                         var now = pre
                         distance = SphericalUtil.computeDistanceBetween(pre, now)
+                        total += distance
                         binding.distance.setText("$total")
                 }
             }
