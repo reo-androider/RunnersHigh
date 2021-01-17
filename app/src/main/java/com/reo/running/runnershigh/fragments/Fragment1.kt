@@ -14,16 +14,18 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
+import com.google.maps.android.SphericalUtil
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import com.reo.running.runnershigh.Resource
 import java.util.*
 
 
 class Fragment1 : Fragment() {
-    val results = floatArrayOf(1f)
     var map:GoogleMap? = null
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient:FusedLocationProviderClient
+    var distance:Double? = null
+    var total:Double = 0.0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,8 +49,8 @@ class Fragment1 : Fragment() {
 
             //精度重視と省電力重視を両立するため2種類の更新間隔を指定
             //今回は公式のサンプル通りにする
-             interval = 3                                   //最遅の更新間隔（ただし正確ではない）
-             fastestInterval = 3                             //最短の更新間隔
+             interval = 500                                   //最遅の更新間隔（ただし正確ではない）
+             fastestInterval = 500                            //最短の更新間隔
              priority = LocationRequest.PRIORITY_HIGH_ACCURACY   //精度重視
             //切り替え実装
             //ピンの間隔で距離計計測
@@ -62,19 +64,18 @@ class Fragment1 : Fragment() {
                 super.onLocationResult(locationResult)
                 //更新直後の位置が格納されているはず
                  val location = locationResult?.lastLocation ?: return
-                while (true){
+                //マーカーを指した箇所の緯度経度を取って置く。
+                var pre = LatLng(location.latitude,location.longitude)
                     binding.mapView.getMapAsync{
                         it.addMarker(
                             MarkerOptions()
-                                .position(LatLng(location.latitude, location.longitude))
+                                .position(pre)
                         //        .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,)))
-
                         )
                         it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
-                    }
-                    var previousLatitude = location.latitude
-                    var previousLongitude = location.longitude
-                    var a = Location.distanceBetween(previousLatitude,previousLongitude,location.latitude,location.longitude,results)
+                        var now = pre
+                        distance = SphericalUtil.computeDistanceBetween(pre, now)
+                        binding.distance.setText("$total")
                 }
             }
         }
