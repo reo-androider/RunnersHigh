@@ -20,8 +20,9 @@ import java.util.*
 
 
 class Fragment1 : Fragment() {
+    val results = floatArrayOf(1f)
     var map:GoogleMap? = null
-    private lateinit var binding: Fragment1Binding
+    private final lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient:FusedLocationProviderClient
 
     override fun onCreateView(
@@ -66,14 +67,18 @@ class Fragment1 : Fragment() {
                         it.addMarker(
                             MarkerOptions()
                                 .position(LatLng(location.latitude, location.longitude))
-                                .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,)))
+                        //        .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,)))
+
                         )
                         it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
                     }
-                    val results = floatArrayOf(1f)
                     var previousLatitude = location.latitude
                     var previousLongitude = location.longitude
-                    Location.distanceBetween(previousLatitude,previousLongitude,location.latitude,location.longitude,results)
+                    var a = Location.distanceBetween(previousLatitude,previousLongitude,location.latitude,location.longitude,results)
+                    a += a
+
+                    binding.distance.text = a
+
                 }
             }
         }
