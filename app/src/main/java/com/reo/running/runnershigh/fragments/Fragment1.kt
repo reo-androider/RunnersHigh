@@ -22,7 +22,7 @@ import java.util.*
 class Fragment1 : Fragment() {
     val results = floatArrayOf(1f)
     var map:GoogleMap? = null
-    private final lateinit var binding: Fragment1Binding
+    private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient:FusedLocationProviderClient
 
     override fun onCreateView(
@@ -75,10 +75,6 @@ class Fragment1 : Fragment() {
                     var previousLatitude = location.latitude
                     var previousLongitude = location.longitude
                     var a = Location.distanceBetween(previousLatitude,previousLongitude,location.latitude,location.longitude,results)
-                    a += a
-
-                    binding.distance.text = a
-
                 }
             }
         }
