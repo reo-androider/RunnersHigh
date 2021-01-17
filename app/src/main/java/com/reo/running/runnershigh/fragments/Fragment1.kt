@@ -2,7 +2,7 @@ package com.reo.running.runnershigh.fragments
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.drawable.Icon
+import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.view.LayoutInflater
@@ -15,6 +15,9 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.reo.running.runnershigh.databinding.Fragment1Binding
+import com.reo.running.runnershigh.Resource
+import java.util.*
+
 
 class Fragment1 : Fragment() {
     var map:GoogleMap? = null
@@ -58,11 +61,19 @@ class Fragment1 : Fragment() {
                 super.onLocationResult(locationResult)
                 //更新直後の位置が格納されているはず
                  val location = locationResult?.lastLocation ?: return
-               // Location.distanceBetween()//lastlocation
-                binding.mapView.getMapAsync{
-                    it.addMarker(MarkerOptions()
-                            .position(LatLng(location.latitude,location.longitude)))
-                    it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),15f))
+                while (true){
+                    binding.mapView.getMapAsync{
+                        it.addMarker(
+                            MarkerOptions()
+                                .position(LatLng(location.latitude, location.longitude))
+                                .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,)))
+                        )
+                        it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
+                    }
+                    val results = floatArrayOf(1f)
+                    var previousLatitude = location.latitude
+                    var previousLongitude = location.longitude
+                    Location.distanceBetween(previousLatitude,previousLongitude,location.latitude,location.longitude,results)
                 }
             }
         }
