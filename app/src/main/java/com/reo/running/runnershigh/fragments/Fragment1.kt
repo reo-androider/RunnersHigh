@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,8 @@ class Fragment1 : Fragment() {
     private lateinit var fusedLocationClient:FusedLocationProviderClient
     var distance:Double = 0.0
     var total:Double = 0.0
+    // 基準値緯度経度
+    var stdLct:LatLng? = null
    // var switch = true
 
     override fun onCreateView(
@@ -70,13 +73,13 @@ class Fragment1 : Fragment() {
                 super.onLocationResult(locationResult)
                 //更新直後の位置が格納されているはず
                  val location = locationResult?.lastLocation ?: return
-                    binding.mapView.getMapAsync{
+                    binding.mapView.getMapAsync {
 
+                        Log.d("koko","koko")
                         // zoom-in
                         val zoomValue = 20.0f
-                        var latLng = LatLng(location.latitude,location.longitude)
-                        it.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoomValue)
-                        )
+                        var latLng = LatLng(location.latitude, location.longitude)
+                        it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomValue))
                         //it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
                         // 平行移動可能に
                         it.uiSettings.isScrollGesturesEnabled = true
@@ -106,25 +109,37 @@ class Fragment1 : Fragment() {
                                 it.isMyLocationEnabled = true
                             }
 
-                            //遅延処理
-                            GlobalScope.launch(Dispatchers.Main) {
-                                delay(3000)
-                                // 基準となる緯度・経度
-                                var stdLct = LatLng(location.latitude, location.longitude)
-                                // 基準となる緯度・経度の地点にマーカーを指す
-                                it.addMarker(MarkerOptions()
-                                    .position(stdLct)
-                                    .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,))))
+                                //遅延処理
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    delay(6000)
+                                    // 基準となる緯度・経度
+                                    var stdLct = LatLng(location.latitude, location.longitude)
+                                    // 基準となる緯度・経度の地点にマーカーを指す
+                                    it.addMarker(
+                                        MarkerOptions()
+                                            .position(stdLct)
+                                            .icon(
+                                                BitmapDescriptorFactory.fromBitmap(
+                                                    Resource.getBitmap(
+                                                        context,
+                                                        R.drawable.in_trace,
+                                                    )
+                                                )
+                                            )
+                                    )
+                                }
+                                // 3秒後に緯度経度を取得
+                                var nowLct = LatLng(location.latitude, location.longitude)
+                                stdLct?.let {
+                                    // マーカー間の距離を取得
+                                    distance = SphericalUtil.computeDistanceBetween(stdLct, nowLct)
+                                    Log.d("log","$distance")
+                                }
+                                total += distance
+                                // 移動距離をTextViewに表示
+                                binding.meter.setText("$total")
                             }
-                            // 3秒後に緯度経度を取得
-                            var nowLct = LatLng(location.latitude, location.longitude)
-                            // マーカー間の距離を取得
-                            // TODO stdLctを参照するには？
-                            distance = SphericalUtil.computeDistanceBetween(stdLct,nowLct)
-                            // 移動距離をTextViewに表示
-                            binding.meter.setText("$total")
-                        }
-                }
+                    }
             }
         }
 
@@ -165,8 +180,4 @@ class Fragment1 : Fragment() {
     }
     */
 
-    fun preLct(n:LatLng) {
-        delay(1000)
-        return n
-    }
 }
