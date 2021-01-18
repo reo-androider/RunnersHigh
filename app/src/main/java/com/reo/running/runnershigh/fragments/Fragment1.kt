@@ -11,12 +11,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.common.internal.ResourceUtils
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.SphericalUtil
+import com.reo.running.runnershigh.R
+import com.reo.running.runnershigh.Resource
+import com.reo.running.runnershigh.Resource.getBitmap
 import com.reo.running.runnershigh.databinding.Fragment1Binding
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
 
 
 class Fragment1 : Fragment() {
@@ -49,8 +55,8 @@ class Fragment1 : Fragment() {
 
             //精度重視と省電力重視を両立するため2種類の更新間隔を指定
             //今回は公式のサンプル通りにする
-             interval = 500                                   //最遅の更新間隔（ただし正確ではない）
-             fastestInterval = 500                            //最短の更新間隔
+             interval = 1                                   //最遅の更新間隔（ただし正確ではない）
+             fastestInterval = 1                            //最短の更新間隔
              priority = LocationRequest.PRIORITY_HIGH_ACCURACY   //精度重視
             //切り替え実装
             //ピンの間隔で距離計計測
@@ -64,20 +70,12 @@ class Fragment1 : Fragment() {
                 super.onLocationResult(locationResult)
                 //更新直後の位置が格納されているはず
                  val location = locationResult?.lastLocation ?: return
-                // TODO 3Dにする
-                // TODO 方角を自分が向いている方向にする
-                //マーカーを指した箇所の緯度経度を取って置く。
                     binding.mapView.getMapAsync{
+
                         // zoom-in
-                        val zoomValue = 30.0f
+                        val zoomValue = 20.0f
                         var latLng = LatLng(location.latitude,location.longitude)
                         it.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,zoomValue)
-                        )
-                        //marker
-                        it.addMarker(
-                            MarkerOptions()
-                                .position(LatLng(location.latitude,location.longitude))
-                        //        .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,)))
                         )
                         //it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
                         // 平行移動可能に
@@ -108,29 +106,21 @@ class Fragment1 : Fragment() {
                             it.isMyLocationEnabled = true
                         }
                         }
-
-                        // 基準となる緯度・経度
-                        var stdLct = LatLng(location.latitude,location.longitude)
-
                          //遅延処理
-//                        Looper.myLooper()?.let {
-//                            Handler(it).postDelayed({
-//                                // 最新の緯度経度
-//                                var newLct = LatLng(location.latitude,location.longitude)
-//                                distance = SphericalUtil.computeDistanceBetween(stdLct, newLct)
-//                                total += distance
-//                                                    },3000000)
-//                        }
+                        GlobalScope.launch (Dispatchers.Main){
+                            delay(3000)
+                            //基準となる緯度・経度
+                            var stdLct = LatLng(location.latitude, location.longitude)
+                            it.addMarker(
+                                MarkerOptions()
+                                    .position(stdLct)
+                                    .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,)))
+                            )
 
-                        // 線の描画
-                        it.addPolyline(
-                            PolylineOptions()
-                                .add(stdLct)
-                                .add(LatLng(location.latitude,location.longitude))
-                                .color(Color.RED)
-                                .width(10f)
-                        )
-                      //  binding.meter.setText("$total")
+                        }
+                        var now = LatLng(location.latitude,location.longitude)
+                        distance = SphericalUtil.computeDistanceBetween()
+                        binding.meter.setText("$total")
 
                 }
             }
