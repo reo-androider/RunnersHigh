@@ -1,6 +1,7 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
+import android.app.job.JobInfo
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -24,7 +25,7 @@ class Fragment1 : Fragment() {
     var map:GoogleMap? = null
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient:FusedLocationProviderClient
-    var distance:Double? = null
+    var distance:Double = 0.0
     var total:Double = 0.0
 
     override fun onCreateView(
@@ -67,12 +68,32 @@ class Fragment1 : Fragment() {
                 //マーカーを指した箇所の緯度経度を取って置く。
                 var pre = LatLng(location.latitude,location.longitude)
                     binding.mapView.getMapAsync{
+                        context?.run {
+                            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                                    && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                 it.isMyLocationEnabled = true
+                            }
+
+                        }
                         it.addMarker(
                             MarkerOptions()
                                 .position(pre)
                         //        .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,)))
                         )
-                        it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
+                        //it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
+                        it.uiSettings.isScrollGesturesEnabled = true    // 平行移動可能に
+                        it.uiSettings.isZoomGesturesEnabled = true      // 縮尺変更
+                        it.uiSettings.isMapToolbarEnabled = true
+                        it.isMyLocationEnabled = true                   // 現在地ボタン
+                        it.isMyLocationEnabled = true                   // 現在地表示
+
                         var now = pre
                         distance = SphericalUtil.computeDistanceBetween(pre, now)
                         total += distance
