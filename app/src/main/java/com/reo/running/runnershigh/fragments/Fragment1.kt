@@ -115,25 +115,17 @@ class Fragment1 : Fragment() {
                                     // 基準となる緯度・経度
                                     var stdLct = LatLng(location.latitude, location.longitude)
                                     // 基準となる緯度・経度の地点にマーカーを指す
-                                    it.addMarker(
-                                        MarkerOptions()
-                                            .position(stdLct)
-                                            .icon(
-                                                BitmapDescriptorFactory.fromBitmap(
-                                                    Resource.getBitmap(
-                                                        context,
-                                                        R.drawable.in_trace,
-                                                    )
-                                                )
-                                            )
-                                    )
+                                    it.addMarker(MarkerOptions()
+                                        .position(stdLct)
+                                        .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,))))
                                 }
                                 // 3秒後に緯度経度を取得
                                 var nowLct = LatLng(location.latitude, location.longitude)
+                            Log.d("log","distance")
                                 stdLct?.let {
                                     // マーカー間の距離を取得
                                     distance = SphericalUtil.computeDistanceBetween(stdLct, nowLct)
-                                    Log.d("log","distance")
+                                    Log.d("log2","distance2")
                                 }
                                 total += distance
                                 // 移動距離をTextViewに表示
