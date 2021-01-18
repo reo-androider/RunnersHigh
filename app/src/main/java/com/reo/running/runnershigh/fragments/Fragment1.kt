@@ -133,7 +133,7 @@ class Fragment1 : Fragment() {
                                 stdLct?.let {
                                     // マーカー間の距離を取得
                                     distance = SphericalUtil.computeDistanceBetween(stdLct, nowLct)
-                                    Log.d("log","$distance")
+                                    Log.d("log","distance")
                                 }
                                 total += distance
                                 // 移動距離をTextViewに表示
