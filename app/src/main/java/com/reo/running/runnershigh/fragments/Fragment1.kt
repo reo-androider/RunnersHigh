@@ -88,40 +88,42 @@ class Fragment1 : Fragment() {
                         it.uiSettings.isCompassEnabled = true
                         // 現在地ボタン
                         context?.run {
-                        if (ActivityCompat.checkSelfPermission(
-                                this,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                this,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            it.isMyLocationEnabled = true
-                        }
-                        }
-                         //遅延処理
-                        GlobalScope.launch (Dispatchers.Main){
-                            delay(3000)
-                            //基準となる緯度・経度
-                            var stdLct = LatLng(location.latitude, location.longitude)
-                            it.addMarker(
-                                MarkerOptions()
+                            if (ActivityCompat.checkSelfPermission(
+                                    this,
+                                    Manifest.permission.ACCESS_FINE_LOCATION
+                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                    this,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION
+                                ) != PackageManager.PERMISSION_GRANTED
+                            ) {
+                                // TODO: Consider calling
+                                //    ActivityCompat#requestPermissions
+                                // here to request the missing permissions, and then overriding
+                                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                                //                                          int[] grantResults)
+                                // to handle the case where the user grants the permission. See the documentation
+                                // for ActivityCompat#requestPermissions for more details.
+                                it.isMyLocationEnabled = true
+                            }
+
+                            //遅延処理
+                            GlobalScope.launch(Dispatchers.Main) {
+                                delay(3000)
+                                // 基準となる緯度・経度
+                                var stdLct = LatLng(location.latitude, location.longitude)
+                                // 基準となる緯度・経度の地点にマーカーを指す
+                                it.addMarker(MarkerOptions()
                                     .position(stdLct)
-                                    .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,)))
-                            )
-
+                                    .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,))))
+                            }
+                            // 3秒後に緯度経度を取得
+                            var nowLct = LatLng(location.latitude, location.longitude)
+                            // マーカー間の距離を取得
+                            // TODO stdLctを参照するには？
+                            distance = SphericalUtil.computeDistanceBetween(stdLct,nowLct)
+                            // 移動距離をTextViewに表示
+                            binding.meter.setText("$total")
                         }
-                        var now = LatLng(location.latitude,location.longitude)
-                        distance = SphericalUtil.computeDistanceBetween()
-                        binding.meter.setText("$total")
-
                 }
             }
         }
@@ -162,4 +164,9 @@ class Fragment1 : Fragment() {
         mapView.onDestroy()
     }
     */
+
+    fun preLct(n:LatLng) {
+        delay(1000)
+        return n
+    }
 }
