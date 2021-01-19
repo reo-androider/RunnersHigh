@@ -21,10 +21,10 @@ class FragmentGO : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        binding.start.setOnClickListener{
-            findNavController().navigate(R.id.action_navi_smile_to_fragment12)
-        }
-    }
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
+//        binding.start.setOnClickListener{
+//            findNavController().navigate(R.id.action_navi_smile_to_fragment12)
+//        }
+//    }
 }

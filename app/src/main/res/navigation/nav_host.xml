@@ -9,7 +9,9 @@
     <fragment
         android:id="@+id/fragment1"
         android:name="com.reo.running.runnershigh.fragments.Fragment1"
-        android:label="Fragment1" />
+        android:label="Fragment1"
+        tools:layout="@layout/fragment_1"/>
+
     <fragment
         android:id="@+id/fragment2"
         android:name="com.reo.running.runnershigh.fragments.Fragment2"
@@ -25,5 +27,4 @@
         android:name="com.reo.running.runnershigh.fragments.Fragment4"
         android:label="fragment_4"
         tools:layout="@layout/fragment_4" />
-
 </navigation>
