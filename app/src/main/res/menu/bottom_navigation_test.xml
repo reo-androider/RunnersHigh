@@ -7,16 +7,16 @@
         android:title="RUN" />
     <item
         android:id="@+id/navi_pets"
-        android:icon="@drawable/ic_train"
-        android:title="Trip"/>
+        android:icon="@drawable/ic_height"
+        android:title="HIGH"/>
     <item
         android:id="@+id/navi_flight"
         android:icon="@drawable/ic_calorie"
-        android:title="calorie"/>
+        android:title="CALORIE"/>
 
     <item
         android:id="@+id/navi_sun"
-        android:icon="@drawable/ic_weather"
-        android:title="WEATHER"/>
+        android:icon="@drawable/ic_setting"
+        android:title="setting"/>
 
 </menu>

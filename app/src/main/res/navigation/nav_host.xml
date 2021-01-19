@@ -25,4 +25,5 @@
         android:name="com.reo.running.runnershigh.fragments.Fragment4"
         android:label="fragment_4"
         tools:layout="@layout/fragment_4" />
+
 </navigation>
