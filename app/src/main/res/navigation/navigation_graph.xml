@@ -3,23 +3,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_graph"
-    app:startDestination="@id/navi_smile">
+    app:startDestination="@id/navi_run">
+
+    <fragment
+        android:id="@+id/navi_run"
+        android:name="com.reo.running.runnershigh.fragments.Fragment1"
 
 
 
-    <fragment android:id="@+id/navi_pets"
+        
+        android:label="Fragment1" />
+
+    <fragment android:id="@+id/navi_high"
         android:name="com.reo.running.runnershigh.fragments.Fragment2"
         android:label="Fragment2"/>
 
-    <fragment android:id="@+id/navi_flight"
+    <fragment android:id="@+id/navi_calorie"
         android:name="com.reo.running.runnershigh.fragments.Fragment4"
         android:label="Fragment3"/>
 
-    <fragment android:id="@+id/navi_sun"
+    <fragment android:id="@+id/navi_setting"
         android:name="com.reo.running.runnershigh.fragments.Fragment3"
         android:label="Fragment4"/>
-    <fragment
-        android:id="@+id/fragment12"
-        android:name="com.reo.running.runnershigh.fragments.Fragment1"
-        android:label="Fragment1" />
+
 </navigation>
