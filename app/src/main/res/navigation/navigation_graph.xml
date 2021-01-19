@@ -8,10 +8,6 @@
     <fragment
         android:id="@+id/navi_run"
         android:name="com.reo.running.runnershigh.fragments.Fragment1"
-
-
-
-        
         android:label="Fragment1" />
 
     <fragment android:id="@+id/navi_high"
