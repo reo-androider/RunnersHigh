@@ -27,6 +27,7 @@ class Fragment1 : Fragment() {
     var stdLocation:Location? = null
     var totalDistance:Int = 0
     var distance:Float? = null
+    var cnt:Int = 0
 //    var locations:LocationResult?.locations = null
 //    var startLatitude:Double = 0.0
 //    var startLongtude:Double = 0.0
@@ -73,8 +74,18 @@ class Fragment1 : Fragment() {
                         it.latitude, it.longitude,
                         lastLocation.latitude, lastLocation.longitude, results
                     )
-                    totalDistance += results[0].toInt()
-                    println(totalDistance)
+
+                    if (results[0] < 5) {
+                        totalDistance += results[0].toInt()
+                        binding.meter.text = "$totalDistance"
+                        println(totalDistance)
+                    }
+
+                    if (cnt < 10) {
+                        totalDistance = 0
+                        cnt++
+                        println("count")
+                    }
                 }
 
                 stdLocation = lastLocation
