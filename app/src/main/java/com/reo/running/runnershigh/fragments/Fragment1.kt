@@ -3,6 +3,7 @@ package com.reo.running.runnershigh.fragments
 import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.location.Location
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -34,6 +35,11 @@ class Fragment1 : Fragment() {
     var total:Double = 0.0
     // 基準値緯度経度
     var stdLct:LatLng? = null
+    var lastLct:LatLng? = null
+//    var locations:LocationResult?.locations = null
+//    var startLatitude:Double = 0.0
+//    var startLongtude:Double = 0.0
+//    var resuts = FloatArray(1)
    // var switch = true
 
     override fun onCreateView(
@@ -55,7 +61,6 @@ class Fragment1 : Fragment() {
 
         //どのような取得方法を要求
         val locationRequest = LocationRequest().apply {
-
             //精度重視と省電力重視を両立するため2種類の更新間隔を指定
             //今回は公式のサンプル通りにする
              interval = 1                                   //最遅の更新間隔（ただし正確ではない）
@@ -71,11 +76,15 @@ class Fragment1 : Fragment() {
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
-                //更新直後の位置が格納されているはず
-                 val location = locationResult?.lastLocation ?: return
-                    binding.mapView.getMapAsync {
 
-                        Log.d("koko","koko")
+                // TODO
+                 val location = locationResult?.lastLocation ?: return
+                var locations = locationResult?.locations
+//                println(locations)
+//                println(locations[0].latitude)
+
+
+                    binding.mapView.getMapAsync {
                         // zoom-in
                         val zoomValue = 20.0f
                         var latLng = LatLng(location.latitude, location.longitude)
@@ -109,27 +118,38 @@ class Fragment1 : Fragment() {
                                 it.isMyLocationEnabled = true
                             }
 
-                                //遅延処理
-                                GlobalScope.launch(Dispatchers.Main) {
-                                    delay(6000)
-                                    // 基準となる緯度・経度
-                                    var stdLct = LatLng(location.latitude, location.longitude)
-                                    // 基準となる緯度・経度の地点にマーカーを指す
-                                    it.addMarker(MarkerOptions()
-                                        .position(stdLct)
-                                        .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,))))
-                                }
-                                // 3秒後に緯度経度を取得
-                                var nowLct = LatLng(location.latitude, location.longitude)
-                            Log.d("log","distance")
-                                stdLct?.let {
-                                    // マーカー間の距離を取得
-                                    distance = SphericalUtil.computeDistanceBetween(stdLct, nowLct)
-                                    Log.d("log2","distance2")
-                                }
-                                total += distance
+//                                //遅延処理
+                                  GlobalScope.launch(Dispatchers.Main) {
+                                      delay(60000)
+//                                     //基準となる緯度・経度
+                                      val stdLct = LatLng(locations[0].latitude, locations[0].longitude)
+                                      Log.d("std","$stdLct")
+//                                     //基準となる緯度・経度の地点にマーカーを指す
+                                      it.addMarker(MarkerOptions()
+                                          .position(stdLct)
+                                          .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,))))
+                                  }
+                            var newLct = LatLng(locations[0].latitude,locations[0].longitude)
+                            Log.d("new","$newLct")
+                            stdLct?.let {
+                                distance = SphericalUtil.computeDistanceBetween(stdLct,newLct)
+                            }
+                            //TODO 0と表示される
+                            binding.meter.text = "$distance"
+                            Log.d("distance","$distance")
+
+//                            distance = SphericalUtil.computeDistanceBetween(LatLng(locations[10].latitude,locations[10].longitude),LatLng(locations[0].latitude,locations[0].longitude))
+
+//                            total = SphericalUtil.computeDistanceBetween(LatLng(locations.first().latitude,locations.first().longitude),
+//                                LatLng(locations[0].latitude,locations[0].longitude)
+//                            )
+//                            val a = LatLng(locations[0].latitude,locations[0].longitude)
+//                            Handler().postDelayed(Runnable {
+//                                val b = LatLng(locations[0].latitude,locations[0].longitude)
+//                            },6000)
+//                            distance = Location.distanceBetween(a,a2,b,b2,results)
                                 // 移動距離をTextViewに表示
-                                binding.meter.setText("$total")
+
                             }
                     }
             }
