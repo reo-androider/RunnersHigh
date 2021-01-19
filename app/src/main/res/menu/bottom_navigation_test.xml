@@ -2,20 +2,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navi_smile"
+        android:id="@+id/navi_run"
         android:icon="@drawable/ic_running"
         android:title="RUN" />
     <item
-        android:id="@+id/navi_pets"
+        android:id="@+id/navi_high"
         android:icon="@drawable/ic_height"
         android:title="HIGH"/>
     <item
-        android:id="@+id/navi_flight"
+        android:id="@+id/navi_calorie"
         android:icon="@drawable/ic_calorie"
         android:title="CALORIE"/>
 
     <item
-        android:id="@+id/navi_sun"
+        android:id="@+id/navi_setting"
         android:icon="@drawable/ic_setting"
         android:title="setting"/>
 

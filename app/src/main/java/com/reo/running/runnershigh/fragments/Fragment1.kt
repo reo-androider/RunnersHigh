@@ -17,22 +17,12 @@ import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
 
 class Fragment1 : Fragment() {
-   // var map:GoogleMap? = null
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient:FusedLocationProviderClient
-    var total:Double = 0.0
-    // 基準値緯度経度
-    var stdLct:LatLng? = null
-    var lastLct:LatLng? = null
     var stdLocation:Location? = null
     var totalDistance:Int = 0
-    var distance:Float? = null
     var cnt:Int = 0
-//    var locations:LocationResult?.locations = null
-//    var startLatitude:Double = 0.0
-//    var startLongtude:Double = 0.0
     var results = FloatArray(1)
-   // var switch = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +30,7 @@ class Fragment1 : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = Fragment1Binding.inflate(layoutInflater, container, false)
+        binding = Fragment1Binding.inflate(LayoutInflater, container, false)
         return binding.root
     }
 
