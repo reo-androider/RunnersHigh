@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
@@ -17,7 +16,7 @@ import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
 
 class Fragment1 : Fragment() {
-    private lateinit var binding: Fragment1Binding
+    private lateinit var binding:Fragment1Binding
     private lateinit var fusedLocationClient:FusedLocationProviderClient
     var stdLocation:Location? = null
     var totalDistance:Int = 0
@@ -48,10 +47,6 @@ class Fragment1 : Fragment() {
              interval = 1                                   //最遅の更新間隔（ただし正確ではない）
              fastestInterval = 1                            //最短の更新間隔
              priority = LocationRequest.PRIORITY_HIGH_ACCURACY   //精度重視
-            //切り替え実装
-            //ピンの間隔で距離計計測
-            //marker 緯度経度から距離を計算する
-            //足跡付ける
         }
 
         //コールバック
