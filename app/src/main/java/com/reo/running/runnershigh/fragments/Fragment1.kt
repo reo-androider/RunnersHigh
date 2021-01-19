@@ -2,44 +2,35 @@ package com.reo.running.runnershigh.fragments
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
-import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import com.google.android.gms.common.internal.ResourceUtils
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
-import com.google.maps.android.SphericalUtil
-import com.reo.running.runnershigh.R
-import com.reo.running.runnershigh.Resource
-import com.reo.running.runnershigh.Resource.getBitmap
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
-import kotlin.system.measureTimeMillis
-
 
 class Fragment1 : Fragment() {
    // var map:GoogleMap? = null
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient:FusedLocationProviderClient
-    var distance:Double = 0.0
     var total:Double = 0.0
     // 基準値緯度経度
     var stdLct:LatLng? = null
     var lastLct:LatLng? = null
+    var stdLocation:Location? = null
+    var totalDistance:Int = 0
+    var distance:Float? = null
 //    var locations:LocationResult?.locations = null
 //    var startLatitude:Double = 0.0
 //    var startLongtude:Double = 0.0
-//    var resuts = FloatArray(1)
+    var results = FloatArray(1)
    // var switch = true
 
     override fun onCreateView(
@@ -76,10 +67,18 @@ class Fragment1 : Fragment() {
         val locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
+                 val lastLocation = locationResult?.lastLocation ?: return
+                stdLocation?.let {
+                    Location.distanceBetween(
+                        it.latitude, it.longitude,
+                        lastLocation.latitude, lastLocation.longitude, results
+                    )
+                    totalDistance += results[0].toInt()
+                    println(totalDistance)
+                }
 
-                // TODO
-                 val location = locationResult?.lastLocation ?: return
-                var locations = locationResult?.locations
+                stdLocation = lastLocation
+
 //                println(locations)
 //                println(locations[0].latitude)
 
@@ -87,7 +86,7 @@ class Fragment1 : Fragment() {
                     binding.mapView.getMapAsync {
                         // zoom-in
                         val zoomValue = 20.0f
-                        var latLng = LatLng(location.latitude, location.longitude)
+                        var latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
                         it.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoomValue))
                         //it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
                         // 平行移動可能に
@@ -118,25 +117,26 @@ class Fragment1 : Fragment() {
                                 it.isMyLocationEnabled = true
                             }
 
-//                                //遅延処理
-                                  GlobalScope.launch(Dispatchers.Main) {
-                                      delay(60000)
-//                                     //基準となる緯度・経度
-                                      val stdLct = LatLng(locations[0].latitude, locations[0].longitude)
-                                      Log.d("std","$stdLct")
-//                                     //基準となる緯度・経度の地点にマーカーを指す
-                                      it.addMarker(MarkerOptions()
-                                          .position(stdLct)
-                                          .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,))))
-                                  }
-                            var newLct = LatLng(locations[0].latitude,locations[0].longitude)
-                            Log.d("new","$newLct")
-                            stdLct?.let {
-                                distance = SphericalUtil.computeDistanceBetween(stdLct,newLct)
-                            }
-                            //TODO 0と表示される
-                            binding.meter.text = "$distance"
-                            Log.d("distance","$distance")
+////                                //遅延処理
+//                                  GlobalScope.launch(Dispatchers.Main) {
+//                                      delay(60000)
+////                                     //基準となる緯度・経度
+//                                      val stdLct = LatLng(locations[0].latitude, locations[0].longitude)
+//                                      Log.d("std","$stdLct")
+////                                     //基準となる緯度・経度の地点にマーカーを指す
+//                                      it.addMarker(MarkerOptions()
+//                                          .position(stdLct)
+//                                          .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace,))))
+//                                  }
+//                            var newLct = LatLng(locations[0].latitude,locations[0].longitude)
+//                            Log.d("new","$newLct")
+//                            stdLct?.let {
+//                                distance = SphericalUtil.computeDistanceBetween(stdLct,newLct)
+//                            }
+//                            //TODO 0と表示される
+//                            binding.meter.text = "$distance"
+//                            Log.d("distance","$distance")
+
 
 //                            distance = SphericalUtil.computeDistanceBetween(LatLng(locations[10].latitude,locations[10].longitude),LatLng(locations[0].latitude,locations[0].longitude))
 
