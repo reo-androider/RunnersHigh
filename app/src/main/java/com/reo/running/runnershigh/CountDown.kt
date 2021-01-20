@@ -14,11 +14,7 @@ import com.reo.running.runnershigh.databinding.CountDownBinding
 class CountDown : Fragment() {
 
     private lateinit var binding: CountDownBinding
-    private lateinit var animT:TranslateAnimation
-    private lateinit var animS:ScaleAnimation
-    private lateinit var animSet:AnimationSet
-    private lateinit var a:Animation
-    private lateinit var wm:WindowManager
+
 
     val handler = Handler()
 
@@ -34,9 +30,16 @@ class CountDown : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val w = (view.width / 2).toFloat()
-        val h = (view.height / 2).toFloat()
-        val scale = ScaleAnimation(0f,100f,0f,100f,w,h)
+        val scale = ScaleAnimation(
+                0f,
+                100f,
+                0f,
+                100f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+                )
         scale.duration = 1000
         binding.countNum5.startAnimation(scale)
     }
