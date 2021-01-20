@@ -132,8 +132,8 @@ class Fragment1 : Fragment() {
         }
 
         binding.start.setOnClickListener{
-            if (start == true) (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
-            //findNavController().navigate(R.id.action_navi_smile_to_fragment12)
+            (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
+            findNavController().navigate(com.reo.running.runnershigh.R.id.action_navi_run_to_countDown)
         }
     }
 
