@@ -7,4 +7,6 @@
     <string name="twitter_consumer_key" translatable="false">xZIjBdSGoYDXveTBkuEGtHSPt</string>
     <string name="twitter_consumer_secret" translatable="false">19gmqmhu5Y4itMIku4Gg4zxJNzqtB7WmrPQlM3LwBar0eFjQZN</string>
 
+    <string name="start_button">START</string>
+
 </resources>
