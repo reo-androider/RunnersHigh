@@ -24,6 +24,6 @@ class FragmentGO : Fragment() {
 //    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 //        super.onViewCreated(view, savedInstanceState)
 //        binding.start.setOnClickListener{
-//            findNavController().navigate(R.id.action_navi_smile_to_fragment12)
+//          findNavController().navigate(R.id.action_navi_smile_to_fragment12)
 //        }
     }

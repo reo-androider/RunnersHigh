@@ -8,7 +8,11 @@
     <fragment
         android:id="@+id/navi_run"
         android:name="com.reo.running.runnershigh.fragments.Fragment1"
-        android:label="Fragment1" />
+        android:label="Fragment1" >
+        <action
+            android:id="@+id/action_navi_run_to_countDown"
+            app:destination="@id/countDown" />
+    </fragment>
 
     <fragment android:id="@+id/navi_high"
         android:name="com.reo.running.runnershigh.fragments.Fragment2"
@@ -21,5 +25,9 @@
     <fragment android:id="@+id/navi_setting"
         android:name="com.reo.running.runnershigh.fragments.Fragment3"
         android:label="Fragment4"/>
+    <fragment
+        android:id="@+id/countDown"
+        android:name="com.reo.running.runnershigh.CountDown"
+        android:label="CountDown" />
 
 </navigation>
