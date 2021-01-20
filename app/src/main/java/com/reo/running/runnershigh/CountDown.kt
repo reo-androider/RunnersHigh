@@ -1,10 +1,12 @@
 package com.reo.running.runnershigh
 
 import android.animation.Animator
+import android.graphics.Canvas
+import android.graphics.Point
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.os.Handler
+import android.util.DisplayMetrics
+import android.view.*
 import android.view.animation.*
 import androidx.fragment.app.Fragment
 import com.reo.running.runnershigh.databinding.CountDownBinding
@@ -16,6 +18,9 @@ class CountDown : Fragment() {
     private lateinit var animS:ScaleAnimation
     private lateinit var animSet:AnimationSet
     private lateinit var a:Animation
+    private lateinit var wm:WindowManager
+
+    val handler = Handler()
 
     var cnt = 0
 
@@ -29,8 +34,10 @@ class CountDown : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val scale = ScaleAnimation(10f,100f,10f,100f)
-        scale.duration = 10000
-
+        val w = (view.width / 2).toFloat()
+        val h = (view.height / 2).toFloat()
+        val scale = ScaleAnimation(0f,100f,0f,100f,w,h)
+        scale.duration = 1000
+        binding.countNum5.startAnimation(scale)
     }
 }
