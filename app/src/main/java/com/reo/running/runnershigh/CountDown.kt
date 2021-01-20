@@ -17,6 +17,8 @@ class CountDown : Fragment() {
     private lateinit var animSet:AnimationSet
     private lateinit var a:Animation
 
+    var cnt = 0
+
     private var shortAnimationDuration:Int = 0
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -27,8 +29,8 @@ class CountDown : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        animS = ScaleAnimation(0f,100f,0f,100f)
-//        animS.duration
-        
+        val scale = ScaleAnimation(10f,100f,10f,100f)
+        scale.duration = 10000
+
     }
 }
