@@ -8,5 +8,7 @@
     <string name="twitter_consumer_secret" translatable="false">19gmqmhu5Y4itMIku4Gg4zxJNzqtB7WmrPQlM3LwBar0eFjQZN</string>
 
     <string name="start_button">START</string>
+    <string name="pause_button">PAUSE</string>
+    <string name="finish_button">FINISH</string>
 
 </resources>

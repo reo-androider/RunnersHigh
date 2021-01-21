@@ -3,13 +3,19 @@ package com.reo.running.runnershigh.fragments
 import android.Manifest
 import android.R
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.ScaleAnimation
+import androidx.annotation.MainThread
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
@@ -131,9 +137,54 @@ class Fragment1 : Fragment() {
             fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
         }
 
-        binding.start.setOnClickListener{
-            (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
-            findNavController().navigate(com.reo.running.runnershigh.R.id.action_navi_run_to_countDown)
+        binding.startButton.setOnClickListener {
+//
+//            binding.start.visibility = View.GONE
+//            binding.mapView.visibility = View.INVISIBLE
+//            (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
+//
+//            GlobalScope.launch {
+//                animation5()
+//                delay(1000)
+//                animation4()
+//                delay(1000)
+//                animation3()
+//                delay(1000)
+//                animation2()
+//                delay(1000)
+//                animation1()
+//                delay(1000)
+//                animation0()
+//                delay(1000)
+//            }
+
+            binding.run {
+                startText.visibility = View.GONE
+
+                startButton.visibility = View.GONE
+                mapView.visibility = View.INVISIBLE
+
+                (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
+                GlobalScope.launch {
+                    withContext(Dispatchers.IO) {
+                        listOf(
+                                countNum5,
+                                countNum4,
+                                countNum3,
+                                countNum2,
+                                countNum1,
+                                countNum0
+                        ).map {
+                            animationCount(it)
+                            delay(1000)
+                        }
+                    }
+                    withContext(Dispatchers.Main) {
+                        mapView.visibility = View.VISIBLE
+                    }
+                }
+            }
+
         }
     }
 
@@ -157,5 +208,114 @@ class Fragment1 : Fragment() {
         mapView.onDestroy()
     }
     */
+
+    fun animation0() {
+
+        val scale = ScaleAnimation(
+                0f,
+                100f,
+                0f,
+                100f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+        )
+        scale.duration = 1000
+        binding.countNum0.startAnimation(scale)
+    }
+
+    fun animation1() {
+
+        val scale = ScaleAnimation(
+                0f,
+                100f,
+                0f,
+                100f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+        )
+        scale.duration = 1000
+        binding.countNum1.startAnimation(scale)
+    }
+
+    fun animation2() {
+
+        val scale = ScaleAnimation(
+                0f,
+                100f,
+                0f,
+                100f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+        )
+        scale.duration = 500
+        binding.countNum2.startAnimation(scale)
+    }
+
+    fun animation3() {
+
+        val scale = ScaleAnimation(
+                0f,
+                100f,
+                0f,
+                100f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+        )
+        scale.duration = 500
+        binding.countNum3.startAnimation(scale)
+    }
+
+    fun animation4() {
+
+        val scale = ScaleAnimation(
+                0f,
+                100f,
+                0f,
+                100f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+        )
+        scale.duration = 500
+        binding.countNum4.startAnimation(scale)
+    }
+
+    fun animation5() {
+
+        val scale = ScaleAnimation(
+                0f,
+                100f,
+                0f,
+                100f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+        )
+        scale.duration = 500
+        binding.countNum5.startAnimation(scale)
+    }
+
+    private fun animationCount(view:View) {
+        view.startAnimation(ScaleAnimation(
+                0f,
+                100f,
+                0f,
+                100f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+        ).apply { duration = 1000 })
+    }
 
 }
