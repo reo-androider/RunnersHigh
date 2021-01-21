@@ -17,6 +17,7 @@ class CountDown : Fragment() {
 
     private lateinit var binding: CountDownBinding
     var cnt = 5
+    val handler = Handler(Looper.getMainLooper())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
@@ -27,7 +28,9 @@ class CountDown : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        for (i in 1..6) {
+
+//
+//        for (i in 1..6) {
             val scale = ScaleAnimation(
                     0f,
                     100f,
@@ -47,11 +50,41 @@ class CountDown : Fragment() {
                 1 -> binding.countNum1.startAnimation(scale)
                 0 -> binding.countNum0.startAnimation(scale)
                 -1 -> findNavController().navigate(R.id.navi_run)
-            }
-        }
-        Handler(Looper.getMainLooper()).postDelayed({
-            cnt += -1
-        },3000)
+//            }
+//        }
+//        Handler(Looper.getMainLooper()).postDelayed({
+//            cnt += -1
+//        },3000)
+
     }
+
+    fun animation1() {
+
+        val scale = ScaleAnimation(
+                0f,
+                100f,
+                0f,
+                100f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
+        )
+        scale.duration = 3000
+        binding.countNum5.startAnimation(scale)
+    }
+
+
+    }
+
+
+
+
+
+
+
+
+
+
 }
 
