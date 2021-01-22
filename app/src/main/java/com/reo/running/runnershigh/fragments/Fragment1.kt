@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
+import android.widget.Toast
 import androidx.annotation.MainThread
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -43,7 +44,8 @@ class Fragment1 : Fragment() {
     var countMinutes10 = 0
     var countHour = 0
     var results = FloatArray(1)
-    var start = true
+    var stopWatch = true
+    var againWatch = true
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -179,10 +181,8 @@ class Fragment1 : Fragment() {
 
             binding.run {
                 startText.visibility = View.GONE
-
                 startButton.visibility = View.GONE
                 mapView.visibility = View.INVISIBLE
-
                 (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
@@ -205,30 +205,65 @@ class Fragment1 : Fragment() {
                         finishButton.visibility = View.VISIBLE
                         finishText.visibility = View.VISIBLE
                         timerScreen.visibility = View.VISIBLE
+
+
+                        // TODO ストップウォッチの時間を止めた後に再開されない（具体的には、fabが押せない）
                         while (true) {
-                            // ここからランニングスタート！！！
-                            delay(1000)
-                            count++
+                            while (againWatch) {
+                                // RESTART
+                                restartButton.setOnClickListener {
+                                    stopWatch = true
+                                    pauseText.visibility = View.VISIBLE
+                                    pauseButton.visibility = View.VISIBLE
+                                    restartText.visibility = View.INVISIBLE
+                                    restartButton.visibility = View.INVISIBLE
+                                }
+                                while (stopWatch) {
+                                    // PAUSE
+                                    pauseButton.setOnClickListener {
+                                        stopWatch = false
+                                        pauseText.visibility = View.INVISIBLE
+                                        pauseButton.visibility = View.INVISIBLE
+                                        restartText.visibility = View.VISIBLE
+                                        restartButton.visibility = View.VISIBLE
+                                    }
 
-                            if (count > 9) {
-                                count10++
-                                count = 0
-                            }
+                                    //FINISH
+                                    finishButton.setOnClickListener {
+                                    }
 
-                            if (count10 > 5) {
-                                countMinutes++
-                                count10 = 0
-                            }
+                                    delay(1000)
+                                    count++
 
-                            if (countMinutes > 9) {
-                                countMinutes10++
-                                countMinutes = 0
+                                    if (count > 9) {
+                                        count10++
+                                        count = 0
+                                    }
+
+                                    if (count10 > 5) {
+                                        countMinutes++
+                                        count10 = 0
+                                    }
+
+                                    if (countMinutes > 9) {
+                                        countMinutes10++
+                                        countMinutes = 0
+                                    }
+
+                                    if (countMinutes10 > 5) {
+                                        countHour++
+                                        countMinutes10 = 0
+                                    }
+                                    binding.timeCnt.setText("$countHour:$countMinutes10$countMinutes:$count10$count")
+                                    break
+                                }
+                                break
                             }
-                            binding.timeCnt.setText("$countHour:$countMinutes10$countMinutes:$count10$count")
                         }
                     }
                 }
             }
+            println("hey!")
         }
     }
         override fun onStart() {
