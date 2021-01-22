@@ -11,4 +11,6 @@
     <string name="pause_button">PAUSE</string>
     <string name="finish_button">FINISH</string>
 
+    <string name="timer">0：00：00</string>
+
 </resources>
