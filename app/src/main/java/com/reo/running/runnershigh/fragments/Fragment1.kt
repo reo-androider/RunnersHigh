@@ -69,7 +69,7 @@ class Fragment1 : Fragment() {
                 val lastLocation = locationResult?.lastLocation ?: return
                 binding.mapView.getMapAsync {
                     // zoom-in
-                    val zoomValue = 30.0f
+                    val zoomValue = 25.0f
                     it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
                     //it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
                     // 平行移動可能に
@@ -181,8 +181,17 @@ class Fragment1 : Fragment() {
                     }
                     withContext(Dispatchers.Main) {
                         mapView.visibility = View.VISIBLE
+                        pauseButton.visibility = View.VISIBLE
+                        pauseText.visibility = View.VISIBLE
+                        finishButton.visibility = View.VISIBLE
+                        finishText.visibility = View.VISIBLE
                     }
                 }
+            }
+            // ここからランニングスタート！！！
+            GlobalScope.launch {
+                delay(1000)
+
             }
 
         }
