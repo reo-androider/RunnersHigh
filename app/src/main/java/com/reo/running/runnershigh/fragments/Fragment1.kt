@@ -21,26 +21,34 @@ import androidx.navigation.fragment.findNavController
 import androidx.viewbinding.ViewBinding
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.reo.running.runnershigh.MainActivity
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
+import kotlin.concurrent.timer
 
 class Fragment1 : Fragment() {
 
-    private lateinit var binding:Fragment1Binding
-    private lateinit var fusedLocationClient:FusedLocationProviderClient
-    var stdLocation:Location? = null
-    var totalDistance:Int = 0
-    var cnt:Int = 0
+    private lateinit var binding: Fragment1Binding
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    var stdLocation: Location? = null
+    var totalDistance = 0
+    var gpsCount = 0
+    var count = 0
+    var count10 = 0
+    var countMinutes = 0
+    var countMinutes10 = 0
+    var countHour = 0
     var results = FloatArray(1)
     var start = true
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = Fragment1Binding.inflate(layoutInflater, container, false)
@@ -57,9 +65,9 @@ class Fragment1 : Fragment() {
         //どのような取得方法を要求
         val locationRequest = LocationRequest().apply {
             //精度重視と省電力重視を両立するため2種類の更新間隔を指定
-             interval = 1                                           //最遅の更新間隔（ただし正確ではない）
-             fastestInterval = 1                                    //最短の更新間隔
-             priority = LocationRequest.PRIORITY_HIGH_ACCURACY      //精度重視
+            interval = 1                                           //最遅の更新間隔（ただし正確ではない）
+            fastestInterval = 1                                    //最短の更新間隔
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY      //精度重視
         }
 
         //コールバック
@@ -68,9 +76,17 @@ class Fragment1 : Fragment() {
                 super.onLocationResult(locationResult)
                 val lastLocation = locationResult?.lastLocation ?: return
                 binding.mapView.getMapAsync {
+
                     // zoom-in
                     val zoomValue = 25.0f
-                    it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
+                    it.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                lastLocation.latitude,
+                                lastLocation.longitude
+                            ), zoomValue
+                        )
+                    )
                     //it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
                     // 平行移動可能に
                     it.uiSettings.isScrollGesturesEnabled = true
@@ -82,12 +98,12 @@ class Fragment1 : Fragment() {
                     it.uiSettings.isCompassEnabled = true
                     context?.run {
                         if (ActivityCompat.checkSelfPermission(
-                                        this,
-                                        Manifest.permission.ACCESS_FINE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                        this,
-                                        Manifest.permission.ACCESS_COARSE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED
+                                this,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             // TODO: Consider calling
                             //    ActivityCompat#requestPermissions
@@ -100,24 +116,23 @@ class Fragment1 : Fragment() {
                         }
 
                     }
-                stdLocation?.let {
-                    Location.distanceBetween(
+                    stdLocation?.let {
+                        Location.distanceBetween(
                             it.latitude, it.longitude,
                             lastLocation.latitude, lastLocation.longitude, results
-                    )
+                        )
 
-                    if (results[0] < 5) {
-                        totalDistance += results[0].toInt()
-                        println(totalDistance)
-                    }
+                        if (results[0] < 5) {
+                            totalDistance += results[0].toInt()
+                            println(totalDistance)
+                        }
 
-                    if (cnt < 10) {
-                        totalDistance = 0
-                        cnt++
-                        println("count")
+                        if (gpsCount < 10) {
+                            totalDistance = 0
+                            gpsCount++
+                            println("count")
+                        }
                     }
-                }
-                stdLocation = lastLocation
                 }
             }
         }
@@ -125,16 +140,20 @@ class Fragment1 : Fragment() {
         //位置情報を更新
         context?.run {
             if (ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return
             }
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.myLooper()
+            )
         }
 
         binding.startButton.setOnClickListener {
@@ -168,12 +187,12 @@ class Fragment1 : Fragment() {
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
                         listOf(
-                                countNum5,
-                                countNum4,
-                                countNum3,
-                                countNum2,
-                                countNum1,
-                                countNum0
+                            countNum5,
+                            countNum4,
+                            countNum3,
+                            countNum2,
+                            countNum1,
+                            countNum0
                         ).map {
                             animationCount(it)
                             delay(1000)
@@ -185,32 +204,47 @@ class Fragment1 : Fragment() {
                         pauseText.visibility = View.VISIBLE
                         finishButton.visibility = View.VISIBLE
                         finishText.visibility = View.VISIBLE
+                        timerScreen.visibility = View.VISIBLE
+                        while (true) {
+                            // ここからランニングスタート！！！
+                            delay(1000)
+                            count++
+
+                            if (count > 9) {
+                                count10++
+                                count = 0
+                            }
+
+                            if (count10 > 5) {
+                                countMinutes++
+                                count10 = 0
+                            }
+
+                            if (countMinutes > 9) {
+                                countMinutes10++
+                                countMinutes = 0
+                            }
+                            binding.timeCnt.setText("$countHour:$countMinutes10$countMinutes:$count10$count")
+                        }
                     }
                 }
             }
-            // ここからランニングスタート！！！
-            GlobalScope.launch {
-                delay(1000)
-
-            }
-
         }
     }
+        override fun onStart() {
+            super.onStart()
+            binding.mapView.onStart()
+        }
 
-    override fun onStart() {
-        super.onStart()
-        binding.mapView.onStart()
-    }
+        override fun onResume() {
+            super.onResume()
+            binding.mapView.onResume()
+        }
 
-    override fun onResume() {
-        super.onResume()
-        binding.mapView.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.mapView.onPause()
-    }
+        override fun onPause() {
+            super.onPause()
+            binding.mapView.onPause()
+        }
 /*
     override fun onDestroy() {
         super.onDestroy()
@@ -218,9 +252,9 @@ class Fragment1 : Fragment() {
     }
     */
 
-    fun animation0() {
+        fun animation0() {
 
-        val scale = ScaleAnimation(
+            val scale = ScaleAnimation(
                 0f,
                 100f,
                 0f,
@@ -229,14 +263,14 @@ class Fragment1 : Fragment() {
                 0.5f,
                 Animation.RELATIVE_TO_SELF,
                 0.5f
-        )
-        scale.duration = 1000
-        binding.countNum0.startAnimation(scale)
-    }
+            )
+            scale.duration = 1000
+            binding.countNum0.startAnimation(scale)
+        }
 
-    fun animation1() {
+        fun animation1() {
 
-        val scale = ScaleAnimation(
+            val scale = ScaleAnimation(
                 0f,
                 100f,
                 0f,
@@ -245,14 +279,14 @@ class Fragment1 : Fragment() {
                 0.5f,
                 Animation.RELATIVE_TO_SELF,
                 0.5f
-        )
-        scale.duration = 1000
-        binding.countNum1.startAnimation(scale)
-    }
+            )
+            scale.duration = 1000
+            binding.countNum1.startAnimation(scale)
+        }
 
-    fun animation2() {
+        fun animation2() {
 
-        val scale = ScaleAnimation(
+            val scale = ScaleAnimation(
                 0f,
                 100f,
                 0f,
@@ -261,14 +295,14 @@ class Fragment1 : Fragment() {
                 0.5f,
                 Animation.RELATIVE_TO_SELF,
                 0.5f
-        )
-        scale.duration = 500
-        binding.countNum2.startAnimation(scale)
-    }
+            )
+            scale.duration = 500
+            binding.countNum2.startAnimation(scale)
+        }
 
-    fun animation3() {
+        fun animation3() {
 
-        val scale = ScaleAnimation(
+            val scale = ScaleAnimation(
                 0f,
                 100f,
                 0f,
@@ -277,14 +311,14 @@ class Fragment1 : Fragment() {
                 0.5f,
                 Animation.RELATIVE_TO_SELF,
                 0.5f
-        )
-        scale.duration = 500
-        binding.countNum3.startAnimation(scale)
-    }
+            )
+            scale.duration = 500
+            binding.countNum3.startAnimation(scale)
+        }
 
-    fun animation4() {
+        fun animation4() {
 
-        val scale = ScaleAnimation(
+            val scale = ScaleAnimation(
                 0f,
                 100f,
                 0f,
@@ -293,14 +327,14 @@ class Fragment1 : Fragment() {
                 0.5f,
                 Animation.RELATIVE_TO_SELF,
                 0.5f
-        )
-        scale.duration = 500
-        binding.countNum4.startAnimation(scale)
-    }
+            )
+            scale.duration = 500
+            binding.countNum4.startAnimation(scale)
+        }
 
-    fun animation5() {
+        fun animation5() {
 
-        val scale = ScaleAnimation(
+            val scale = ScaleAnimation(
                 0f,
                 100f,
                 0f,
@@ -309,13 +343,13 @@ class Fragment1 : Fragment() {
                 0.5f,
                 Animation.RELATIVE_TO_SELF,
                 0.5f
-        )
-        scale.duration = 500
-        binding.countNum5.startAnimation(scale)
-    }
+            )
+            scale.duration = 500
+            binding.countNum5.startAnimation(scale)
+        }
 
-    private fun animationCount(view:View) {
-        view.startAnimation(ScaleAnimation(
+        private fun animationCount(view: View) {
+            view.startAnimation(ScaleAnimation(
                 0f,
                 100f,
                 0f,
@@ -324,7 +358,6 @@ class Fragment1 : Fragment() {
                 0.5f,
                 Animation.RELATIVE_TO_SELF,
                 0.5f
-        ).apply { duration = 1000 })
-    }
-
+            ).apply { duration = 1000 })
+        }
 }
