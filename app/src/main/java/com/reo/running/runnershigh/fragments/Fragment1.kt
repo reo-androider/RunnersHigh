@@ -38,19 +38,13 @@ class Fragment1 : Fragment() {
     var stdLocation: Location? = null
     var totalDistance = 0
     var gpsCount = 0
-    var count = 0
-    var count10 = 0
-    var countMinutes = 0
-    var countMinutes10 = 0
-    var countHour = 0
     var results = FloatArray(1)
     var stopWatch = true
-    var againWatch = true
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = Fragment1Binding.inflate(layoutInflater, container, false)
@@ -82,14 +76,13 @@ class Fragment1 : Fragment() {
                     // zoom-in
                     val zoomValue = 25.0f
                     it.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
-                                lastLocation.latitude,
-                                lastLocation.longitude
-                            ), zoomValue
-                        )
+                            CameraUpdateFactory.newLatLngZoom(
+                                    LatLng(
+                                            lastLocation.latitude,
+                                            lastLocation.longitude
+                                    ), zoomValue
+                            )
                     )
-                    //it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(location.latitude,location.longitude),20f))
                     // 平行移動可能に
                     it.uiSettings.isScrollGesturesEnabled = true
                     // 縮尺変更
@@ -100,12 +93,12 @@ class Fragment1 : Fragment() {
                     it.uiSettings.isCompassEnabled = true
                     context?.run {
                         if (ActivityCompat.checkSelfPermission(
-                                this,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                this,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED
+                                        this,
+                                        Manifest.permission.ACCESS_FINE_LOCATION
+                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                        this,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION
+                                ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             // TODO: Consider calling
                             //    ActivityCompat#requestPermissions
@@ -120,8 +113,8 @@ class Fragment1 : Fragment() {
                     }
                     stdLocation?.let {
                         Location.distanceBetween(
-                            it.latitude, it.longitude,
-                            lastLocation.latitude, lastLocation.longitude, results
+                                it.latitude, it.longitude,
+                                lastLocation.latitude, lastLocation.longitude, results
                         )
 
                         if (results[0] < 5) {
@@ -142,42 +135,23 @@ class Fragment1 : Fragment() {
         //位置情報を更新
         context?.run {
             if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
+                            this,
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                            this,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return
             }
             fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.myLooper()
+                    locationRequest,
+                    locationCallback,
+                    Looper.myLooper()
             )
         }
 
         binding.startButton.setOnClickListener {
-//
-//            binding.start.visibility = View.GONE
-//            binding.mapView.visibility = View.INVISIBLE
-//            (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
-//
-//            GlobalScope.launch {
-//                animation5()
-//                delay(1000)
-//                animation4()
-//                delay(1000)
-//                animation3()
-//                delay(1000)
-//                animation2()
-//                delay(1000)
-//                animation1()
-//                delay(1000)
-//                animation0()
-//                delay(1000)
-//            }
 
             binding.run {
                 startText.visibility = View.GONE
@@ -187,85 +161,63 @@ class Fragment1 : Fragment() {
                 GlobalScope.launch {
                     withContext(Dispatchers.IO) {
                         listOf(
-                            countNum5,
-                            countNum4,
-                            countNum3,
-                            countNum2,
-                            countNum1,
-                            countNum0
+                                countNum5,
+                                countNum4,
+                                countNum3,
+                                countNum2,
+                                countNum1,
+                                countNum0
                         ).map {
                             animationCount(it)
                             delay(1000)
                         }
                     }
+
                     withContext(Dispatchers.Main) {
+                        //timer start!!
+                        binding.stopWatch.start()
+
+                        //mapView redisplay
                         mapView.visibility = View.VISIBLE
+
+                        //pauseButton display
                         pauseButton.visibility = View.VISIBLE
                         pauseText.visibility = View.VISIBLE
+
+                        //finishButton display
                         finishButton.visibility = View.VISIBLE
                         finishText.visibility = View.VISIBLE
+
+                        //timer UI display
                         timerScreen.visibility = View.VISIBLE
 
-
-                        // TODO ストップウォッチの時間を止めた後に再開されない（具体的には、fabが押せない）
-                        while (true) {
-                            while (againWatch) {
-                                // RESTART
-                                restartButton.setOnClickListener {
-                                    stopWatch = true
-                                    pauseText.visibility = View.VISIBLE
-                                    pauseButton.visibility = View.VISIBLE
-                                    restartText.visibility = View.INVISIBLE
-                                    restartButton.visibility = View.INVISIBLE
-                                }
-                                while (stopWatch) {
-                                    // PAUSE
-                                    pauseButton.setOnClickListener {
-                                        stopWatch = false
-                                        pauseText.visibility = View.INVISIBLE
-                                        pauseButton.visibility = View.INVISIBLE
-                                        restartText.visibility = View.VISIBLE
-                                        restartButton.visibility = View.VISIBLE
-                                    }
-
-                                    //FINISH
-                                    finishButton.setOnClickListener {
-                                    }
-
-                                    delay(1000)
-                                    count++
-
-                                    if (count > 9) {
-                                        count10++
-                                        count = 0
-                                    }
-
-                                    if (count10 > 5) {
-                                        countMinutes++
-                                        count10 = 0
-                                    }
-
-                                    if (countMinutes > 9) {
-                                        countMinutes10++
-                                        countMinutes = 0
-                                    }
-
-                                    if (countMinutes10 > 5) {
-                                        countHour++
-                                        countMinutes10 = 0
-                                    }
-                                    binding.timeCnt.setText("$countHour:$countMinutes10$countMinutes:$count10$count")
-                                    break
-                                }
-                                break
-                            }
+                        //process when restartButton is pushed
+                        restartButton.setOnClickListener {
+                            //pauseButton display
+                            pauseText.visibility = View.VISIBLE
+                            pauseButton.visibility = View.VISIBLE
+                            //restartButton hide
+                            restartText.visibility = View.INVISIBLE
+                            restartButton.visibility = View.INVISIBLE
                         }
+
+                        //process when pauseButton is pushed
+                        pauseButton.setOnClickListener {
+                            pauseText.visibility = View.INVISIBLE
+                            pauseButton.visibility = View.INVISIBLE
+                            restartText.visibility = View.VISIBLE
+                            restartButton.visibility = View.VISIBLE
+                        }
+
+                        finishButton.setOnClickListener {
+                        }
+
                     }
                 }
             }
-            println("hey!")
         }
     }
+
         override fun onStart() {
             super.onStart()
             binding.mapView.onStart()
