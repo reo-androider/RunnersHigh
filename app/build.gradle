@@ -78,8 +78,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
 
     // 時間差処理の為のCoroutines
-        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
-        implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'
 
     // TabLayout用
     implementation 'com.google.android.material:material:1.2.1'
