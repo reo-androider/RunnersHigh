@@ -73,7 +73,6 @@ class FragmentRun : Fragment() {
                 super.onLocationResult(locationResult)
                 val lastLocation = locationResult?.lastLocation ?: return
                 binding.mapView.getMapAsync {
-
                     // zoom-in
                     val zoomValue = 25.0f
                     it.moveCamera(
@@ -179,7 +178,7 @@ class FragmentRun : Fragment() {
                         stopWatch.start()
                         stopWatch.base = SystemClock.elapsedRealtime()
                         //display mapView
-                        mapView.visibility = View.VISIBLE
+                        binding.mapView.visibility = View.VISIBLE
 
                         //display pauseButton
                         pauseButton.visibility = View.VISIBLE
