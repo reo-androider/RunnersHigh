@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navi_run"
-        android:name="com.reo.running.runnershigh.fragments.Fragment1"
+        android:name="com.reo.running.runnershigh.fragments.FragmentRun"
         android:label="Fragment1" >
         <action
             android:id="@+id/action_navi_run_to_countDown"

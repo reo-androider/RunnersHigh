@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
+import android.os.SystemClock
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -32,7 +33,7 @@ import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
 import kotlin.concurrent.timer
 
-class Fragment1 : Fragment() {
+class FragmentRun : Fragment() {
 
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -175,8 +176,8 @@ class Fragment1 : Fragment() {
 
                     withContext(Dispatchers.Main) {
                         //start timer!! *stopWatch is id of the chronometer.
-                        binding.stopWatch.start()
-
+                        stopWatch.start()
+                        stopWatch.base = SystemClock.elapsedRealtime()
                         //display mapView
                         mapView.visibility = View.VISIBLE
 
@@ -220,8 +221,7 @@ class Fragment1 : Fragment() {
                             snack.view.setBackgroundColor(Color.parseColor("#00E5FF"))
                             snack.setTextColor(Color.parseColor("#212121"))
                             snack.show()
-                            
-
+                            // result画面へ！！！
                             true
                         }
                     }
@@ -250,102 +250,102 @@ class Fragment1 : Fragment() {
         mapView.onDestroy()
     }
     */
-
-        fun animation0() {
-
-            val scale = ScaleAnimation(
-                0f,
-                100f,
-                0f,
-                100f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            )
-            scale.duration = 1000
-            binding.countNum0.startAnimation(scale)
-        }
-
-        fun animation1() {
-
-            val scale = ScaleAnimation(
-                0f,
-                100f,
-                0f,
-                100f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            )
-            scale.duration = 1000
-            binding.countNum1.startAnimation(scale)
-        }
-
-        fun animation2() {
-
-            val scale = ScaleAnimation(
-                0f,
-                100f,
-                0f,
-                100f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            )
-            scale.duration = 500
-            binding.countNum2.startAnimation(scale)
-        }
-
-        fun animation3() {
-
-            val scale = ScaleAnimation(
-                0f,
-                100f,
-                0f,
-                100f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            )
-            scale.duration = 500
-            binding.countNum3.startAnimation(scale)
-        }
-
-        fun animation4() {
-
-            val scale = ScaleAnimation(
-                0f,
-                100f,
-                0f,
-                100f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            )
-            scale.duration = 500
-            binding.countNum4.startAnimation(scale)
-        }
-
-        fun animation5() {
-
-            val scale = ScaleAnimation(
-                0f,
-                100f,
-                0f,
-                100f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
-            )
-            scale.duration = 500
-            binding.countNum5.startAnimation(scale)
-        }
+//
+//        fun animation0() {
+//
+//            val scale = ScaleAnimation(
+//                0f,
+//                100f,
+//                0f,
+//                100f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f
+//            )
+//            scale.duration = 1000
+//            binding.countNum0.startAnimation(scale)
+//        }
+//
+//        fun animation1() {
+//
+//            val scale = ScaleAnimation(
+//                0f,
+//                100f,
+//                0f,
+//                100f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f
+//            )
+//            scale.duration = 1000
+//            binding.countNum1.startAnimation(scale)
+//        }
+//
+//        fun animation2() {
+//
+//            val scale = ScaleAnimation(
+//                0f,
+//                100f,
+//                0f,
+//                100f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f
+//            )
+//            scale.duration = 500
+//            binding.countNum2.startAnimation(scale)
+//        }
+//
+//        fun animation3() {
+//
+//            val scale = ScaleAnimation(
+//                0f,
+//                100f,
+//                0f,
+//                100f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f
+//            )
+//            scale.duration = 500
+//            binding.countNum3.startAnimation(scale)
+//        }
+//
+//        fun animation4() {
+//
+//            val scale = ScaleAnimation(
+//                0f,
+//                100f,
+//                0f,
+//                100f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f
+//            )
+//            scale.duration = 500
+//            binding.countNum4.startAnimation(scale)
+//        }
+//
+//        fun animation5() {
+//
+//            val scale = ScaleAnimation(
+//                0f,
+//                100f,
+//                0f,
+//                100f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f,
+//                Animation.RELATIVE_TO_SELF,
+//                0.5f
+//            )
+//            scale.duration = 500
+//            binding.countNum5.startAnimation(scale)
+//        }
 
         private fun animationCount(view: View) {
             view.startAnimation(ScaleAnimation(
