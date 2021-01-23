@@ -26,6 +26,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.reo.running.runnershigh.MainActivity
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
@@ -39,7 +40,6 @@ class Fragment1 : Fragment() {
     var totalDistance = 0
     var gpsCount = 0
     var results = FloatArray(1)
-    var stopWatch = true
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -174,44 +174,56 @@ class Fragment1 : Fragment() {
                     }
 
                     withContext(Dispatchers.Main) {
-                        //timer start!!
+                        //start timer!! *stopWatch is id of the chronometer.
                         binding.stopWatch.start()
 
-                        //mapView redisplay
+                        //display mapView
                         mapView.visibility = View.VISIBLE
 
-                        //pauseButton display
+                        //display pauseButton
                         pauseButton.visibility = View.VISIBLE
                         pauseText.visibility = View.VISIBLE
 
-                        //finishButton display
+                        //display finishButton
                         finishButton.visibility = View.VISIBLE
                         finishText.visibility = View.VISIBLE
 
-                        //timer UI display
+                        //display timer UI
                         timerScreen.visibility = View.VISIBLE
 
                         //process when restartButton is pushed
                         restartButton.setOnClickListener {
-                            //pauseButton display
+                            //start timer!!
+                            stopWatch.start()
+                            //display pauseButton
                             pauseText.visibility = View.VISIBLE
                             pauseButton.visibility = View.VISIBLE
-                            //restartButton hide
+                            //hide restartButton
                             restartText.visibility = View.INVISIBLE
                             restartButton.visibility = View.INVISIBLE
                         }
 
                         //process when pauseButton is pushed
                         pauseButton.setOnClickListener {
+                            //stop chronometer
+                            stopWatch.stop()
+                            //hide pauseButton
                             pauseText.visibility = View.INVISIBLE
                             pauseButton.visibility = View.INVISIBLE
+                            //redisplay restartButton
                             restartText.visibility = View.VISIBLE
                             restartButton.visibility = View.VISIBLE
                         }
 
-                        finishButton.setOnClickListener {
-                        }
+                        finishButton.setOnLongClickListener {
+                            val snack = Snackbar.make(view, "長押し…",Snackbar.LENGTH_LONG)
+                            snack.view.setBackgroundColor(Color.parseColor("#00E5FF"))
+                            snack.setTextColor(Color.parseColor("#212121"))
+                            snack.show()
+                            
 
+                            true
+                        }
                     }
                 }
             }
