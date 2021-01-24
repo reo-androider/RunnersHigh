@@ -1,10 +1,10 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
-import android.R
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.os.SystemClock
@@ -14,24 +14,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
-import android.widget.Toast
-import androidx.annotation.MainThread
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.viewbinding.ViewBinding
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.GoogleMapOptions
 import com.google.android.gms.maps.model.*
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.reo.running.runnershigh.MainActivity
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
-import kotlin.concurrent.timer
 
 class FragmentRun : Fragment() {
 
@@ -40,18 +32,21 @@ class FragmentRun : Fragment() {
     var stdLocation: Location? = null
     var totalDistance = 0
     var gpsCount = 0
-    var results = FloatArray(1)
+//    var results = FloatArray(1)
+    @RequiresApi(Build.VERSION_CODES.O)
+    var stopTime:Long = 0
 
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = Fragment1Binding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
@@ -69,9 +64,11 @@ class FragmentRun : Fragment() {
 
         //コールバック
         val locationCallback = object : LocationCallback() {
+            var results = FloatArray(1)
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
                 val lastLocation = locationResult?.lastLocation ?: return
+                Log.d("checkLatLng","${LatLng(lastLocation.latitude,lastLocation.longitude)}") //OK!!
                 binding.mapView.getMapAsync {
                     // zoom-in
                     val zoomValue = 25.0f
@@ -111,11 +108,12 @@ class FragmentRun : Fragment() {
                         }
 
                     }
+
+
+                    Log.d("results","${results[0]}")
+
                     stdLocation?.let {
-                        Location.distanceBetween(
-                                it.latitude, it.longitude,
-                                lastLocation.latitude, lastLocation.longitude, results
-                        )
+                        Location.distanceBetween(it.latitude, it.longitude, lastLocation.latitude, lastLocation.longitude, results)
 
                         if (results[0] < 5) {
                             totalDistance += results[0].toInt()
@@ -125,9 +123,13 @@ class FragmentRun : Fragment() {
                         if (gpsCount < 10) {
                             totalDistance = 0
                             gpsCount++
-                            println("count")
                         }
+
+                        stdLocation = lastLocation.latitude
                     }
+                    Log.d("totalDistance","$totalDistance")
+                    binding.distance.text = "$totalDistance"
+
                 }
             }
         }
@@ -175,10 +177,11 @@ class FragmentRun : Fragment() {
 
                     withContext(Dispatchers.Main) {
                         //start timer!! *stopWatch is id of the chronometer.
+                        //stopTimeで止まっていた時間を加えて正常な時間にする
                         stopWatch.start()
                         stopWatch.base = SystemClock.elapsedRealtime()
                         //display mapView
-                        binding.mapView.visibility = View.VISIBLE
+                        mapView.visibility = View.VISIBLE
 
                         //display pauseButton
                         pauseButton.visibility = View.VISIBLE
@@ -193,6 +196,8 @@ class FragmentRun : Fragment() {
 
                         //process when restartButton is pushed
                         restartButton.setOnClickListener {
+                            //止まっていた時間を加えて正常な時間にする
+                            stopWatch.base = SystemClock.elapsedRealtime() + stopTime
                             //start timer!!
                             stopWatch.start()
                             //display pauseButton
@@ -205,6 +210,7 @@ class FragmentRun : Fragment() {
 
                         //process when pauseButton is pushed
                         pauseButton.setOnClickListener {
+                            stopTime = stopWatch.base - SystemClock.elapsedRealtime()
                             //stop chronometer
                             stopWatch.stop()
                             //hide pauseButton
@@ -229,20 +235,20 @@ class FragmentRun : Fragment() {
         }
     }
 
-        override fun onStart() {
-            super.onStart()
-            binding.mapView.onStart()
-        }
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
 
-        override fun onResume() {
-            super.onResume()
-            binding.mapView.onResume()
-        }
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
 
-        override fun onPause() {
-            super.onPause()
-            binding.mapView.onPause()
-        }
+    override fun onPause() {
+        super.onPause()
+        binding.mapView.onPause()
+    }
 /*
     override fun onDestroy() {
         super.onDestroy()
@@ -346,8 +352,8 @@ class FragmentRun : Fragment() {
 //            binding.countNum5.startAnimation(scale)
 //        }
 
-        private fun animationCount(view: View) {
-            view.startAnimation(ScaleAnimation(
+    private fun animationCount(view: View) {
+        view.startAnimation(ScaleAnimation(
                 0f,
                 100f,
                 0f,
@@ -356,6 +362,6 @@ class FragmentRun : Fragment() {
                 0.5f,
                 Animation.RELATIVE_TO_SELF,
                 0.5f
-            ).apply { duration = 1000 })
-        }
+        ).apply { duration = 1000 })
+    }
 }
