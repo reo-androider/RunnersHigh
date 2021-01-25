@@ -1,6 +1,7 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
@@ -17,11 +18,17 @@ import android.view.animation.ScaleAnimation
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
+import com.google.android.gms.common.api.internal.LifecycleCallback.getFragment
 import com.google.android.gms.common.internal.ResourceUtils
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
+import com.reo.running.runnershigh.DialogMaker
 import com.reo.running.runnershigh.MainActivity
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.Resource
@@ -230,13 +237,9 @@ class FragmentRun : Fragment() {
                             restartButton.visibility = View.VISIBLE
                         }
 
-                        finishButton.setOnLongClickListener {
-                            val snack = Snackbar.make(view, "長押し…",Snackbar.LENGTH_LONG)
-                            snack.view.setBackgroundColor(Color.parseColor("#00E5FF"))
-                            snack.setTextColor(Color.parseColor("#212121"))
-                            snack.show()
+                        finishButton.setOnClickListener {
                             // result画面へ！！！
-                            true
+                            findNavController().navigate(R.id.action_fragment1_to_dialogMaker)
                         }
                     }
                 }
@@ -276,5 +279,11 @@ class FragmentRun : Fragment() {
                 Animation.RELATIVE_TO_SELF,
                 0.5f
         ).apply { duration = 1000 })
+    }
+
+    private fun finishAction() {
+        val dialog = DialogMaker()
+        val supportFragment = parentFragmentManager
+        dialog.show(supportFragment,"kotlin")
     }
 }

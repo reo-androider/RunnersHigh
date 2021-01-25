@@ -6,27 +6,6 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 
-<!--    <androidx.viewpager.widget.ViewPager-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent">-->
-
-<!--        <TableLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content">-->
-
-<!--            <com.google.android.material.tabs.TabItem-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"/>-->
-
-<!--            <com.google.android.material.tabs.TabItem-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"/>-->
-<!--        </TableLayout>-->
-<!--    </androidx.viewpager.widget.ViewPager>-->
-
     <!-- timer -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/timer_screen"
@@ -156,7 +135,7 @@
         android:elevation="100dp"
         android:fontFamily="@font/alfa_slab_one"
         android:text="@string/pause_button"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginEnd="250dp"
@@ -213,7 +192,7 @@
         android:elevation="100dp"
         android:fontFamily="@font/alfa_slab_one"
         android:text="@string/finish_button"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginStart="250dp"
