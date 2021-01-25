@@ -12,6 +12,9 @@
         <action
             android:id="@+id/action_navi_run_to_dialogMaker"
             app:destination="@id/dialogMaker" />
+        <argument
+            android:name="totalDistance"
+            android:defaultValue="0.0" />
     </fragment>
 
     <fragment android:id="@+id/navi_high"
@@ -32,10 +35,15 @@
         <action
             android:id="@+id/action_dialogMaker_to_fragmentResult"
             app:destination="@id/fragmentResult" />
+        <argument
+            android:name="totalDistance"
+            android:defaultValue="0.0" />
     </dialog>
+
     <fragment
         android:id="@+id/fragmentResult"
         android:name="com.reo.running.runnershigh.fragments.FragmentResult"
-        android:label="FragmentResult" />
+        android:label="FragmentResult" >
+    </fragment>
 
 </navigation>

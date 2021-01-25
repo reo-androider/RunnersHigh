@@ -17,6 +17,7 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
@@ -142,7 +143,11 @@ class FragmentRun : Fragment() {
 
 
                     Log.d("totalDistance_UISetVer","${Math.ceil(totalDistance) / 1000}")
+
+                    var amountDistance = Math.ceil(totalDistance) / 1000
+                    var amountCalorie = Math.ceil(totalDistance) * weight / 1000
                     binding.distance.setText("${Math.ceil(totalDistance) / 1000}")
+                    
                     binding.calorieNum.setText("${Math.ceil(totalDistance) * weight / 1000 }")
 
                 }
@@ -238,14 +243,15 @@ class FragmentRun : Fragment() {
                         }
 
                         finishButton.setOnClickListener {
-                            // result画面へ！！！
-                            findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
+                            val bunle = bundleOf (Pair("totalDistance", "$totalDistance"))
+                                // result画面へ！！！
+                                findNavController().navigate(R.id.action_navi_run_to_dialogMaker,bunle)
+                            }
                         }
                     }
                 }
             }
         }
-    }
 
     override fun onStart() {
         super.onStart()
