@@ -17,11 +17,14 @@ import android.view.animation.ScaleAnimation
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import com.google.android.gms.common.internal.ResourceUtils
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
 import com.reo.running.runnershigh.MainActivity
+import com.reo.running.runnershigh.R
+import com.reo.running.runnershigh.Resource
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
 
@@ -36,6 +39,7 @@ class FragmentRun : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     var stopTime:Long = 0
     var addCount = 0
+    var weight = 57
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -73,14 +77,13 @@ class FragmentRun : Fragment() {
                 binding.mapView.getMapAsync {
                     // zoom-in
                     val zoomValue = 25.0f
-                    it.moveCamera(
-                            CameraUpdateFactory.newLatLngZoom(
-                                    LatLng(
-                                            lastLocation.latitude,
-                                            lastLocation.longitude
-                                    ), zoomValue
-                            )
-                    )
+                    it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
+
+                    if (gpsCount == 5) {
+                        it.addMarker(MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude))
+                                .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context,R.drawable.in_trace))))
+                    }
+
                     // 平行移動可能に
                     it.uiSettings.isScrollGesturesEnabled = true
                     // 縮尺変更
@@ -118,7 +121,8 @@ class FragmentRun : Fragment() {
                             totalDistance += results[0]
                         }
 
-                        if (gpsCount < 10) {
+                        if (gpsCount < 5) {
+                            Log.d("gpsCount","$gpsCount")
                             totalDistance = 0.0
                             gpsCount++
                         }
@@ -130,7 +134,9 @@ class FragmentRun : Fragment() {
                     stdLocation = lastLocation
 
 
-                    binding.distance.text = "${Math.ceil(totalDistance) / 10}"
+                    Log.d("totalDistance_UISetVer","${Math.ceil(totalDistance) / 1000}")
+                    binding.distance.setText("${Math.ceil(totalDistance) / 1000}")
+                    binding.calorieNum.setText("${Math.ceil(totalDistance) * weight / 1000 }")
 
                 }
             }
