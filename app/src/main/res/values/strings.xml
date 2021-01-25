@@ -17,6 +17,6 @@
     <string name="distance">0.00</string>
     <string name="ditance_unit">km</string>
     <string name="calorie">0.00</string>
-    <string name="calorie_unit">cal</string>
+    <string name="calorie_unit">kcal</string>
 
 </resources>
