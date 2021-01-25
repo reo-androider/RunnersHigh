@@ -8,7 +8,11 @@
     <fragment
         android:id="@+id/navi_run"
         android:name="com.reo.running.runnershigh.fragments.FragmentRun"
-        android:label="Fragment1" />
+        android:label="Fragment1" >
+        <action
+            android:id="@+id/action_navi_run_to_dialogMaker"
+            app:destination="@id/dialogMaker" />
+    </fragment>
 
     <fragment android:id="@+id/navi_high"
         android:name="com.reo.running.runnershigh.fragments.Fragment2"
@@ -21,9 +25,17 @@
     <fragment android:id="@+id/navi_setting"
         android:name="com.reo.running.runnershigh.fragments.Fragment3"
         android:label="Fragment4"/>
+    <dialog
+        android:id="@+id/dialogMaker"
+        android:name="com.reo.running.runnershigh.DialogMaker"
+        android:label="DialogMaker" >
+        <action
+            android:id="@+id/action_dialogMaker_to_fragmentResult"
+            app:destination="@id/fragmentResult" />
+    </dialog>
     <fragment
-        android:id="@+id/countDown"
-        android:name="com.reo.running.runnershigh.CountDown"
-        android:label="CountDown" />
+        android:id="@+id/fragmentResult"
+        android:name="com.reo.running.runnershigh.fragments.FragmentResult"
+        android:label="FragmentResult" />
 
 </navigation>
