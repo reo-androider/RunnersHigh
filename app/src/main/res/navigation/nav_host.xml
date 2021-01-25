@@ -10,11 +10,7 @@
         android:id="@+id/fragment1"
         android:name="com.reo.running.runnershigh.fragments.FragmentRun"
         android:label="fragment_1"
-        tools:layout="@layout/fragment_1">
-        <action
-            android:id="@+id/action_fragment1_to_dialogMaker"
-            app:destination="@id/dialogMaker" />
-    </fragment>
+        tools:layout="@layout/fragment_1"/>
 
     <fragment
         android:id="@+id/fragment2"
@@ -31,17 +27,4 @@
         android:name="com.reo.running.runnershigh.fragments.Fragment4"
         android:label="fragment_4"
         tools:layout="@layout/fragment_4" />
-    <fragment
-        android:id="@+id/fragmentResult"
-        android:name="com.reo.running.runnershigh.fragments.FragmentResult"
-        android:label="FragmentResult"
-        tools:layout="@layout/fragment_result"/>
-    <dialog
-        android:id="@+id/dialogMaker"
-        android:name="com.reo.running.runnershigh.DialogMaker"
-        android:label="DialogMaker" >
-        <action
-            android:id="@+id/action_dialogMaker_to_fragmentResult"
-            app:destination="@id/fragmentResult" />
-    </dialog>
 </navigation>

@@ -128,7 +128,7 @@ class FragmentRun : Fragment() {
                             totalDistance += results[0]
                         }
 
-                        if (gpsCount < 5) {
+                        if (gpsCount < 8) {
                             Log.d("gpsCount","$gpsCount")
                             totalDistance = 0.0
                             gpsCount++
@@ -239,7 +239,7 @@ class FragmentRun : Fragment() {
 
                         finishButton.setOnClickListener {
                             // result画面へ！！！
-                            findNavController().navigate(R.id.action_fragment1_to_dialogMaker)
+                            findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
                         }
                     }
                 }
@@ -281,9 +281,9 @@ class FragmentRun : Fragment() {
         ).apply { duration = 1000 })
     }
 
-    private fun finishAction() {
-        val dialog = DialogMaker()
-        val supportFragment = parentFragmentManager
-        dialog.show(supportFragment,"kotlin")
-    }
+//    private fun finishAction() {
+//        val dialog = DialogMaker()
+//        val supportFragment = parentFragmentManager
+//        dialog.show(supportFragment,"kotlin")
+//    }
 }
