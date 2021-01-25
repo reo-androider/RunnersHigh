@@ -30,11 +30,12 @@ class FragmentRun : Fragment() {
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var stdLocation: Location? = null
-    var totalDistance = 0
+    var totalDistance = 0.0
     var gpsCount = 0
-//    var results = FloatArray(1)
+    var results = FloatArray(1)
     @RequiresApi(Build.VERSION_CODES.O)
     var stopTime:Long = 0
+    var addCount = 0
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -109,26 +110,27 @@ class FragmentRun : Fragment() {
 
                     }
 
-
-                    Log.d("results","${results[0]}")
-
                     stdLocation?.let {
                         Location.distanceBetween(it.latitude, it.longitude, lastLocation.latitude, lastLocation.longitude, results)
+                        Log.d("results","${results[0]}")
 
                         if (results[0] < 5) {
-                            totalDistance += results[0].toInt()
-                            println(totalDistance)
+                            totalDistance += results[0]
                         }
 
                         if (gpsCount < 10) {
-                            totalDistance = 0
+                            totalDistance = 0.0
                             gpsCount++
                         }
 
-                        stdLocation = lastLocation.latitude
                     }
+
+                    Log.d("stdLocation","$stdLocation")
                     Log.d("totalDistance","$totalDistance")
-                    binding.distance.text = "$totalDistance"
+                    stdLocation = lastLocation
+
+
+                    binding.distance.text = "${Math.ceil(totalDistance) / 10}"
 
                 }
             }
@@ -154,6 +156,7 @@ class FragmentRun : Fragment() {
         }
 
         binding.startButton.setOnClickListener {
+            totalDistance = 0.0
 
             binding.run {
                 startText.visibility = View.GONE
@@ -255,102 +258,6 @@ class FragmentRun : Fragment() {
         mapView.onDestroy()
     }
     */
-//
-//        fun animation0() {
-//
-//            val scale = ScaleAnimation(
-//                0f,
-//                100f,
-//                0f,
-//                100f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f
-//            )
-//            scale.duration = 1000
-//            binding.countNum0.startAnimation(scale)
-//        }
-//
-//        fun animation1() {
-//
-//            val scale = ScaleAnimation(
-//                0f,
-//                100f,
-//                0f,
-//                100f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f
-//            )
-//            scale.duration = 1000
-//            binding.countNum1.startAnimation(scale)
-//        }
-//
-//        fun animation2() {
-//
-//            val scale = ScaleAnimation(
-//                0f,
-//                100f,
-//                0f,
-//                100f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f
-//            )
-//            scale.duration = 500
-//            binding.countNum2.startAnimation(scale)
-//        }
-//
-//        fun animation3() {
-//
-//            val scale = ScaleAnimation(
-//                0f,
-//                100f,
-//                0f,
-//                100f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f
-//            )
-//            scale.duration = 500
-//            binding.countNum3.startAnimation(scale)
-//        }
-//
-//        fun animation4() {
-//
-//            val scale = ScaleAnimation(
-//                0f,
-//                100f,
-//                0f,
-//                100f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f
-//            )
-//            scale.duration = 500
-//            binding.countNum4.startAnimation(scale)
-//        }
-//
-//        fun animation5() {
-//
-//            val scale = ScaleAnimation(
-//                0f,
-//                100f,
-//                0f,
-//                100f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f,
-//                Animation.RELATIVE_TO_SELF,
-//                0.5f
-//            )
-//            scale.duration = 500
-//            binding.countNum5.startAnimation(scale)
-//        }
 
     private fun animationCount(view: View) {
         view.startAnimation(ScaleAnimation(
