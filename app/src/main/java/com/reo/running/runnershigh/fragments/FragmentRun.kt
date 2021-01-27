@@ -1,17 +1,13 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
-import android.app.Activity
-import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.os.SystemClock
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,18 +18,10 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentManager
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.room.Database
-import androidx.room.Room
-import com.google.android.gms.common.api.internal.LifecycleCallback.getFragment
-import com.google.android.gms.common.internal.ResourceUtils
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
-import com.google.android.material.snackbar.Snackbar
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
@@ -54,6 +42,7 @@ class FragmentRun : Fragment() {
     var weight = 57
     private lateinit var bundle:Bundle
     private lateinit var appContext:Context
+    private val userDao = MyApplication.db.userDao()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -286,8 +275,7 @@ class FragmentRun : Fragment() {
                         }
 
                         withContext(Dispatchers.IO) {
-                            db = Room.databaseBuilder(requireContext(),AppDatabase::class.java,"RunData")
-                                .build()
+                            userDao.insertAll(1)
                         }
                     }
                 }
@@ -328,7 +316,7 @@ class FragmentRun : Fragment() {
                 0.5f
         ).apply { duration = 1000 })
     }
-    
+
 //    private fun finishAction() {
 //        val dialog = DialogMaker()
 //        val supportFragment = parentFragmentManager
