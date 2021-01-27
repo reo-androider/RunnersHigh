@@ -2,6 +2,8 @@ package com.reo.running.runnershigh.fragments
 
 import android.Manifest
 import android.app.Activity
+import android.app.Application
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.Location
@@ -23,16 +25,15 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.room.Room
 import com.google.android.gms.common.api.internal.LifecycleCallback.getFragment
 import com.google.android.gms.common.internal.ResourceUtils
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
 import com.google.android.material.snackbar.Snackbar
-import com.reo.running.runnershigh.DialogMaker
-import com.reo.running.runnershigh.MainActivity
+import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
-import com.reo.running.runnershigh.Resource
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
 
@@ -48,6 +49,8 @@ class FragmentRun : Fragment() {
     var stopTime:Long = 0
     var addCount = 0
     var weight = 57
+    private lateinit var bundle:Bundle
+    private lateinit var appContext:Context
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -87,7 +90,7 @@ class FragmentRun : Fragment() {
                     val zoomValue = 25.0f
                     it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
 
-                    if (gpsCount == 5) {
+                    if (gpsCount > 5) {
                         it.addMarker(MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude))
                                 .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context,R.drawable.in_trace))))
                     }
@@ -134,21 +137,20 @@ class FragmentRun : Fragment() {
                             totalDistance = 0.0
                             gpsCount++
                         }
-
                     }
 
                     Log.d("stdLocation","$stdLocation")
                     Log.d("totalDistance","$totalDistance")
                     stdLocation = lastLocation
 
-
                     Log.d("totalDistance_UISetVer","${Math.ceil(totalDistance) / 1000}")
 
                     var amountDistance = Math.ceil(totalDistance) / 1000
                     var amountCalorie = Math.ceil(totalDistance) * weight / 1000
                     binding.distance.setText("${Math.ceil(totalDistance) / 1000}")
-                    
                     binding.calorieNum.setText("${Math.ceil(totalDistance) * weight / 1000 }")
+
+                    bundle = bundleOf ("amount" to "$amountDistance")
 
                 }
             }
@@ -243,11 +245,17 @@ class FragmentRun : Fragment() {
                         }
 
                         finishButton.setOnClickListener {
-                            val bunle = bundleOf (Pair("totalDistance", "$totalDistance"))
                                 // result画面へ！！！
-                                findNavController().navigate(R.id.action_navi_run_to_dialogMaker,bunle)
+                                findNavController().navigate(R.id.action_navi_run_to_dialogMaker,bundle)
                             }
                         }
+
+                    withContext(Dispatchers.IO) {
+                            val database =
+                                Room.databaseBuilder(appContext.applicationContext, AppDatabase::class.java, "database-name"
+                                )
+                                    .build()
+                    }
                     }
                 }
             }
