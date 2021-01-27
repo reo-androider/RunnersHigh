@@ -6,11 +6,10 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 
 @Entity
-data class Address constructor(
-    @PrimaryKey(autoGenerate = true)
-    val id:Long,
-    val address: String,
-    val name: String
+data class User(
+    @PrimaryKey(autoGenerate = true) val uid: Int,
+    @ColumnInfo(name="first_name") val todoTitle: String?,
+    @ColumnInfo(name = "last_name") val lastName: String?
     ) {
 
 }

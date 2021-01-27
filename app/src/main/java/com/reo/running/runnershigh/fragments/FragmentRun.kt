@@ -257,7 +257,7 @@ class FragmentRun : Fragment() {
                         }
 
                     withContext(Dispatchers.IO) {
-                            database = Room.databaseBuilder
+                            //database = Room.databaseBuilder
                     }
                     }
                 }
