@@ -7,17 +7,20 @@ import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.Window
+import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import java.lang.IllegalStateException
 
 class DialogMaker:DialogFragment() {
-
+    val distanceAmount = arguments?.getString("amount")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
+            val bundle = bundleOf("amount" to arguments)
             val builder = AlertDialog.Builder(it)
             builder.setMessage("ランニングを終了しますか？")
+                .setTitle("${arguments?.getString("amount")}")
                     .setPositiveButton("YES",
                     DialogInterface.OnClickListener{ dialog, id ->
                         findNavController().navigate(R.id.action_dialogMaker_to_fragmentResult)

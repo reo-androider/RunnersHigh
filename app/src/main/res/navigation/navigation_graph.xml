@@ -13,8 +13,7 @@
             android:id="@+id/action_navi_run_to_dialogMaker"
             app:destination="@id/dialogMaker" />
         <argument
-            android:name="totalDistance"
-            android:defaultValue="0.0" />
+            android:name="totalDistance" />
     </fragment>
 
     <fragment android:id="@+id/navi_high"
@@ -37,7 +36,7 @@
             app:destination="@id/fragmentResult" />
         <argument
             android:name="totalDistance"
-            android:defaultValue="0.0" />
+            app:argType="float" />
     </dialog>
 
     <fragment
