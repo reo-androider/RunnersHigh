@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.os.SystemClock
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.room.Database
 import androidx.room.Room
 import com.google.android.gms.common.api.internal.LifecycleCallback.getFragment
 import com.google.android.gms.common.internal.ResourceUtils
@@ -38,6 +40,10 @@ import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
 
 class FragmentRun : Fragment() {
+
+    companion object {
+        lateinit var database:Database
+    }
 
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -251,10 +257,7 @@ class FragmentRun : Fragment() {
                         }
 
                     withContext(Dispatchers.IO) {
-                            val database =
-                                Room.databaseBuilder(appContext.applicationContext, AppDatabase::class.java, "database-name"
-                                )
-                                    .build()
+                            database = Room.databaseBuilder
                     }
                     }
                 }

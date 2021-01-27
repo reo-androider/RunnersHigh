@@ -2,7 +2,7 @@ package com.reo.running.runnershigh
 
 import androidx.room.*
 
-@Database(entities = arrayOf(User::class),version = 1)
+@Database(entities = arrayOf(AddressDao::class),version = 1)
 abstract class AppDatabase:RoomDatabase() {
-    abstract fun userDao(): UserDao
+    abstract fun adderssDao(): AddressDao
 }

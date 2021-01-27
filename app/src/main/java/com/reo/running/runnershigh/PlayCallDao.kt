@@ -3,22 +3,16 @@ package com.reo.running.runnershigh
 import androidx.room.*
 
 @Dao
-interface UserDao {
-    @Insert
-    fun insert(user :User)
+interface AddressDao {
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun createAddress(address: Address)
+
+    @Query("SELECT * FROM ADDRESS")
+    fun findAll(): List<Address>
 
     @Update
-    fun update(user: User)
+    fun updateAddress(address: Address)
 
     @Delete
-    fun delete(user: User)
-
-    @Query("delete from users")
-    fun deleteAll()
-
-    @Query("select * from users")
-    fun getAll(): List<User>
-
-    @Query("select * from users where id = :id")
-    fun getUser(id: Int): User
+    fun delete(address: Address)
 }
