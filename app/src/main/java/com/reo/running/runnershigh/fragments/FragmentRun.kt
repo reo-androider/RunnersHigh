@@ -41,10 +41,7 @@ import kotlinx.coroutines.*
 
 class FragmentRun : Fragment() {
 
-    companion object {
-        lateinit var database:Database
-    }
-
+    lateinit var db:AppDatabase
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var stdLocation: Location? = null
@@ -90,15 +87,39 @@ class FragmentRun : Fragment() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
                 val lastLocation = locationResult?.lastLocation ?: return
-                Log.d("checkLatLng","${LatLng(lastLocation.latitude,lastLocation.longitude)}") //OK!!
+                Log.d(
+                    "checkLatLng",
+                    "${LatLng(lastLocation.latitude, lastLocation.longitude)}"
+                ) //OK!!
                 binding.mapView.getMapAsync {
                     // zoom-in
                     val zoomValue = 25.0f
-                    it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
+                    it.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                lastLocation.latitude,
+                                lastLocation.longitude
+                            ), zoomValue
+                        )
+                    )
 
                     if (gpsCount > 5) {
-                        it.addMarker(MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude))
-                                .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context,R.drawable.in_trace))))
+                        it.addMarker(
+                            MarkerOptions().position(
+                                LatLng(
+                                    lastLocation.latitude,
+                                    lastLocation.longitude
+                                )
+                            )
+                                .icon(
+                                    BitmapDescriptorFactory.fromBitmap(
+                                        Resource.getBitmap(
+                                            context,
+                                            R.drawable.in_trace
+                                        )
+                                    )
+                                )
+                        )
                     }
 
                     // 平行移動可能に
@@ -111,12 +132,12 @@ class FragmentRun : Fragment() {
                     it.uiSettings.isCompassEnabled = true
                     context?.run {
                         if (ActivityCompat.checkSelfPermission(
-                                        this,
-                                        Manifest.permission.ACCESS_FINE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                        this,
-                                        Manifest.permission.ACCESS_COARSE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED
+                                this,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             // TODO: Consider calling
                             //    ActivityCompat#requestPermissions
@@ -131,32 +152,38 @@ class FragmentRun : Fragment() {
                     }
 
                     stdLocation?.let {
-                        Location.distanceBetween(it.latitude, it.longitude, lastLocation.latitude, lastLocation.longitude, results)
-                        Log.d("results","${results[0]}")
+                        Location.distanceBetween(
+                            it.latitude,
+                            it.longitude,
+                            lastLocation.latitude,
+                            lastLocation.longitude,
+                            results
+                        )
+                        Log.d("results", "${results[0]}")
 
                         if (results[0] < 5) {
                             totalDistance += results[0]
                         }
 
                         if (gpsCount < 8) {
-                            Log.d("gpsCount","$gpsCount")
+                            Log.d("gpsCount", "$gpsCount")
                             totalDistance = 0.0
                             gpsCount++
                         }
                     }
 
-                    Log.d("stdLocation","$stdLocation")
-                    Log.d("totalDistance","$totalDistance")
+                    Log.d("stdLocation", "$stdLocation")
+                    Log.d("totalDistance", "$totalDistance")
                     stdLocation = lastLocation
 
-                    Log.d("totalDistance_UISetVer","${Math.ceil(totalDistance) / 1000}")
+                    Log.d("totalDistance_UISetVer", "${Math.ceil(totalDistance) / 1000}")
 
                     var amountDistance = Math.ceil(totalDistance) / 1000
                     var amountCalorie = Math.ceil(totalDistance) * weight / 1000
                     binding.distance.setText("${Math.ceil(totalDistance) / 1000}")
-                    binding.calorieNum.setText("${Math.ceil(totalDistance) * weight / 1000 }")
+                    binding.calorieNum.setText("${Math.ceil(totalDistance) * weight / 1000}")
 
-                    bundle = bundleOf ("amount" to "$amountDistance")
+                    bundle = bundleOf("amount" to "$amountDistance")
 
                 }
             }
@@ -165,104 +192,108 @@ class FragmentRun : Fragment() {
         //位置情報を更新
         context?.run {
             if (ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return
             }
             fusedLocationClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    Looper.myLooper()
+                locationRequest,
+                locationCallback,
+                Looper.myLooper()
             )
-        }
 
-        binding.startButton.setOnClickListener {
-            totalDistance = 0.0
+            binding.startButton.setOnClickListener {
+                totalDistance = 0.0
 
-            binding.run {
-                startText.visibility = View.GONE
-                startButton.visibility = View.GONE
-                mapView.visibility = View.INVISIBLE
-                (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
-                GlobalScope.launch {
-                    withContext(Dispatchers.IO) {
-                        listOf(
+                binding.run {
+                    startText.visibility = View.GONE
+                    startButton.visibility = View.GONE
+                    mapView.visibility = View.INVISIBLE
+                    (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
+                    GlobalScope.launch {
+                        withContext(Dispatchers.IO) {
+                            listOf(
                                 countNum5,
                                 countNum4,
                                 countNum3,
                                 countNum2,
                                 countNum1,
                                 countNum0
-                        ).map {
-                            animationCount(it)
-                            delay(1000)
-                        }
-                    }
-
-                    withContext(Dispatchers.Main) {
-                        //start timer!! *stopWatch is id of the chronometer.
-                        //stopTimeで止まっていた時間を加えて正常な時間にする
-                        stopWatch.start()
-                        stopWatch.base = SystemClock.elapsedRealtime()
-                        //display mapView
-                        mapView.visibility = View.VISIBLE
-
-                        //display pauseButton
-                        pauseButton.visibility = View.VISIBLE
-                        pauseText.visibility = View.VISIBLE
-
-                        //display finishButton
-                        finishButton.visibility = View.VISIBLE
-                        finishText.visibility = View.VISIBLE
-
-                        //display timer UI
-                        timerScreen.visibility = View.VISIBLE
-
-                        //process when restartButton is pushed
-                        restartButton.setOnClickListener {
-                            //止まっていた時間を加えて正常な時間にする
-                            stopWatch.base = SystemClock.elapsedRealtime() + stopTime
-                            //start timer!!
-                            stopWatch.start()
-                            //display pauseButton
-                            pauseText.visibility = View.VISIBLE
-                            pauseButton.visibility = View.VISIBLE
-                            //hide restartButton
-                            restartText.visibility = View.INVISIBLE
-                            restartButton.visibility = View.INVISIBLE
-                        }
-
-                        //process when pauseButton is pushed
-                        pauseButton.setOnClickListener {
-                            stopTime = stopWatch.base - SystemClock.elapsedRealtime()
-                            //stop chronometer
-                            stopWatch.stop()
-                            //hide pauseButton
-                            pauseText.visibility = View.INVISIBLE
-                            pauseButton.visibility = View.INVISIBLE
-                            //redisplay restartButton
-                            restartText.visibility = View.VISIBLE
-                            restartButton.visibility = View.VISIBLE
-                        }
-
-                        finishButton.setOnClickListener {
-                                // result画面へ！！！
-                                findNavController().navigate(R.id.action_navi_run_to_dialogMaker,bundle)
+                            ).map {
+                                animationCount(it)
+                                delay(1000)
                             }
                         }
 
-                    withContext(Dispatchers.IO) {
-                            //database = Room.databaseBuilder
-                    }
+                        withContext(Dispatchers.Main) {
+                            //start timer!! *stopWatch is id of the chronometer.
+                            //stopTimeで止まっていた時間を加えて正常な時間にする
+                            stopWatch.start()
+                            stopWatch.base = SystemClock.elapsedRealtime()
+                            //display mapView
+                            mapView.visibility = View.VISIBLE
+
+                            //display pauseButton
+                            pauseButton.visibility = View.VISIBLE
+                            pauseText.visibility = View.VISIBLE
+
+                            //display finishButton
+                            finishButton.visibility = View.VISIBLE
+                            finishText.visibility = View.VISIBLE
+
+                            //display timer UI
+                            timerScreen.visibility = View.VISIBLE
+
+                            //process when restartButton is pushed
+                            restartButton.setOnClickListener {
+                                //止まっていた時間を加えて正常な時間にする
+                                stopWatch.base = SystemClock.elapsedRealtime() + stopTime
+                                //start timer!!
+                                stopWatch.start()
+                                //display pauseButton
+                                pauseText.visibility = View.VISIBLE
+                                pauseButton.visibility = View.VISIBLE
+                                //hide restartButton
+                                restartText.visibility = View.INVISIBLE
+                                restartButton.visibility = View.INVISIBLE
+                            }
+
+                            //process when pauseButton is pushed
+                            pauseButton.setOnClickListener {
+                                stopTime = stopWatch.base - SystemClock.elapsedRealtime()
+                                //stop chronometer
+                                stopWatch.stop()
+                                //hide pauseButton
+                                pauseText.visibility = View.INVISIBLE
+                                pauseButton.visibility = View.INVISIBLE
+                                //redisplay restartButton
+                                restartText.visibility = View.VISIBLE
+                                restartButton.visibility = View.VISIBLE
+                            }
+
+                            finishButton.setOnClickListener {
+                                // result画面へ！！！
+                                findNavController().navigate(
+                                    R.id.action_navi_run_to_dialogMaker,
+                                    bundle
+                                )
+                            }
+                        }
+
+                        withContext(Dispatchers.IO) {
+                            db = Room.databaseBuilder(requireContext(),AppDatabase::class.java,"RunData")
+                                .build()
+                        }
                     }
                 }
             }
         }
+    }
 
     override fun onStart() {
         super.onStart()
@@ -297,7 +328,7 @@ class FragmentRun : Fragment() {
                 0.5f
         ).apply { duration = 1000 })
     }
-
+    
 //    private fun finishAction() {
 //        val dialog = DialogMaker()
 //        val supportFragment = parentFragmentManager
