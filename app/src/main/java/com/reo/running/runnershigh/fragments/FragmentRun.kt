@@ -34,14 +34,15 @@ class FragmentRun : Fragment() {
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var stdLocation: Location? = null
-    private var totalDistance by Delegates.notNull<Double>()
+    var totalDistance = 0.0
     var gpsCount = 0
     var results = FloatArray(1)
     @RequiresApi(Build.VERSION_CODES.O)
     var stopTime:Long = 0
     var weight = 57
     private lateinit var bundle:Bundle
-    private val recordDao = MyApplication.db.recordDao()
+
+  //  private val recordDao = MyApplication.db.recordDao()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -265,10 +266,10 @@ class FragmentRun : Fragment() {
                             }
 
                                 finishButton.setOnClickListener {
-                                    lifecycleScope.launch {
-                                        val record = Record(0,Math.ceil(totalDistance) / 1000,Math.ceil(totalDistance) * weight / 1000)
-                                        recordDao.insertRecord(record)
-                                    }
+//                                    lifecycleScope.launch {
+//                                        val record = Record(0,Math.ceil(totalDistance) / 1000,Math.ceil(totalDistance) * weight / 1000)
+//                                        recordDao.insertRecord(record)
+//                                    }
                                     // result画面へ！！！
                                 findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
                             }

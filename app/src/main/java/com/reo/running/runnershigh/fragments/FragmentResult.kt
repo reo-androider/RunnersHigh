@@ -6,9 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 
 class FragmentResult : Fragment() {
+
+//    private val recordDao = MyApplication.db.recordDao()
 
     private lateinit var binding:FragmentResultBinding
     val bundle = Bundle()
@@ -25,7 +28,5 @@ class FragmentResult : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("fragmentResultCheck","${arguments?.getString("amount")}")
-        binding.totalDistance.text = "${arguments?.getString("amount")}"
     }
 }
