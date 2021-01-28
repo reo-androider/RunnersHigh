@@ -37,12 +37,11 @@ class FragmentRun : Fragment() {
     var totalDistance = 0.0
     var gpsCount = 0
     var results = FloatArray(1)
-    @RequiresApi(Build.VERSION_CODES.O)
     var stopTime:Long = 0
     var weight = 57
     private lateinit var bundle:Bundle
 
-  //  private val recordDao = MyApplication.db.recordDao()
+    private val recordDao = MyApplication.db.recordDao()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -54,7 +53,6 @@ class FragmentRun : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
@@ -252,26 +250,26 @@ class FragmentRun : Fragment() {
                                 restartButton.visibility = View.INVISIBLE
                             }
 
-                            //process when pauseButton is pushed
                             pauseButton.setOnClickListener {
                                 stopTime = stopWatch.base - SystemClock.elapsedRealtime()
-                                //stop chronometer
                                 stopWatch.stop()
-                                //hide pauseButton
                                 pauseText.visibility = View.INVISIBLE
                                 pauseButton.visibility = View.INVISIBLE
-                                //redisplay restartButton
                                 restartText.visibility = View.VISIBLE
                                 restartButton.visibility = View.VISIBLE
                             }
 
                                 finishButton.setOnClickListener {
-//                                    lifecycleScope.launch {
-//                                        val record = Record(0,Math.ceil(totalDistance) / 1000,Math.ceil(totalDistance) * weight / 1000)
-//                                        recordDao.insertRecord(record)
-//                                    }
-                                    // result画面へ！！！
-                                findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
+                                    lifecycleScope.launch (Dispatchers.IO) {
+                                        val record = Record(0,Math.ceil(totalDistance) / 1000,Math.ceil(totalDistance) * weight / 1000)
+                                        recordDao.insertRecord(record)
+                                        Log.d("kotlin","${recordDao.getAll()}")
+
+                                        withContext(Dispatchers.Main) {
+                                            // result画面へ！！！
+                                            Log.d("kotlin","test")
+                                            findNavController().navigate(R.id.action_navi_run_to_dialogMaker)}
+                                    }
                             }
                         }
                     }

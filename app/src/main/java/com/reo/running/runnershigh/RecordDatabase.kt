@@ -24,7 +24,7 @@ interface RecordDao {
     suspend fun getRecord(id: Int): Record
 
     @Insert
-    fun insertRecord(record: Record)
+    suspend fun insertRecord(record: Record)
 
     @Update
     suspend fun updateRecord(record: Record)
