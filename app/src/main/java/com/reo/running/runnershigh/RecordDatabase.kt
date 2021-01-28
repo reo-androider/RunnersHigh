@@ -1,9 +1,6 @@
 package com.reo.running.runnershigh
 
 import androidx.room.*
-import com.twitter.sdk.android.core.models.User
-import java.text.SimpleDateFormat
-import java.util.*
 
 @Database(entities = [Record::class], version = 1)
 abstract class RecordDatabase : RoomDatabase() {
@@ -15,10 +12,7 @@ data class Record(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val distance: Double,
-    val time: Long,
     val calorie: Double,
-    val date: Long,
-    val onComplete: Boolean
 )
 
 @Dao
@@ -30,7 +24,7 @@ interface RecordDao {
     suspend fun getRecord(id: Int): Record
 
     @Insert
-    fun insertRecord(record: Record)
+    fun insertRecord(record: Int, d: Double, d1: Double)
 
     @Update
     suspend fun updateRecord(record: Record)
