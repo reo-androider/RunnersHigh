@@ -6,7 +6,7 @@ import androidx.room.Room
 class MyApplication: Application() {
 
     companion object {
-        lateinit var db: AppDatabase
+        lateinit var db: RecordDatabase
     }
 
     override fun onCreate() {
@@ -14,7 +14,7 @@ class MyApplication: Application() {
 
         db = Room.databaseBuilder(
             this,
-            AppDatabase::class.java,
+            RecordDatabase::class.java,
             "database-name"
         ).build()
     }

@@ -18,6 +18,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -26,14 +27,14 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
+import kotlin.properties.Delegates
 
 class FragmentRun : Fragment() {
 
-    lateinit var db:AppDatabase
     private lateinit var binding: Fragment1Binding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var stdLocation: Location? = null
-    var totalDistance = 0.0
+    private var totalDistance by Delegates.notNull<Double>()
     var gpsCount = 0
     var results = FloatArray(1)
     @RequiresApi(Build.VERSION_CODES.O)
@@ -42,7 +43,7 @@ class FragmentRun : Fragment() {
     var weight = 57
     private lateinit var bundle:Bundle
     private lateinit var appContext:Context
-    private val userDao = MyApplication.db.userDao()
+    private val recordDao = MyApplication.db.recordDao()
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -265,17 +266,12 @@ class FragmentRun : Fragment() {
                                 restartButton.visibility = View.VISIBLE
                             }
 
-                            finishButton.setOnClickListener {
-                                // result画面へ！！！
-                                findNavController().navigate(
-                                    R.id.action_navi_run_to_dialogMaker,
-                                    bundle
-                                )
+                                finishButton.setOnClickListener {
+                                    lifecycleScope.launch {
+                                    }
+                                    // result画面へ！！！
+                                findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
                             }
-                        }
-
-                        withContext(Dispatchers.IO) {
-                            userDao.insertAll(1)
                         }
                     }
                 }
