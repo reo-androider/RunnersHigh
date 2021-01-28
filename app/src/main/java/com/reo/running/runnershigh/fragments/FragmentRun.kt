@@ -39,10 +39,8 @@ class FragmentRun : Fragment() {
     var results = FloatArray(1)
     @RequiresApi(Build.VERSION_CODES.O)
     var stopTime:Long = 0
-    var addCount = 0
     var weight = 57
     private lateinit var bundle:Bundle
-    private lateinit var appContext:Context
     private val recordDao = MyApplication.db.recordDao()
 
     override fun onCreateView(
@@ -268,11 +266,8 @@ class FragmentRun : Fragment() {
 
                                 finishButton.setOnClickListener {
                                     lifecycleScope.launch {
-                                        recordDao.insertRecord(
-                                                0,
-                                                Math.ceil(totalDistance) / 1000,
-                                                Math.ceil(totalDistance) * weight / 1000,
-                                        )
+                                        val record = Record(0,Math.ceil(totalDistance) / 1000,Math.ceil(totalDistance) * weight / 1000)
+                                        recordDao.insertRecord(record)
                                     }
                                     // result画面へ！！！
                                 findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
