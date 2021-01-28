@@ -268,6 +268,11 @@ class FragmentRun : Fragment() {
 
                                 finishButton.setOnClickListener {
                                     lifecycleScope.launch {
+                                        recordDao.insertRecord(
+                                                0,
+                                                Math.ceil(totalDistance) / 1000,
+                                                Math.ceil(totalDistance) * weight / 1000,
+                                        )
                                     }
                                     // result画面へ！！！
                                 findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
