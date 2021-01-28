@@ -17,10 +17,8 @@ class DialogMaker:DialogFragment() {
     val distanceAmount = arguments?.getString("amount")
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
-            val bundle = bundleOf("amount" to arguments)
             val builder = AlertDialog.Builder(it)
             builder.setMessage("ランニングを終了しますか？")
-                .setTitle("${arguments?.getString("amount")}")
                     .setPositiveButton("YES",
                     DialogInterface.OnClickListener{ dialog, id ->
                         findNavController().navigate(R.id.action_dialogMaker_to_fragmentResult)
