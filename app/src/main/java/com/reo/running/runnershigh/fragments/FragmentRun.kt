@@ -25,6 +25,7 @@ import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
 import java.text.DecimalFormat
+import java.util.concurrent.TimeUnit
 import kotlin.math.ceil
 
 class FragmentRun : Fragment() {
@@ -72,38 +73,50 @@ class FragmentRun : Fragment() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
                 val lastLocation = locationResult?.lastLocation ?: return
-                Log.d(
-                    "checkLatLng",
-                    "${LatLng(lastLocation.latitude, lastLocation.longitude)}"
-                ) //OK!!
+                Log.d("checkLatLng", "${LatLng(lastLocation.latitude, lastLocation.longitude)}")
                 binding.mapView.getMapAsync {
-                    // zoom-in
                     val zoomValue = 25.0f
-                    it.moveCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(
+                    it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
+
+
+                    if (gpsCount < 8) {
+                        Log.d("gpsCount", "$gpsCount")
+                        totalDistance = 0.0
+                        gpsCount++
+                    }
+
+                    if (recordStop == true) {
+
+                        stdLocation?.let {
+                            Location.distanceBetween(
+                                it.latitude,
+                                it.longitude,
                                 lastLocation.latitude,
-                                lastLocation.longitude
-                            ), zoomValue
-                        )
-                    )
+                                lastLocation.longitude,
+                                results
+                            )
+
+                            if (results[0] < 5) {
+                                totalDistance += results[0]
+                            }
+
+                            Log.d("results", "${results[0]}")
+                        }
+
+                        Log.d("stdLocation", "$stdLocation")
+                        Log.d("totalDistance", "$totalDistance")
+                        stdLocation = lastLocation
+
+                        kmAmount = kmConvert(totalDistance)
+                        calorieAmount = calorieConvert(totalDistance, weight)
+                        binding.distance.text = "$kmAmount"
+                        binding.calorieNum.text = "$calorieAmount"
+                    }
 
                     if (gpsCount > 5) {
                         it.addMarker(
-                            MarkerOptions().position(
-                                LatLng(
-                                    lastLocation.latitude,
-                                    lastLocation.longitude
-                                )
-                            )
-                                .icon(
-                                    BitmapDescriptorFactory.fromBitmap(
-                                        Resource.getBitmap(
-                                            context,
-                                            R.drawable.in_trace
-                                        )
-                                    )
-                                )
+                            MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude))
+                                .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace)))
                         )
                     }
 
@@ -129,41 +142,6 @@ class FragmentRun : Fragment() {
                             // for ActivityCompat#requestPermissions for more details.
                             it.isMyLocationEnabled = true
                         }
-
-                    }
-
-                    if (gpsCount < 8) {
-                        Log.d("gpsCount", "$gpsCount")
-                        totalDistance = 0.0
-                        gpsCount++
-                    }
-
-                    if (recordStop == true) {
-
-                    stdLocation?.let {
-                        Location.distanceBetween(
-                            it.latitude,
-                            it.longitude,
-                            lastLocation.latitude,
-                            lastLocation.longitude,
-                            results
-                        )
-
-                        if (results[0] < 5) {
-                            totalDistance += results[0]
-                        }
-
-                        Log.d("results", "${results[0]}")
-                    }
-
-                        Log.d("stdLocation", "$stdLocation")
-                        Log.d("totalDistance", "$totalDistance")
-                        stdLocation = lastLocation
-
-                        kmAmount = kmConvert(totalDistance)
-                        calorieAmount = calorieConvert(totalDistance, weight)
-                        binding.distance.text = "$kmAmount"
-                        binding.calorieNum.text = "$calorieAmount"
                     }
                 }
             }
@@ -247,7 +225,19 @@ class FragmentRun : Fragment() {
                             }
 
                             finishButton.setOnClickListener {
-                                // TODO chronometerの値を取得する chronometerが23秒の時のログ
+//                                var chronometer = String.format("%02d:%02d:%02d",
+//                                    TimeUnit.MILLISECONDS.toHours(stopWatch.base),
+//                                    TimeUnit.MILLISECONDS.toHours(stopWatch.base),
+//                                    TimeUnit.MILLISECONDS.toMinutes(stopWatch.base) -
+//                                            TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(stopWatch.base)),
+//                                    TimeUnit.MILLISECONDS.toSeconds(stopWatch.base) -
+//                                            TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(stopWatch.base))
+//                                )
+                                var chronometer = String.format("%02d",
+                                    TimeUnit.MILLISECONDS.toHours(stopWatch.base))
+
+                                Log.d("chronometer","$chronometer")
+
                                 val builder = AlertDialog.Builder(requireContext())
                                 builder
                                     .setCancelable(false)
