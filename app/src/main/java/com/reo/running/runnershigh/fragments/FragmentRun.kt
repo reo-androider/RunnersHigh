@@ -46,7 +46,7 @@ class FragmentRun : Fragment() {
     var marker: Marker? = null
     var runStart = false
     var leaveFootprints = 0
-    var gpsSearch = false
+    var gpsSearch = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -116,14 +116,16 @@ class FragmentRun : Fragment() {
                         binding.calorieNum.text = "$calorieAmount"
                     }
 
-                    if (gpsAdjust > 5) {
+                    if (gpsAdjust > 10) {
 
                         if (runStart == false) {
 
-                            if (gpsSearch != false) {
+                            if (gpsSearch == 10) {
                                 binding.gpsSearch.visibility = View.GONE
                                 binding.startNav.visibility = View.VISIBLE
                                 binding.startNav2.visibility = View.VISIBLE
+                                binding.startText.visibility = View.VISIBLE
+                                binding.startButton.visibility = View.VISIBLE
                             }
 
                             marker?.remove()
@@ -132,7 +134,7 @@ class FragmentRun : Fragment() {
                                     .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.ic_running)))
                                     .title("You are here"))
 
-                            gpsSearch = true
+                            gpsSearch++
                         }
 
                         else if (runStart == true) {
@@ -195,25 +197,41 @@ class FragmentRun : Fragment() {
             )
 
             binding.startButton.setOnClickListener {
+                GlobalScope.launch(Dispatchers.Main) {
+                    binding.mapView.visibility = View.INVISIBLE
+                    countDown5()
+                    delay(1000)
+                    countDown4()
+                    delay(1000)
+                    countDown3()
+                    delay(1000)
+                    countDown2()
+                    delay(1000)
+                    countDown1()
+                    delay(1000)
+                    countDown0()
+                    binding.mapView.visibility = View.VISIBLE
+                }
                 binding.run {
                     startText.visibility = View.GONE
                     startButton.visibility = View.GONE
-                    mapView.visibility = View.INVISIBLE
+
                     (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
                     GlobalScope.launch {
-                        withContext(Dispatchers.IO) {
-                            listOf(
-                                countNum5,
-                                countNum4,
-                                countNum3,
-                                countNum2,
-                                countNum1,
-                                countNum0
-                            ).map {
-                                it.visibility = View.VISIBLE
-                                animationCount(it)
-                                delay(1000)
-                            }
+                        withContext(Dispatchers.Main) {
+                            view.startAnimation(ScaleAnimation(0f, 100f, 0f, 100f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f))
+//                            listOf(
+//                                countNum5,
+//                                countNum4,
+//                                countNum3,
+//                                countNum2,
+//                                countNum1,
+//                                countNum0
+//                            ).map {
+//                                viewVisible(it)
+//                                animationCount(it)
+//                                delay(1000)
+//                            }
                         }
 
                         withContext(Dispatchers.Main) {
@@ -323,18 +341,19 @@ class FragmentRun : Fragment() {
     }
     */
 
-    private fun animationCount(view: View) {
-        view.startAnimation(ScaleAnimation(
-            0f,
-            100f,
-            0f,
-            100f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f
-        ).apply { duration = 1000 })
-    }
+//    private fun animationCount(view: View) {
+//        view.startAnimation(ScaleAnimation(
+//            0f,
+//            100f,
+//            0f,
+//            100f,
+//            Animation.RELATIVE_TO_SELF,
+//            0.5f,
+//            Animation.RELATIVE_TO_SELF,
+//            0.5f
+//        ).apply { duration = 1000 })
+//    }
+
 
 //    private fun finishAction() {
 //        val dialog = DialogMaker()
@@ -348,5 +367,96 @@ class FragmentRun : Fragment() {
 
     private fun calorieConvert(distance: Double, weight: Double): Double {
         return ceil(distance) * weight / 1000
+    }
+
+
+    fun countDown5() {
+        val scale = ScaleAnimation(
+            0f,
+            100f,
+            0f,
+            100f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        scale.duration = 3000
+        binding.countNum5.startAnimation(scale)
+    }
+
+    fun countDown4() {
+        val scale = ScaleAnimation(
+            0f,
+            100f,
+            0f,
+            100f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        scale.duration = 3000
+        binding.countNum4.startAnimation(scale)
+    }
+
+    fun countDown3() {
+        val scale = ScaleAnimation(
+            0f,
+            100f,
+            0f,
+            100f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        scale.duration = 3000
+        binding.countNum3.startAnimation(scale)
+    }
+
+    fun countDown2() {
+        val scale = ScaleAnimation(
+            0f,
+            100f,
+            0f,
+            100f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        scale.duration = 3000
+        binding.countNum2.startAnimation(scale)
+    }
+
+    fun countDown1() {
+        val scale = ScaleAnimation(
+            0f,
+            100f,
+            0f,
+            100f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        scale.duration = 3000
+        binding.countNum1.startAnimation(scale)
+    }
+
+    fun countDown0() {
+        val scale = ScaleAnimation(
+            0f,
+            100f,
+            0f,
+            100f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        )
+        scale.duration = 3000
+        binding.countNum0.startAnimation(scale)
     }
 }
