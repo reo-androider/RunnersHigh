@@ -36,7 +36,7 @@ class FragmentRun : Fragment() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var stdLocation: Location? = null
     var totalDistance = 0.0
-    var gpsCount = 0
+    var gpsAdjust = 0
     var weight = 57.0
     var kmAmount: Double = 0.0
     var calorieAmount: Double = 0.0
@@ -45,6 +45,8 @@ class FragmentRun : Fragment() {
     private val recordDao = MyApplication.db.recordDao()
     var marker: Marker? = null
     var runStart = false
+    var leaveFootprints = 0
+    var gpsSearch = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,10 +82,10 @@ class FragmentRun : Fragment() {
                     it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
 
 
-                    if (gpsCount < 8) {
-                        Log.d("gpsCount", "$gpsCount")
+                    if (gpsAdjust < 8) {
+                        Log.d("gpsCount", "$gpsAdjust")
                         totalDistance = 0.0
-                        gpsCount++
+                        gpsAdjust++
                     }
 
                     if (recordStop == true) {
@@ -114,51 +116,36 @@ class FragmentRun : Fragment() {
                         binding.calorieNum.text = "$calorieAmount"
                     }
 
-                    if (gpsCount > 5) {
+                    if (gpsAdjust > 5) {
 
                         if (runStart == false) {
 
+                            if (gpsSearch != false) {
+                                binding.gpsSearch.visibility = View.GONE
+                                binding.startNav.visibility = View.VISIBLE
+                                binding.startNav2.visibility = View.VISIBLE
+                            }
+
                             marker?.remove()
                             marker = it.addMarker(
-                                MarkerOptions().position(
-                                    LatLng(
-                                        lastLocation.latitude,
-                                        lastLocation.longitude
-                                    )
-                                )
-                                    .icon(
-                                        BitmapDescriptorFactory.fromBitmap(
-                                            Resource.getBitmap(
-                                                context,
-                                                R.drawable.ic_running
-                                            )
-                                        )
-                                    )
-                                    .title("You are here!")
-                            )
+                                MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude))
+                                    .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.ic_running)))
+                                    .title("You are here"))
 
+                            gpsSearch = true
                         }
 
-                        else {
-                            
-                            marker = it.addMarker(
-                                MarkerOptions().position(
-                                    LatLng(
-                                        lastLocation.latitude,
-                                        lastLocation.longitude
-                                    )
-                                )
-                                    .icon(
-                                        BitmapDescriptorFactory.fromBitmap(
-                                            Resource.getBitmap(
-                                                context,
-                                                R.drawable.ic_running
-                                            )
-                                        )
-                                    )
-                            )
+                        else if (runStart == true) {
+                            Log.d("duraring_run","OK")
+                            if (leaveFootprints % 5 == 0) {
+                                marker = it.addMarker(
+                                    MarkerOptions().position(
+                                        LatLng(lastLocation.latitude, lastLocation.longitude))
+                                        .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.ic_running))))
+                                Log.d("leaveFoorPrints","$leaveFootprints")
+                            }
+                            leaveFootprints++
                         }
-
                         marker?.showInfoWindow()
                     }
 
@@ -223,6 +210,7 @@ class FragmentRun : Fragment() {
                                 countNum1,
                                 countNum0
                             ).map {
+                                it.visibility = View.VISIBLE
                                 animationCount(it)
                                 delay(1000)
                             }
@@ -230,6 +218,8 @@ class FragmentRun : Fragment() {
 
                         withContext(Dispatchers.Main) {
                             runStart = true
+                            startNav.visibility = View.GONE
+                            startNav2.visibility = View.GONE
                             stopWatch.base = SystemClock.elapsedRealtime()
                             stopWatch.start()
 

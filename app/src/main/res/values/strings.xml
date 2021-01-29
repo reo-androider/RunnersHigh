@@ -7,18 +7,21 @@
     <string name="twitter_consumer_key" translatable="false">xZIjBdSGoYDXveTBkuEGtHSPt</string>
     <string name="twitter_consumer_secret" translatable="false">19gmqmhu5Y4itMIku4Gg4zxJNzqtB7WmrPQlM3LwBar0eFjQZN</string>
 
+    <!-- run_fragment   -->
     <string name="start_button">START</string>
     <string name="restart_button">AGAIN</string>
     <string name="pause_button">PAUSE</string>
     <string name="finish_button">FINISH</string>
 
     <string name="timer">0：00：00</string>
-
     <string name="distance">0.00</string>
     <string name="ditance_unit">km</string>
     <string name="calorie">0.00</string>
     <string name="calorie_unit">kcal</string>
 
+    <string name="gps_search">GPS Search</string>
+    <string name="startNav">Tap under button</string>
+    <string name="startNav2">and run</string>
     <!--  result_fragment  -->
     <string name="result_title">Nice Run</string>
     <string name="result_time">Time</string>
