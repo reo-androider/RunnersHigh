@@ -22,6 +22,9 @@
     <string name="gps_search">Search for GPS</string>
     <string name="startNav">Tap under button</string>
     <string name="startNav2">and run</string>
+    <string name="card_object">目標(サンプル)</string>
+    <string name="card_object2">週40キロ走る</string>
+
     <!--  result_fragment  -->
     <string name="result_title">Nice Run</string>
     <string name="result_time">Time</string>
@@ -31,5 +34,6 @@
     <string name="result_calorie">Calorie</string>
     <string name="total_calorie">0.0</string>
     <string name="result_memo">Memo</string>
+
 
 </resources>
