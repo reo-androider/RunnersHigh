@@ -1,6 +1,8 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
@@ -22,6 +24,7 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
+import java.text.DecimalFormat
 import kotlin.math.ceil
 
 class FragmentRun : Fragment() {
@@ -31,13 +34,13 @@ class FragmentRun : Fragment() {
     var stdLocation: Location? = null
     var totalDistance = 0.0
     var gpsCount = 0
-    private var stopTime: Long = 0
     var weight = 57.0
     var kmAmount: Double = 0.0
     var calorieAmount: Double = 0.0
     var recordStop = true
-    private var timeAmount: Long = 0L
-    private var timeAmountStop: Long = 0L
+    private var totalTime: Long = 0L
+    private var stopTime: Long = 0L
+    lateinit var decimalFormat: DecimalFormat
 
     private val recordDao = MyApplication.db.recordDao()
 
@@ -185,10 +188,6 @@ class FragmentRun : Fragment() {
             )
 
             binding.startButton.setOnClickListener {
-                
-                timeAmount = SystemClock.elapsedRealtime()
-                timeAmountStop = timeAmount - SystemClock.elapsedRealtime()
-
                 binding.run {
                     startText.visibility = View.GONE
                     startButton.visibility = View.GONE
@@ -210,9 +209,8 @@ class FragmentRun : Fragment() {
                         }
 
                         withContext(Dispatchers.Main) {
-                            stopWatch.start()
                             stopWatch.base = SystemClock.elapsedRealtime()
-                            Log.d("start","${stopWatch.base}")
+                            stopWatch.start()
 
                             mapView.visibility = View.VISIBLE
                             pauseButton.visibility = View.VISIBLE
@@ -221,10 +219,8 @@ class FragmentRun : Fragment() {
 
 
                             restartButton.setOnClickListener {
-
-                                stopWatch.base = SystemClock.elapsedRealtime() + stopTime
+                                stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                                 stopWatch.start()
-                                Log.d("restartTime","${stopWatch.base}")
 
                                 pauseText.visibility     = View.VISIBLE
                                 pauseButton.visibility   = View.VISIBLE
@@ -237,11 +233,8 @@ class FragmentRun : Fragment() {
                             }
 
                             pauseButton.setOnClickListener {
-
-
-                                stopTime = stopWatch.base - SystemClock.elapsedRealtime()
+                                stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                                 stopWatch.stop()
-                                Log.d("pauseTime","$stopTime")
 
                                 pauseText.visibility      = View.INVISIBLE
                                 pauseButton.visibility    = View.INVISIBLE
@@ -254,8 +247,21 @@ class FragmentRun : Fragment() {
                             }
 
                             finishButton.setOnClickListener {
-                                Log.d("finish","${stopWatch.base / 1000}")
-                                findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
+                                // TODO chronometerの値を取得する chronometerが23秒の時のログ
+                                val builder = AlertDialog.Builder(requireContext())
+                                builder
+                                    .setCancelable(false)
+                                    .setMessage("ランニングを終了しますか？")
+                                    .setPositiveButton("YES",
+                                        DialogInterface.OnClickListener{ dialog, id ->
+                                            findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
+                                        })
+                                    .setNegativeButton("CANCEL",
+                                        DialogInterface.OnClickListener{ dialog, which ->
+                                            dialog.dismiss()
+                                        })
+                                builder.show()
+                                Log.d("dialog","$builder")
 //                                lifecycleScope.launch(Dispatchers.IO) {
 //                                    Log.d("read","${recordDao.getAll()}")
 //                                    val record = Record(0,timeAmount kmAmount, ,calorieAmount,SystemClock.elapsedRealtime())
