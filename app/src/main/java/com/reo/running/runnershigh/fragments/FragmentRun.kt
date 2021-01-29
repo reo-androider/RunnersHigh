@@ -81,13 +81,6 @@ class FragmentRun : Fragment() {
                     val zoomValue = 22.0f
                     it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
 
-
-                    if (gpsAdjust < 8) {
-                        Log.d("gpsCount", "$gpsAdjust")
-                        totalDistance = 0.0
-                        gpsAdjust++
-                    }
-
                     if (recordStop == true) {
 
                         stdLocation?.let {
@@ -116,7 +109,13 @@ class FragmentRun : Fragment() {
                         binding.calorieNum.text = "$calorieAmount"
                     }
 
-                    if (gpsAdjust > 10) {
+                    if (gpsAdjust < 8) {
+                        Log.d("gpsCount", "$gpsAdjust")
+                        totalDistance = 0.0
+                        gpsAdjust++
+                    }
+
+                    else if (gpsAdjust == 8) {
 
                         if (runStart == false) {
 
@@ -126,6 +125,7 @@ class FragmentRun : Fragment() {
                                 binding.startNav2.visibility = View.VISIBLE
                                 binding.startText.visibility = View.VISIBLE
                                 binding.startButton.visibility = View.VISIBLE
+                                binding.cardObjective.visibility = View.GONE
                             }
 
                             marker?.remove()
