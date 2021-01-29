@@ -14,7 +14,6 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -36,6 +35,9 @@ class FragmentRun : Fragment() {
     var weight = 57.0
     var kmAmount: Double = 0.0
     var calorieAmount: Double = 0.0
+    var recordStop = true
+    private var timeAmount: Long = 0L
+    private var timeAmountStop: Long = 0L
 
     private val recordDao = MyApplication.db.recordDao()
 
@@ -102,13 +104,9 @@ class FragmentRun : Fragment() {
                         )
                     }
 
-                    // 平行移動可能に
                     it.uiSettings.isScrollGesturesEnabled = true
-                    // 縮尺変更
                     it.uiSettings.isZoomGesturesEnabled = true
-                    // Marker押すとでてくるよ
                     it.uiSettings.isMapToolbarEnabled = true
-                    //コンパス
                     it.uiSettings.isCompassEnabled = true
                     context?.run {
                         if (ActivityCompat.checkSelfPermission(
@@ -131,6 +129,14 @@ class FragmentRun : Fragment() {
 
                     }
 
+                    if (gpsCount < 8) {
+                        Log.d("gpsCount", "$gpsCount")
+                        totalDistance = 0.0
+                        gpsCount++
+                    }
+
+                    if (recordStop == true) {
+
                     stdLocation?.let {
                         Location.distanceBetween(
                             it.latitude,
@@ -139,27 +145,23 @@ class FragmentRun : Fragment() {
                             lastLocation.longitude,
                             results
                         )
-                        Log.d("results", "${results[0]}")
 
                         if (results[0] < 5) {
                             totalDistance += results[0]
                         }
 
-                        if (gpsCount < 8) {
-                            Log.d("gpsCount", "$gpsCount")
-                            totalDistance = 0.0
-                            gpsCount++
-                        }
+                        Log.d("results", "${results[0]}")
                     }
 
-                    Log.d("stdLocation", "$stdLocation")
-                    Log.d("totalDistance", "$totalDistance")
-                    stdLocation = lastLocation
+                        Log.d("stdLocation", "$stdLocation")
+                        Log.d("totalDistance", "$totalDistance")
+                        stdLocation = lastLocation
 
-                    kmAmount = kmConvert(totalDistance)
-                    calorieAmount = calorieConvert(totalDistance, weight)
-                    binding.distance.text = "$kmAmount"
-                    binding.calorieNum.text = "$calorieAmount"
+                        kmAmount = kmConvert(totalDistance)
+                        calorieAmount = calorieConvert(totalDistance, weight)
+                        binding.distance.text = "$kmAmount"
+                        binding.calorieNum.text = "$calorieAmount"
+                    }
                 }
             }
         }
@@ -183,7 +185,9 @@ class FragmentRun : Fragment() {
             )
 
             binding.startButton.setOnClickListener {
-                totalDistance = 0.0
+                
+                timeAmount = SystemClock.elapsedRealtime()
+                timeAmountStop = timeAmount - SystemClock.elapsedRealtime()
 
                 binding.run {
                     startText.visibility = View.GONE
@@ -206,56 +210,61 @@ class FragmentRun : Fragment() {
                         }
 
                         withContext(Dispatchers.Main) {
-                            //start timer!! *stopWatch is id of the chronometer.
-                            //stopTimeで止まっていた時間を加えて正常な時間にする
                             stopWatch.start()
                             stopWatch.base = SystemClock.elapsedRealtime()
-                            //display mapView
-                            mapView.visibility = View.VISIBLE
+                            Log.d("start","${stopWatch.base}")
 
-                            //display pauseButton
+                            mapView.visibility = View.VISIBLE
                             pauseButton.visibility = View.VISIBLE
                             pauseText.visibility = View.VISIBLE
-
-                            //display finishButton
-                            finishButton.visibility = View.VISIBLE
-                            finishText.visibility = View.VISIBLE
-
-                            //display timer UI
                             timerScreen.visibility = View.VISIBLE
 
-                            //process when restartButton is pushed
+
                             restartButton.setOnClickListener {
-                                //止まっていた時間を加えて正常な時間にする
+
                                 stopWatch.base = SystemClock.elapsedRealtime() + stopTime
-                                //start timer!!
                                 stopWatch.start()
-                                //display pauseButton
-                                pauseText.visibility = View.VISIBLE
-                                pauseButton.visibility = View.VISIBLE
-                                //hide restartButton
-                                restartText.visibility = View.INVISIBLE
+                                Log.d("restartTime","${stopWatch.base}")
+
+                                pauseText.visibility     = View.VISIBLE
+                                pauseButton.visibility   = View.VISIBLE
+                                restartText.visibility   = View.INVISIBLE
                                 restartButton.visibility = View.INVISIBLE
+                                finishButton.visibility  = View.GONE
+                                finishText.visibility    = View.GONE
+
+                                recordStop = true
                             }
 
                             pauseButton.setOnClickListener {
+
+
                                 stopTime = stopWatch.base - SystemClock.elapsedRealtime()
                                 stopWatch.stop()
-                                pauseText.visibility = View.INVISIBLE
-                                pauseButton.visibility = View.INVISIBLE
-                                restartText.visibility = View.VISIBLE
-                                restartButton.visibility = View.VISIBLE
+                                Log.d("pauseTime","$stopTime")
+
+                                pauseText.visibility      = View.INVISIBLE
+                                pauseButton.visibility    = View.INVISIBLE
+                                finishButton.visibility   = View.VISIBLE
+                                finishText.visibility     = View.VISIBLE
+                                restartText.visibility    = View.VISIBLE
+                                restartButton.visibility  = View.VISIBLE
+
+                                recordStop = false
                             }
 
                             finishButton.setOnClickListener {
-                                lifecycleScope.launch(Dispatchers.IO) {
-                                    val record = Record(0, kmAmount, calorieAmount)
-                                    recordDao.insertRecord(record)
-
-                                    withContext(Dispatchers.Main) {
-                                        findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
-                                    }
-                                }
+                                Log.d("finish","${stopWatch.base / 1000}")
+                                findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
+//                                lifecycleScope.launch(Dispatchers.IO) {
+//                                    Log.d("read","${recordDao.getAll()}")
+//                                    val record = Record(0,timeAmount kmAmount, ,calorieAmount,SystemClock.elapsedRealtime())
+//                                    recordDao.insertRecord(record)
+//
+//                                    withContext(Dispatchers.Main) {
+//
+//                                    }
+//                                }
                             }
                         }
                     }

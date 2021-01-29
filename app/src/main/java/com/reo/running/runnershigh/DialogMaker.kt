@@ -15,25 +15,20 @@ import java.lang.IllegalStateException
 class DialogMaker:DialogFragment() {
     val readDao = MyApplication.db.recordDao()
 
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
-            builder.setMessage("ランニングを終了しますか？")
-                    .setPositiveButton("YES",
+            builder
+                .setMessage("ランニングを終了しますか？")
+                .setPositiveButton("YES",
                     DialogInterface.OnClickListener{ dialog, id ->
                         findNavController().navigate(R.id.action_dialogMaker_to_fragmentResult)
                     })
                     .setNegativeButton("CANCEL",
-                            DialogInterface.OnClickListener{ dialog, which ->
-                                lifecycleScope.launch(Dispatchers.IO) {
-                                    readDao.getAll().takeLast(0)
-
-                                    withContext(Dispatchers.Main) {
-                                        dialog.dismiss()
-                                    }
-                                }
-                            })
-                .setCancelable(false)
+                        DialogInterface.OnClickListener{ dialog, which ->
+                                    dialog.dismiss()
+                        })
             builder.create()
         }?:throw IllegalStateException("Activity cannot be null")
     }

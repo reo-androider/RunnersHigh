@@ -32,6 +32,7 @@ class FragmentResult : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch(Dispatchers.IO) {
+            Log.d("delete","${readDao.getRecord(1)}")
             val distance = readDao.getAll().takeLast(0)
             withContext(Dispatchers.Main) {
                 binding.totalDistance.text = "$distance"
