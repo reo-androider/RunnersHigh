@@ -1,10 +1,8 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.os.SystemClock
@@ -14,9 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
-import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -27,7 +23,7 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
-import kotlin.properties.Delegates
+import kotlin.math.ceil
 
 class FragmentRun : Fragment() {
 
@@ -36,17 +32,17 @@ class FragmentRun : Fragment() {
     var stdLocation: Location? = null
     var totalDistance = 0.0
     var gpsCount = 0
-    var results = FloatArray(1)
-    var stopTime:Long = 0
-    var weight = 57
-    private lateinit var bundle:Bundle
+    private var stopTime: Long = 0
+    var weight = 57.0
+    var kmAmount: Double = 0.0
+    var calorieAmount: Double = 0.0
 
     private val recordDao = MyApplication.db.recordDao()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = Fragment1Binding.inflate(layoutInflater, container, false)
@@ -60,15 +56,12 @@ class FragmentRun : Fragment() {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         }
 
-        //どのような取得方法を要求
         val locationRequest = LocationRequest().apply {
-            //精度重視と省電力重視を両立するため2種類の更新間隔を指定
-            interval = 1                                           //最遅の更新間隔（ただし正確ではない）
-            fastestInterval = 1                                    //最短の更新間隔
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY      //精度重視
+            interval = 1
+            fastestInterval = 1
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
 
-        //コールバック
         val locationCallback = object : LocationCallback() {
             var results = FloatArray(1)
             override fun onLocationResult(locationResult: LocationResult?) {
@@ -163,15 +156,10 @@ class FragmentRun : Fragment() {
                     Log.d("totalDistance", "$totalDistance")
                     stdLocation = lastLocation
 
-                    Log.d("totalDistance_UISetVer", "${Math.ceil(totalDistance) / 1000}")
-
-                    var amountDistance = Math.ceil(totalDistance) / 1000
-                    var amountCalorie = Math.ceil(totalDistance) * weight / 1000
-                    binding.distance.setText("${Math.ceil(totalDistance) / 1000}")
-                    binding.calorieNum.setText("${Math.ceil(totalDistance) * weight / 1000}")
-
-                    bundle = bundleOf("amount" to "$amountDistance")
-
+                    kmAmount = kmConvert(totalDistance)
+                    calorieAmount = calorieConvert(totalDistance, weight)
+                    binding.distance.text = "$kmAmount"
+                    binding.calorieNum.text = "$calorieAmount"
                 }
             }
         }
@@ -259,17 +247,15 @@ class FragmentRun : Fragment() {
                                 restartButton.visibility = View.VISIBLE
                             }
 
-                                finishButton.setOnClickListener {
-                                    lifecycleScope.launch (Dispatchers.IO) {
-                                        val record = Record(0,Math.ceil(totalDistance) / 1000,Math.ceil(totalDistance) * weight / 1000)
-                                        recordDao.insertRecord(record)
-                                        Log.d("kotlin","${recordDao.getAll()}")
+                            finishButton.setOnClickListener {
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    val record = Record(0, kmAmount, calorieAmount)
+                                    recordDao.insertRecord(record)
 
-                                        withContext(Dispatchers.Main) {
-                                            // result画面へ！！！
-                                            Log.d("kotlin","test")
-                                            findNavController().navigate(R.id.action_navi_run_to_dialogMaker)}
+                                    withContext(Dispatchers.Main) {
+                                        findNavController().navigate(R.id.action_navi_run_to_dialogMaker)
                                     }
+                                }
                             }
                         }
                     }
@@ -301,14 +287,14 @@ class FragmentRun : Fragment() {
 
     private fun animationCount(view: View) {
         view.startAnimation(ScaleAnimation(
-                0f,
-                100f,
-                0f,
-                100f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f,
-                Animation.RELATIVE_TO_SELF,
-                0.5f
+            0f,
+            100f,
+            0f,
+            100f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
         ).apply { duration = 1000 })
     }
 
@@ -317,4 +303,12 @@ class FragmentRun : Fragment() {
 //        val supportFragment = parentFragmentManager
 //        dialog.show(supportFragment,"kotlin")
 //    }
+
+    private fun kmConvert(distance: Double): Double {
+        return ceil(distance) / 1000
+    }
+
+    private fun calorieConvert(distance: Double, weight: Double): Double {
+        return ceil(distance) * weight / 1000
+    }
 }
