@@ -16,9 +16,11 @@ import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.*
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
@@ -39,11 +41,10 @@ class FragmentRun : Fragment() {
     var kmAmount: Double = 0.0
     var calorieAmount: Double = 0.0
     var recordStop = true
-    private var totalTime: Long = 0L
     private var stopTime: Long = 0L
-    lateinit var decimalFormat: DecimalFormat
-
     private val recordDao = MyApplication.db.recordDao()
+    var marker: Marker? = null
+    var runStart = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +76,7 @@ class FragmentRun : Fragment() {
                 val lastLocation = locationResult?.lastLocation ?: return
                 Log.d("checkLatLng", "${LatLng(lastLocation.latitude, lastLocation.longitude)}")
                 binding.mapView.getMapAsync {
-                    val zoomValue = 25.0f
+                    val zoomValue = 22.0f
                     it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
 
 
@@ -114,10 +115,51 @@ class FragmentRun : Fragment() {
                     }
 
                     if (gpsCount > 5) {
-                        it.addMarker(
-                            MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude))
-                                .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.in_trace)))
-                        )
+
+                        if (runStart == false) {
+
+                            marker?.remove()
+                            marker = it.addMarker(
+                                MarkerOptions().position(
+                                    LatLng(
+                                        lastLocation.latitude,
+                                        lastLocation.longitude
+                                    )
+                                )
+                                    .icon(
+                                        BitmapDescriptorFactory.fromBitmap(
+                                            Resource.getBitmap(
+                                                context,
+                                                R.drawable.ic_running
+                                            )
+                                        )
+                                    )
+                                    .title("You are here!")
+                            )
+
+                        }
+
+                        else {
+                            
+                            marker = it.addMarker(
+                                MarkerOptions().position(
+                                    LatLng(
+                                        lastLocation.latitude,
+                                        lastLocation.longitude
+                                    )
+                                )
+                                    .icon(
+                                        BitmapDescriptorFactory.fromBitmap(
+                                            Resource.getBitmap(
+                                                context,
+                                                R.drawable.ic_running
+                                            )
+                                        )
+                                    )
+                            )
+                        }
+
+                        marker?.showInfoWindow()
                     }
 
                     it.uiSettings.isScrollGesturesEnabled = true
@@ -187,6 +229,7 @@ class FragmentRun : Fragment() {
                         }
 
                         withContext(Dispatchers.Main) {
+                            runStart = true
                             stopWatch.base = SystemClock.elapsedRealtime()
                             stopWatch.start()
 
