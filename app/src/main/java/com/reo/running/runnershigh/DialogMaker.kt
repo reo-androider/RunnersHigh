@@ -1,20 +1,20 @@
 package com.reo.running.runnershigh
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.Dialog
-import android.content.Context
 import android.content.DialogInterface
 import android.os.Bundle
-import android.view.Window
-import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.findNavController
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.lang.IllegalStateException
 
 class DialogMaker:DialogFragment() {
-    val distanceAmount = arguments?.getString("amount")
+    val readDao = MyApplication.db.recordDao()
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             val builder = AlertDialog.Builder(it)
@@ -25,8 +25,15 @@ class DialogMaker:DialogFragment() {
                     })
                     .setNegativeButton("CANCEL",
                             DialogInterface.OnClickListener{ dialog, which ->
-                                dialog.dismiss()
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    readDao.getAll().takeLast(0)
+
+                                    withContext(Dispatchers.Main) {
+                                        dialog.dismiss()
+                                    }
+                                }
                             })
+                .setCancelable(false)
             builder.create()
         }?:throw IllegalStateException("Activity cannot be null")
     }

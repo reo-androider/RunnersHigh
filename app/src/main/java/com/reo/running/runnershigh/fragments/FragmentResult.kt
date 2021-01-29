@@ -6,27 +6,36 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FragmentResult : Fragment() {
 
-//    private val recordDao = MyApplication.db.recordDao()
-
-    private lateinit var binding:FragmentResultBinding
-    val bundle = Bundle()
+    private lateinit var binding: FragmentResultBinding
+    private val readDao = MyApplication.db.recordDao()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentResultBinding.inflate(layoutInflater,container,false)
+        binding = FragmentResultBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            val distance = readDao.getAll().takeLast(0)
+            withContext(Dispatchers.Main) {
+                binding.totalDistance.text = "$distance"
+            }
+        }
     }
 }

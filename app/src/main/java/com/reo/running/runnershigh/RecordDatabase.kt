@@ -18,7 +18,7 @@ data class Record(
 @Dao
 interface RecordDao {
     @Query("Select * From record")
-    suspend fun getAll(): List<Record>
+    fun getAll(): List<Record>
 
     @Query("select * From record Where id = :id")
     suspend fun getRecord(id: Int): Record
