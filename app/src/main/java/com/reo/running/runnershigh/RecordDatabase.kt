@@ -11,10 +11,10 @@ abstract class RecordDatabase : RoomDatabase() {
 data class Record(
         @PrimaryKey(autoGenerate = true)
         val id: Int,
-       // val time: CharSequence,
+        val time: String,
         val distance: Double,
         val calorie: Int,
-        val runDate: Long,
+        val runDate: String,
 )
 
 @Dao
