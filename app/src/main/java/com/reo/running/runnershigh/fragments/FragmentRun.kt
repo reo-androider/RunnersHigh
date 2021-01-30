@@ -5,15 +5,18 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Location
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.os.SystemClock
+import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
 import android.view.animation.ScaleAnimation
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -24,6 +27,10 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.math.ceil
 
 class FragmentRun : Fragment() {
@@ -54,6 +61,7 @@ class FragmentRun : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
@@ -189,6 +197,8 @@ class FragmentRun : Fragment() {
                     mapView.visibility = View.GONE
                     startText.visibility = View.GONE
                     startButton.visibility = View.GONE
+                    startNav.visibility = View.GONE
+                    startNav2.visibility = View.GONE
 
                     (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
                     GlobalScope.launch {
@@ -201,7 +211,6 @@ class FragmentRun : Fragment() {
                                     countNum3,
                                     countNum2,
                                     countNum1,
-                                    countNum0
                             ).map {
                                 animationCount(it)
                                 delay(1000)
@@ -251,7 +260,7 @@ class FragmentRun : Fragment() {
                             }
 
                             finishButton.setOnClickListener {
-                                Log.d("test","${stopWatch.text}")
+                                Log.d("test", stopWatch.text.toString())
 
                                 val builder = AlertDialog.Builder(requireContext())
                                 builder
@@ -259,8 +268,8 @@ class FragmentRun : Fragment() {
                                         .setMessage("ランニングを終了しますか？")
                                         .setPositiveButton("YES",
                                                 DialogInterface.OnClickListener { dialog, id ->
-                                                    //var recod = Record(1,stopWatch.text)
-                                                    //recordDao.insertRecord()
+                                                    var record = Record(1,stopWatch.text.toString(),kmAmount,calorieAmount,getRunDate())
+                                                    recordDao.insertRecord(record)
                                                     findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                                                 })
                                         .setNegativeButton("CANCEL",
@@ -310,21 +319,29 @@ class FragmentRun : Fragment() {
     private fun animationCount(view: View) {
         view.startAnimation(ScaleAnimation(
             0f,
-            100f,
+            400f,
             0f,
-            100f,
+            400f,
             Animation.RELATIVE_TO_SELF,
-            0.5f,
+            0.355f,
             Animation.RELATIVE_TO_SELF,
-            0.5f
+            0.55f
         ).apply { duration = 1000 })
     }
 
-        private fun kmConvert(distance: Double): Double {
-            return ceil(distance) / 1000
-        }
-
-        private fun calorieConvert(distance: Double, weight: Double): Int {
-            return (ceil(distance) * weight).toInt()
-        }
+    private fun kmConvert(distance: Double): Double {
+        return ceil(distance) / 1000
     }
+
+    private fun calorieConvert(distance: Double, weight: Double): Int {
+            return (ceil(distance) * weight / 1000).toInt()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun getRunDate(): String {
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ISO_DATE_TIME
+        val formatted = current.format(formatter)
+        return formatted
+    }
+}
