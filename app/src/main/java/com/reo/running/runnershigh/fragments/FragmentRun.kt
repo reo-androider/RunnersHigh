@@ -19,6 +19,7 @@ import android.view.animation.ScaleAnimation
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -268,9 +269,14 @@ class FragmentRun : Fragment() {
                                         .setMessage("ランニングを終了しますか？")
                                         .setPositiveButton("YES",
                                                 DialogInterface.OnClickListener { dialog, id ->
-                                                    var record = Record(1,stopWatch.text.toString(),kmAmount,calorieAmount,getRunDate())
-                                                    recordDao.insertRecord(record)
-                                                    findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
+                                                    lifecycleScope.launch(Dispatchers.IO) {
+                                                        var record = Record(id, stopWatch.text.toString(), kmAmount, calorieAmount, getRunDate())
+                                                        recordDao.insertRecord(record)
+                                                        Log.d("room","${recordDao.getAll()}")
+                                                        withContext(Dispatchers.Main) {
+                                                            findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
+                                                        }
+                                                    }
                                                 })
                                         .setNegativeButton("CANCEL",
                                                 DialogInterface.OnClickListener { dialog, which ->
