@@ -2,19 +2,19 @@ package com.reo.running.runnershigh
 
 import androidx.room.*
 
-@Database(entities = [Record::class], version = 1)
+@Database(entities = [Record::class], version = 2)
 abstract class RecordDatabase : RoomDatabase() {
     abstract fun recordDao(): RecordDao
 }
 
 @Entity
 data class Record(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
-    val time: Long,
-    val distance: Double,
-    val calorie: Double,
-    val runDate: Long,
+        @PrimaryKey(autoGenerate = true)
+        val id: Int,
+       // val time: CharSequence,
+        val distance: Double,
+        val calorie: Int,
+        val runDate: Long,
 )
 
 @Dao
