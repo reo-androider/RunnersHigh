@@ -5,7 +5,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black">
+    android:background="@color/black"
+    android:elevation="10dp">
 
     <!-- timer -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:elevation="100dp"
         android:visibility="invisible">
 
         <Chronometer
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/orbitron"
             android:textColor="#00B8D4"
-            android:textSize="60dp"
+            android:textSize="60sp"
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -95,28 +95,8 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
-
-    <!--  for database  -->
-
-<!--    <Button-->
-<!--        android:id="@+id/add_button"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="add"-->
-<!--        android:layout_marginTop="200dp"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/delete_button"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="delete"-->
-<!--        android:layout_marginTop="400dp"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- startButton   -->
     <com.google.android.material.textview.MaterialTextView
@@ -124,7 +104,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="127dp"
-        android:elevation="100dp"
         android:fontFamily="@font/orbitron"
         android:text="@string/start_button"
         android:textColor="@color/white"
@@ -133,17 +112,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:elevation="20dp"/>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/start_button"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_marginBottom="100dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:visibility="gone"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/start_button"
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_marginBottom="100dp"
+        android:contentDescription="@string/start_description"
+        android:elevation="100dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!--    pauseButton  -->
     <com.google.android.material.textview.MaterialTextView
@@ -151,7 +133,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="127dp"
-        android:elevation="100dp"
         android:fontFamily="@font/orbitron"
         android:text="@string/pause_button"
         android:textColor="@color/white"
@@ -161,7 +142,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="invisible"/>
+        android:visibility="gone"
+        android:elevation="20dp"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pause_button"
@@ -172,7 +154,9 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="invisible"/>
+        android:visibility="gone"
+        android:contentDescription="@string/pause_description"
+        android:elevation="0dp"/>
 
     <!-- restartButton   -->
     <com.google.android.material.textview.MaterialTextView
@@ -180,7 +164,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="127dp"
-        android:elevation="100dp"
+        android:elevation="20dp"
         android:fontFamily="@font/orbitron"
         android:text="@string/restart_button"
         android:textColor="@color/white"
@@ -195,11 +179,13 @@
         android:id="@+id/restart_button"
         android:layout_width="90dp"
         android:layout_height="90dp"
+        android:elevation="20dp"
         android:layout_marginBottom="100dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/restart_descrption" />
 
 
     <!-- finishButton   -->
@@ -208,7 +194,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="127dp"
-        android:elevation="100dp"
+        android:elevation="20dp"
         android:fontFamily="@font/orbitron"
         android:text="@string/finish_button"
         android:textColor="@color/white"
@@ -218,103 +204,113 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/finish_button"
         android:layout_width="90dp"
         android:layout_height="90dp"
+        android:elevation="0dp"
         android:layout_marginBottom="100dp"
         android:layout_marginStart="250dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="invisible"/>
+        android:visibility="gone"
+        android:contentDescription="@string/finish_description" />
+
+
+
+
 
     <!--countDownNum-->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/countNum5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/orbitron"
-        android:text="5"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/count_down5"
         android:textColor="#00B8D4"
-        android:textSize="1sp"
+        android:textSize="0.5sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:elevation="-10dp" />
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/countNum4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/orbitron"
-        android:text="4"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/count_down4"
         android:textColor="#00B8D4"
-        android:textSize="1sp"
+        android:textSize="0.5sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:elevation="-10dp"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/countNum3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/orbitron"
-        android:text="3"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/count_down3"
         android:textColor="#00B8D4"
-        android:textSize="1sp"
+        android:textSize="0.5sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:elevation="-10dp"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/countNum2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/orbitron"
-        android:text="2"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/count_down2"
         android:textColor="#00B8D4"
-        android:textSize="1sp"
+        android:textSize="0.5sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:elevation="-10dp"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/countNum1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/orbitron"
-        android:text="1"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/count_down1"
         android:textColor="#00B8D4"
-        android:textSize="1sp"
+        android:textSize="0.6sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:elevation="-10dp"/>
 
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/countNum0"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/orbitron"
-        android:text="ENJOY!!"
+        android:fontFamily="@font/alfa_slab_one"
+        android:text="@string/count_down0"
         android:textColor="#00B8D4"
-        android:textSize="1sp"
+        android:textSize="0.1sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:elevation="-10dp"/>
+
+
+
+
 
     <!--  gps探査  -->
     <TextView
@@ -322,14 +318,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/gps_search"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textColor="@color/black"
         android:layout_marginBottom="300dp"
         android:fontFamily="@font/orbitron"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:elevation="0dp"/>
 
     <!--  Let's run!!  -->
 
@@ -340,20 +337,21 @@
         android:layout_marginBottom="300dp"
         android:fontFamily="@font/orbitron"
         android:text="@string/startNav"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textColor="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:elevation="0dp"/>
 
     <TextView
         android:id="@+id/startNav2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/startNav2"
-        android:textSize="30dp"
+        android:textSize="30sp"
         android:textColor="@color/black"
         android:layout_marginBottom="300dp"
         android:fontFamily="@font/orbitron"
@@ -361,7 +359,7 @@
         app:layout_constraintTop_toBottomOf="@id/startNav"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/card_objective"
@@ -373,7 +371,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:backgroundTint="@color/teal_200">
+        android:backgroundTint="@color/teal_200"
+        android:elevation="0dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -382,16 +381,18 @@
             android:textSize="20sp"
             android:textColor="@color/white"
             android:layout_marginTop="15dp"
-            android:layout_marginStart="30dp"/>
+            android:layout_marginStart="30dp"
+            android:elevation="0dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/card_object2"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textColor="@color/white"
             android:layout_marginTop="70dp"
-            android:layout_marginStart="30dp"/>
+            android:layout_marginStart="30dp"
+            android:elevation="0dp"/>
 
     </androidx.cardview.widget.CardView>
 
