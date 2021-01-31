@@ -45,6 +45,7 @@
     <string name="result_calorie">Calorie</string>
     <string name="total_calorie">0.0</string>
     <string name="result_memo">メモの追加</string>
-
+    <string name="resutl_finish">result_finish</string>
+    <string name="today">yyMMdd</string>
 
 </resources>

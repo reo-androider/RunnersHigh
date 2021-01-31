@@ -213,7 +213,7 @@ class FragmentRun : Fragment() {
                                     countNum1,
                             ).map {
                                 animationCount(it)
-                                delay(1000)
+                                delay(500)
                             }
                         }
 
