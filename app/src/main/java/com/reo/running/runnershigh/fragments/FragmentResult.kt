@@ -12,12 +12,13 @@ import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.math.log
+import okhttp3.Dispatcher
 
 class FragmentResult : Fragment() {
 
     private lateinit var binding: FragmentResultBinding
     private val readDao = MyApplication.db.recordDao()
+    private var memo = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,8 +39,17 @@ class FragmentResult : Fragment() {
             Log.d("delete", "${readDao.getAll().lastIndex}")
             Log.d("delete", "${readDao.getAll().last()}")
             Log.d("delete", readDao.getAll().last().time)
-            Log.d("delete","${readDao.getAll().last().distance}")
-            Log.d("delete","${readDao.getAll().last().calorie}")
+            Log.d("delete", "${readDao.getAll().last().distance}")
+            Log.d("delete", "${readDao.getAll().last().calorie}")
+
+            binding.timeDisplay.text = "${readDao.getAll().last().time}"
+
+            withContext(Dispatchers.Main) {
+            binding.resultButton.setOnClickListener {
+                memo = binding.memo.text.toString()
+                Log.d("memo", "$memo")
+            }
+            }
         }
     }
 }
