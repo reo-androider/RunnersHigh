@@ -42,8 +42,6 @@ class FragmentResult : Fragment() {
             Log.d("delete", "${readDao.getAll().last().distance}")
             Log.d("delete", "${readDao.getAll().last().calorie}")
 
-            binding.timeDisplay.text = "${readDao.getAll().last().time}"
-
             withContext(Dispatchers.Main) {
             binding.resultButton.setOnClickListener {
                 memo = binding.memo.text.toString()
