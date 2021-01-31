@@ -226,34 +226,6 @@
 
     <!--countDownNum-->
     <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/countNum5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/alfa_slab_one"
-        android:text="@string/count_down5"
-        android:textColor="#00B8D4"
-        android:textSize="0.5sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="-10dp" />
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/countNum4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/alfa_slab_one"
-        android:text="@string/count_down4"
-        android:textColor="#00B8D4"
-        android:textSize="0.5sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:elevation="-10dp"/>
-
-    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/countNum3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -12,6 +12,7 @@ import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlin.math.log
 
 class FragmentResult : Fragment() {
 
@@ -32,11 +33,13 @@ class FragmentResult : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch(Dispatchers.IO) {
-            Log.d("delete","${readDao.getRecord(1)}")
-            val distance = readDao.getAll().takeLast(0)
-            withContext(Dispatchers.Main) {
-                binding.totalDistance.text = "$distance"
-            }
+            Log.d("delete", "${readDao.getAll()}")
+            Log.d("delete", "${readDao.getRecord(1)}")
+            Log.d("delete", "${readDao.getAll().lastIndex}")
+            Log.d("delete", "${readDao.getAll().last()}")
+            Log.d("delete", readDao.getAll().last().time)
+            Log.d("delete","${readDao.getAll().last().distance}")
+            Log.d("delete","${readDao.getAll().last().calorie}")
         }
     }
 }

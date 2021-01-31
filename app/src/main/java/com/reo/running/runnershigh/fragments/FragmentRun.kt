@@ -32,6 +32,7 @@ import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import kotlin.math.ceil
 
 class FragmentRun : Fragment() {
@@ -207,8 +208,6 @@ class FragmentRun : Fragment() {
                             Log.d("withContext", "withContext")
                             // TODO アニメーションが起動しない
                             listOf(
-                                    countNum5,
-                                    countNum4,
                                     countNum3,
                                     countNum2,
                                     countNum1,
@@ -265,25 +264,24 @@ class FragmentRun : Fragment() {
 
                                 val builder = AlertDialog.Builder(requireContext())
                                 builder
-                                        .setCancelable(false)
-                                        .setMessage("ランニングを終了しますか？")
-                                        .setPositiveButton("YES",
-                                                DialogInterface.OnClickListener { dialog, id ->
-                                                    lifecycleScope.launch(Dispatchers.IO) {
-                                                        var record = Record(id, stopWatch.text.toString(), kmAmount, calorieAmount, getRunDate())
-                                                        recordDao.insertRecord(record)
-                                                        Log.d("room","${recordDao.getAll()}")
-                                                        withContext(Dispatchers.Main) {
-                                                            findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
-                                                        }
-                                                    }
-                                                })
-                                        .setNegativeButton("CANCEL",
-                                                DialogInterface.OnClickListener { dialog, which ->
-                                                    dialog.dismiss()
-                                                })
+                                    .setCancelable(false)
+                                    .setMessage("ランニングを終了しますか？")
+                                    .setPositiveButton("YES",
+                                        DialogInterface.OnClickListener { dialog, id ->
+                                            lifecycleScope.launch(Dispatchers.IO) {
+                                                var record = Record(0, stopWatch.text.toString(), kmAmount, calorieAmount, getRunDate())
+                                                recordDao.insertRecord(record)
+                                                Log.d("room","${recordDao.getAll()}")
+                                                withContext(Dispatchers.Main) {
+                                                    findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
+                                                }
+                                            }
+                                        })
+                                    .setNegativeButton("CANCEL",
+                                        DialogInterface.OnClickListener { dialog, which ->
+                                            dialog.dismiss()
+                                        })
                                 builder.show()
-                                Log.d("dialog", "$builder")
 //                                lifecycleScope.launch(Dispatchers.IO) {
 //                                    Log.d("read","${recordDao.getAll()}")
 //                                    val record = Record(0,timeAmount kmAmount, ,calorieAmount,SystemClock.elapsedRealtime())
@@ -329,10 +327,11 @@ class FragmentRun : Fragment() {
             0f,
             400f,
             Animation.RELATIVE_TO_SELF,
-            0.355f,
+            // 0に近づけると右に移動される
+            0.255f,
             Animation.RELATIVE_TO_SELF,
             0.55f
-        ).apply { duration = 1000 })
+        ).apply { duration = 500 })
     }
 
     private fun kmConvert(distance: Double): Double {
@@ -346,7 +345,7 @@ class FragmentRun : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun getRunDate(): String {
         val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ISO_DATE_TIME
+        val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
         val formatted = current.format(formatter)
         return formatted
     }

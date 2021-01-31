@@ -44,7 +44,7 @@
     <string name="total_distance">0.000</string>
     <string name="result_calorie">Calorie</string>
     <string name="total_calorie">0.0</string>
-    <string name="result_memo">Memo</string>
+    <string name="result_memo">メモの追加</string>
 
 
 </resources>
