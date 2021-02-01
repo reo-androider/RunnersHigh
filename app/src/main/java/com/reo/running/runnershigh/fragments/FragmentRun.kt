@@ -136,9 +136,16 @@ class FragmentRun : Fragment() {
                             binding.startText.visibility = View.VISIBLE
                             binding.centerCircle.visibility = View.VISIBLE
 
-                            val fab = view.findViewById<FloatingActionButton>(R.id.centerCircle)
-                            val img = view.findViewById<TextView>(R.id.startText)
-                            animationForefront(fab,img)
+                            val alphaAnimation = AlphaAnimation(0f,1f)
+                            val alphaAnimation2 = AlphaAnimation(0f,1f)
+                            alphaAnimation.duration = 2000
+                            alphaAnimation2.duration = 4000
+
+                            binding.startNav.startAnimation(alphaAnimation)
+                            binding.startNav2.startAnimation(alphaAnimation)
+
+                            binding.centerCircle.startAnimation(alphaAnimation2)
+                            binding.startText.startAnimation(alphaAnimation2)
 
                     }
 
@@ -239,7 +246,6 @@ class FragmentRun : Fragment() {
                             restartButton.setOnClickListener {
                                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                                 stopWatch.start()
-
                                 pauseImage.visibility = View.VISIBLE
                                 pauseButton.visibility = View.VISIBLE
                                 restartImage.visibility = View.GONE
@@ -362,17 +368,4 @@ class FragmentRun : Fragment() {
         return formatted
     }
 
-    private fun animationForefront(fab:FloatingActionButton,txt:TextView) {
-        val foreFrontAnimation = ScaleAnimation(
-            0f,
-            100f,
-            0f,
-            100f,
-            Animation.RELATIVE_TO_SELF,
-            0.255f,
-            Animation.RELATIVE_TO_SELF,
-            0.55f)
-        fab.startAnimation(foreFrontAnimation)
-        txt.startAnimation(foreFrontAnimation)
-    }
 }
