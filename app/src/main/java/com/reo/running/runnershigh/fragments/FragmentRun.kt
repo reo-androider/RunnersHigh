@@ -1,6 +1,7 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
+import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
@@ -9,13 +10,13 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.os.SystemClock
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.view.animation.ScaleAnimation
+import android.view.animation.*
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -24,12 +25,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -43,7 +43,7 @@ class FragmentRun : Fragment() {
     var totalDistance = 0.0
     var results = FloatArray(1)
     val zoomValue = 21.0f
-    var gpsAdjust = 10
+    var gpsAdjust = 0
     var weight = 57.0
     var kmAmount: Double = 0.0
     var calorieAmount:  Int = 0
@@ -65,6 +65,7 @@ class FragmentRun : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
         context?.run {
@@ -127,13 +128,17 @@ class FragmentRun : Fragment() {
                     } else {
 
                         if (gpsAdjust == 10) {
-
                             binding.gpsSearch.visibility = View.GONE
                             binding.cardObjective.visibility = View.GONE
                             binding.startNav.visibility = View.VISIBLE
                             binding.startNav2.visibility = View.VISIBLE
+
                             binding.startText.visibility = View.VISIBLE
-                            binding.startButton.visibility = View.VISIBLE
+                            binding.centerCircle.visibility = View.VISIBLE
+
+                            val fab = view.findViewById<FloatingActionButton>(R.id.centerCircle)
+                            val img = view.findViewById<TextView>(R.id.startText)
+                            animationForefront(fab,img)
 
                     }
 
@@ -179,26 +184,26 @@ class FragmentRun : Fragment() {
         //位置情報を更新
         context?.run {
             if (ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                            this,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 return
             }
             fusedLocationClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    Looper.myLooper()
+                locationRequest,
+                locationCallback,
+                Looper.myLooper()
             )
 
-            binding.startButton.setOnClickListener {
+            binding.centerCircle.setOnClickListener {
                 binding.run {
                     mapView.visibility = View.GONE
                     startText.visibility = View.GONE
-                    startButton.visibility = View.GONE
+                    centerCircle.visibility = View.GONE
                     startNav.visibility = View.GONE
                     startNav2.visibility = View.GONE
 
@@ -208,9 +213,9 @@ class FragmentRun : Fragment() {
                             Log.d("withContext", "withContext")
                             // TODO アニメーションが起動しない
                             listOf(
-                                    countNum3,
-                                    countNum2,
-                                    countNum1,
+                                countNum3,
+                                countNum2,
+                                countNum1,
                             ).map {
                                 animationCount(it)
                                 delay(500)
@@ -226,8 +231,8 @@ class FragmentRun : Fragment() {
                             stopWatch.start()
 
                             mapView.visibility = View.VISIBLE
+                            pauseImage.visibility = View.VISIBLE
                             pauseButton.visibility = View.VISIBLE
-                            pauseText.visibility = View.VISIBLE
                             timerScreen.visibility = View.VISIBLE
 
 
@@ -235,12 +240,12 @@ class FragmentRun : Fragment() {
                                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                                 stopWatch.start()
 
-                                pauseText.visibility = View.VISIBLE
+                                pauseImage.visibility = View.VISIBLE
                                 pauseButton.visibility = View.VISIBLE
-                                restartText.visibility = View.INVISIBLE
-                                restartButton.visibility = View.INVISIBLE
+                                restartImage.visibility = View.GONE
+                                restartButton.visibility = View.GONE
                                 finishButton.visibility = View.GONE
-                                finishText.visibility = View.GONE
+                                finishImage.visibility = View.GONE
 
                                 recordStop = true
                             }
@@ -249,11 +254,11 @@ class FragmentRun : Fragment() {
                                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                                 stopWatch.stop()
 
-                                pauseText.visibility = View.INVISIBLE
+                                pauseImage.visibility = View.GONE
                                 pauseButton.visibility = View.INVISIBLE
+                                finishImage.visibility = View.VISIBLE
                                 finishButton.visibility = View.VISIBLE
-                                finishText.visibility = View.VISIBLE
-                                restartText.visibility = View.VISIBLE
+                                restartImage.visibility = View.VISIBLE
                                 restartButton.visibility = View.VISIBLE
 
                                 recordStop = false
@@ -269,9 +274,15 @@ class FragmentRun : Fragment() {
                                     .setPositiveButton("YES",
                                         DialogInterface.OnClickListener { dialog, id ->
                                             lifecycleScope.launch(Dispatchers.IO) {
-                                                var record = Record(0, stopWatch.text.toString(), kmAmount, calorieAmount, getRunDate())
+                                                var record = Record(
+                                                    0,
+                                                    stopWatch.text.toString(),
+                                                    kmAmount,
+                                                    calorieAmount,
+                                                    getRunDate()
+                                                )
                                                 recordDao.insertRecord(record)
-                                                Log.d("room","${recordDao.getAll()}")
+                                                Log.d("room", "${recordDao.getAll()}")
                                                 withContext(Dispatchers.Main) {
                                                     findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                                                 }
@@ -298,6 +309,7 @@ class FragmentRun : Fragment() {
             }
         }
     }
+
 
         override fun onStart() {
             super.onStart()
@@ -348,5 +360,19 @@ class FragmentRun : Fragment() {
         val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
         val formatted = current.format(formatter)
         return formatted
+    }
+
+    private fun animationForefront(fab:FloatingActionButton,txt:TextView) {
+        val foreFrontAnimation = ScaleAnimation(
+            0f,
+            100f,
+            0f,
+            100f,
+            Animation.RELATIVE_TO_SELF,
+            0.255f,
+            Animation.RELATIVE_TO_SELF,
+            0.55f)
+        fab.startAnimation(foreFrontAnimation)
+        txt.startAnimation(foreFrontAnimation)
     }
 }
