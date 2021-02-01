@@ -103,7 +103,14 @@ class FragmentRun : Fragment() {
                 Log.d("checkLatLng", "${LatLng(lastLocation.latitude, lastLocation.longitude)}")
 
                 binding.mapView.getMapAsync {
-                    it.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue))
+                    it.moveCamera(
+                        CameraUpdateFactory.newLatLngZoom(
+                            LatLng(
+                                lastLocation.latitude,
+                                lastLocation.longitude
+                            ), zoomValue
+                        )
+                    )
 
                     if (recordStop == true) {
 
@@ -153,10 +160,10 @@ class FragmentRun : Fragment() {
                             binding.startText.visibility = View.VISIBLE
                             binding.centerCircle.visibility = View.VISIBLE
 
-                            val alphaAnimation = AlphaAnimation(0f,1f)
+                            val alphaAnimation = AlphaAnimation(0f, 1f)
                             alphaAnimation.duration = 1500
 
-                            val alphaAnimation2 = AlphaAnimation(0f,1f)
+                            val alphaAnimation2 = AlphaAnimation(0f, 1f)
                             alphaAnimation2.duration = 1500
 
                             binding.startNav.startAnimation(alphaAnimation)
@@ -165,11 +172,17 @@ class FragmentRun : Fragment() {
                             binding.centerCircle.startAnimation(alphaAnimation2)
                             binding.startText.startAnimation(alphaAnimation2)
 
-                    }
+                        }
 
                         marker?.remove()
                         marker = it.addMarker(
-                            MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude)))
+                            MarkerOptions().position(
+                                LatLng(
+                                    lastLocation.latitude,
+                                    lastLocation.longitude
+                                )
+                            )
+                        )
 
                         marker?.showInfoWindow()
                     }
@@ -180,15 +193,15 @@ class FragmentRun : Fragment() {
                     it.uiSettings.isCompassEnabled = true
 
                     gpsAdjust++
-                    Log.d("gsp","$gpsAdjust")
+                    Log.d("gsp", "$gpsAdjust")
                     context?.run {
                         if (ActivityCompat.checkSelfPermission(
-                                        this,
-                                        Manifest.permission.ACCESS_FINE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                        this,
-                                        Manifest.permission.ACCESS_COARSE_LOCATION
-                                ) != PackageManager.PERMISSION_GRANTED
+                                this,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
                         ) {
                             // TODO: Consider calling
                             //    ActivityCompat#requestPermissions
@@ -267,51 +280,79 @@ class FragmentRun : Fragment() {
                                 finishImage.visibility = View.GONE
 
                                 GlobalScope.launch(Dispatchers.Main) {
-                                    val scaleImage2 = ScaleAnimation(
+                                    val scaleRestartImage = ScaleAnimation(
                                         1f,
-                                        0.5f,
+                                        0.6f,
                                         1f,
-                                        0.5f,
+                                        0.6f,
                                         Animation.RELATIVE_TO_SELF,
                                         0.5f,
                                         Animation.RELATIVE_TO_SELF,
                                         0.5f
                                     )
 
-                                    val scaleButton2 = ScaleAnimation(
+                                    val scaleRestartButton = ScaleAnimation(
                                         1f,
-                                        0.5f,
+                                        0.6f,
                                         1f,
-                                        0.5f,
+                                        0.6f,
                                         Animation.RELATIVE_TO_SELF,
                                         0.5f,
                                         Animation.RELATIVE_TO_SELF,
                                         0.5f
                                     )
 
-                                    val scaleUp = ScaleAnimation(
-                                        0.1f,
-                                        1f,
-                                        0.1f,
-                                        1f,
-                                        Animation.RELATIVE_TO_SELF,
-                                        0.5f,
-                                        Animation.RELATIVE_TO_SELF,
-                                        0.5f
-                                    )
-                                    scaleImage2.duration = 500
-                                    scaleImage2.fillAfter = true
-                                    scaleButton2.duration = 500
-                                    scaleButton2.fillAfter = true
-                                    restartImage.startAnimation(scaleImage2)
-                                    restartButton.startAnimation(scaleButton2)
-                                    delay(300)
+                                    scaleRestartImage.let {
+                                        it.duration = 300
+                                        it.fillAfter = true
+                                    }
+
+                                    scaleRestartButton.let {
+                                        it.duration = 300
+                                        it.fillAfter = true
+                                    }
+                                    restartImage.startAnimation(scaleRestartImage)
+                                    restartButton.startAnimation(scaleRestartButton)
+                                    delay(600)
                                     restartImage.clearAnimation()
                                     restartButton.clearAnimation()
                                     pauseImage.visibility = View.VISIBLE
                                     pauseButton.visibility = View.VISIBLE
                                     restartImage.visibility = View.GONE
                                     restartButton.visibility = View.GONE
+                                    val scalePauseImage = ScaleAnimation(
+                                        0.1f,
+                                        1f,
+                                        0.1f,
+                                        1f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+
+                                    val scalePauseButton = ScaleAnimation(
+                                        0.6f,
+                                        1f,
+                                        0.6f,
+                                        1f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+
+                                    scalePauseImage.let {
+                                        it.duration = 300
+                                    }
+
+                                    scalePauseButton.let {
+                                        it.duration = 300
+                                    }
+
+                                    pauseImage.startAnimation(scalePauseImage)
+                                    pauseButton.startAnimation(scalePauseButton)
+
                                 }
                             }
 
@@ -432,34 +473,75 @@ class FragmentRun : Fragment() {
                             }
 
                             finishButton.setOnClickListener {
-                                Log.d("test", stopWatch.text.toString())
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    val scaleFinishImage = ScaleAnimation(
+                                        1f,
+                                        0.6f,
+                                        1f,
+                                        0.6f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
 
-                                val builder = AlertDialog.Builder(requireContext())
-                                builder
-                                    .setCancelable(false)
-                                    .setMessage("ランニングを終了しますか？")
-                                    .setPositiveButton("YES",
-                                        DialogInterface.OnClickListener { dialog, id ->
-                                            lifecycleScope.launch(Dispatchers.IO) {
-                                                var record = Record(
-                                                    0,
-                                                    stopWatch.text.toString(),
-                                                    kmAmount,
-                                                    calorieAmount,
-                                                    getRunDate()
-                                                )
-                                                recordDao.insertRecord(record)
-                                                Log.d("room", "${recordDao.getAll()}")
-                                                withContext(Dispatchers.Main) {
-                                                    findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
+                                    val scaleFinishButton = ScaleAnimation(
+                                        1f,
+                                        0.6f,
+                                        1f,
+                                        0.6f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+
+                                    scaleFinishImage.let {
+                                        it.duration = 300
+                                        it.fillAfter = true
+                                    }
+
+                                    scaleFinishButton.let {
+                                        it.duration = 300
+                                        it.fillAfter = true
+                                    }
+
+                                    finishImage.startAnimation(scaleFinishImage)
+                                    finishButton.startAnimation(scaleFinishButton)
+
+                                    delay(500)
+
+                                    finishImage.clearAnimation()
+                                    finishButton.clearAnimation()
+
+                                    Log.d("test", stopWatch.text.toString())
+
+                                    val builder = AlertDialog.Builder(requireContext())
+                                    builder
+                                        .setCancelable(false)
+                                        .setMessage("ランニングを終了しますか？")
+                                        .setPositiveButton("YES",
+                                            DialogInterface.OnClickListener { dialog, id ->
+                                                lifecycleScope.launch(Dispatchers.IO) {
+                                                    var record = Record(
+                                                        0,
+                                                        stopWatch.text.toString(),
+                                                        kmAmount,
+                                                        calorieAmount,
+                                                        getRunDate()
+                                                    )
+                                                    recordDao.insertRecord(record)
+                                                    Log.d("room", "${recordDao.getAll()}")
+                                                    withContext(Dispatchers.Main) {
+                                                        findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
+                                                    }
                                                 }
-                                            }
-                                        })
-                                    .setNegativeButton("CANCEL",
-                                        DialogInterface.OnClickListener { dialog, which ->
-                                            dialog.dismiss()
-                                        })
-                                builder.show()
+                                            })
+                                        .setNegativeButton("CANCEL",
+                                            DialogInterface.OnClickListener { dialog, which ->
+                                                dialog.dismiss()
+                                            })
+                                    builder.show()
 //                                lifecycleScope.launch(Dispatchers.IO) {
 //                                    Log.d("read","${recordDao.getAll()}")
 //                                    val record = Record(0,timeAmount kmAmount, ,calorieAmount,SystemClock.elapsedRealtime())
@@ -469,8 +551,10 @@ class FragmentRun : Fragment() {
 //
 //                                    }
 //                             }
+                                }
                             }
                         }
+
                     }
                 }
             }
@@ -528,25 +612,5 @@ class FragmentRun : Fragment() {
         val formatted = current.format(formatter)
         return formatted
     }
-
-//    private fun pushDown(view:View) {
-//        val scaleAnimation = ScaleAnimation(
-//            1f,
-//            0.7f,
-//            1f,
-//            0.7f,
-//            Animation.RELATIVE_TO_SELF,
-//            0.5f,
-//            Animation.RELATIVE_TO_SELF,
-//            0.5f
-//        ).let {
-//
-//            it.duration = 300
-//            it.fillAfter = true
-//        }
-//
-//        view.startAnimation(scaleAnimation)
-//        view.clearAnimation()
-//    }
-
+    
 }
