@@ -44,12 +44,14 @@
     <string name="total_distance">0.000km</string>
     <string name="result_calorie">Calorie</string>
     <string name="total_calorie">0.0</string>
-    <string name="result_memo">メモの追加</string>
+    <string name="result_memo">感想・メモ</string>
     <string name="resutl_finish">result_finish</string>
     <string name="today">yymmdd</string>
     <string name="result_camera">cameraSet</string>
     <string name="feedBack">feed_back</string>
     <string name="imageSet">imageSet</string>
     <string name="weatherSet">weatherSet</string>
+    <string name="checkFab">checkFab</string>
+    <string name="weatherSelect">weatherSelect</string>
 
 </resources>

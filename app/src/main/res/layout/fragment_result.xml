@@ -23,6 +23,15 @@
         app:layout_constraintTop_toTopOf="parent"
         android:elevation="-10dp"/>
 
+    <ImageView
+        android:id="@+id/weather"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:contentDescription="@string/weatherSet" />
     <TextView
         android:id="@+id/today"
         android:layout_width="wrap_content"
@@ -32,7 +41,7 @@
         android:fontFamily="@font/alfa_slab_one"
         android:layout_marginStart="10dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
+        app:layout_constraintStart_toEndOf="@id/weather"/>
 
     <TextView
         android:id="@+id/totalDistance"
@@ -55,6 +64,16 @@
         android:layout_marginStart="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/totalDistance" />
+
+    <ImageView
+        android:id="@+id/feedBack"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:contentDescription="@string/feedBack" />
 
     <TextView
         android:id="@+id/photoText"
@@ -140,39 +159,86 @@
 
 <!--weather-->
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="@id/backRound"
+        android:id="@+id/sunny"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_sunny"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="15dp"
+        android:contentDescription="@string/weatherSet"
+        app:layout_constraintTop_toBottomOf="@id/perfectImage"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/cloud"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_cloud"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="60dp"
+        android:contentDescription="@string/weatherSet"
+        app:layout_constraintTop_toBottomOf="@id/goodImage"
+        app:layout_constraintStart_toEndOf="@id/sunny"/>
+
+    <ImageView
+        android:id="@+id/rainy"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_rainy"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="60dp"
+        android:contentDescription="@string/weatherSet"
+        app:layout_constraintTop_toBottomOf="@id/sosoImage"
+        app:layout_constraintStart_toEndOf="@id/cloud"/>
+
+    <ImageView
+        android:id="@+id/snow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_snow"
+        android:layout_marginTop="30dp"
+        android:layout_marginStart="60dp"
+        android:contentDescription="@string/weatherSet"
+        app:layout_constraintTop_toBottomOf="@id/badImage"
+        app:layout_constraintStart_toEndOf="@id/rainy" />
+
+<!--course-->
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toBottomOf="@id/backRound"
         app:layout_constraintStart_toStartOf="parent"/>
 
-
 <!--memo-->
-        <ImageView
-            android:id="@+id/memoImage"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_marginTop="19dp"
-            android:src="@drawable/ic_memo"
-            android:layout_marginStart="30dp"
-            android:contentDescription="@string/result_memo"
-            android:layout_marginBottom="150dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+    <ImageView
+        android:id="@+id/memoImage"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="19dp"
+        android:src="@drawable/ic_memo"
+        android:layout_marginStart="30dp"
+        android:contentDescription="@string/result_memo"
+        android:layout_marginBottom="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
-        <EditText
-            android:id="@+id/memo"
-            android:layout_width="250dp"
-            android:layout_height="50dp"
-            android:textSize="15sp"
-            android:textColor="@color/normal"
-            android:hint="@string/result_memo"
-            android:textColorHint="@color/normal"
-            android:autofillHints="@string/result_memo"
-            android:inputType="textMultiLine"
-            android:layout_marginBottom="140dp"
-            android:layout_marginStart="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/memoImage"/>
+    <EditText
+        android:id="@+id/memo"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:textSize="15sp"
+        android:textColor="@color/normal"
+        android:hint="@string/result_memo"
+        android:textColorHint="@color/normal"
+        android:autofillHints="@string/result_memo"
+        android:inputType="textMultiLine"
+        android:layout_marginBottom="140dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/memoImage"/>
 
 <!--fab-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -186,16 +252,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/resutl_finish" />
 
-        <ImageView
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="@drawable/ic_check"
-            android:elevation="10dp"
-            android:layout_marginBottom="33dp"
-            android:layout_marginEnd="43dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tint="@color/white"
-            android:contentDescription="@string/resutl_finish" />
+    <ImageView
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_check"
+        android:elevation="10dp"
+        android:layout_marginBottom="33dp"
+        android:layout_marginEnd="43dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:tint="@color/white"
+        android:contentDescription="@string/resutl_finish" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
