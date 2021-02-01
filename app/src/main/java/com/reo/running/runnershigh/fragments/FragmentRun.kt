@@ -39,7 +39,7 @@ class FragmentRun : Fragment() {
     var totalDistance = 0.0
     var results = FloatArray(1)
     val zoomValue = 21.0f
-    var gpsAdjust = 10
+    var gpsAdjust = 0
     var weight = 57.0
     var kmAmount: Double = 0.0
     var calorieAmount:  Int = 0
@@ -152,6 +152,8 @@ class FragmentRun : Fragment() {
                     } else {
 
                         if (gpsAdjust == 10) {
+                            binding.sleepBat.visibility = View.GONE
+                            binding.mapView.visibility = View.VISIBLE
                             binding.gpsSearch.visibility = View.GONE
                             binding.cardObjective.visibility = View.GONE
                             binding.startNav.visibility = View.VISIBLE
@@ -612,5 +614,5 @@ class FragmentRun : Fragment() {
         val formatted = current.format(formatter)
         return formatted
     }
-    
+
 }
