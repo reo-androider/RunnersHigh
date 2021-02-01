@@ -11,7 +11,7 @@
         android:title="HIGH"/>
     <item
         android:id="@+id/navi_calorie"
-        android:icon="@drawable/ic_calorie"
+        android:icon="@drawable/ic_calorie2"
         android:title="CALORIE"/>
 
     <item
