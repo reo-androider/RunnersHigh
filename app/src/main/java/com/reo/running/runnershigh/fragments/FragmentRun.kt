@@ -1,7 +1,6 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
-import android.animation.ObjectAnimator
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.pm.PackageManager
@@ -15,8 +14,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -25,7 +22,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
@@ -43,7 +39,7 @@ class FragmentRun : Fragment() {
     var totalDistance = 0.0
     var results = FloatArray(1)
     val zoomValue = 21.0f
-    var gpsAdjust = 0
+    var gpsAdjust = 10
     var weight = 57.0
     var kmAmount: Double = 0.0
     var calorieAmount:  Int = 0
@@ -52,6 +48,27 @@ class FragmentRun : Fragment() {
     private val recordDao = MyApplication.db.recordDao()
     var marker: Marker? = null
     private var runStart = false
+//    val scaleAnimation = ScaleAnimation(
+//        1f,
+//        0.7f,
+//        1f,
+//        0.7f,
+//        Animation.RELATIVE_TO_SELF,
+//        0.5f,
+//        Animation.RELATIVE_TO_SELF,
+//        0.5f
+//    )
+//
+//    val scaleDisplay = ScaleAnimation(
+//        1f,
+//        0f,
+//        0f,
+//        1f,
+//        Animation.RELATIVE_TO_SELF,
+//        0f,
+//        Animation.RELATIVE_TO_SELF,
+//        0f
+//    )
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -137,9 +154,10 @@ class FragmentRun : Fragment() {
                             binding.centerCircle.visibility = View.VISIBLE
 
                             val alphaAnimation = AlphaAnimation(0f,1f)
+                            alphaAnimation.duration = 1500
+
                             val alphaAnimation2 = AlphaAnimation(0f,1f)
-                            alphaAnimation.duration = 2000
-                            alphaAnimation2.duration = 4000
+                            alphaAnimation2.duration = 1500
 
                             binding.startNav.startAnimation(alphaAnimation)
                             binding.startNav2.startAnimation(alphaAnimation)
@@ -151,9 +169,7 @@ class FragmentRun : Fragment() {
 
                         marker?.remove()
                         marker = it.addMarker(
-                            MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude))
-                                .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context, R.drawable.ic_running)))
-                                .title("You are here"))
+                            MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude)))
 
                         marker?.showInfoWindow()
                     }
@@ -188,7 +204,7 @@ class FragmentRun : Fragment() {
             }
         }
 
-        //位置情報を更新
+        // 位置情報を更新
         context?.run {
             if (ActivityCompat.checkSelfPermission(
                     this,
@@ -246,28 +262,173 @@ class FragmentRun : Fragment() {
                             restartButton.setOnClickListener {
                                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                                 stopWatch.start()
-                                pauseImage.visibility = View.VISIBLE
-                                pauseButton.visibility = View.VISIBLE
-                                restartImage.visibility = View.GONE
-                                restartButton.visibility = View.GONE
+                                recordStop = true
                                 finishButton.visibility = View.GONE
                                 finishImage.visibility = View.GONE
 
-                                recordStop = true
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    val scaleImage2 = ScaleAnimation(
+                                        1f,
+                                        0.5f,
+                                        1f,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+
+                                    val scaleButton2 = ScaleAnimation(
+                                        1f,
+                                        0.5f,
+                                        1f,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+
+                                    val scaleUp = ScaleAnimation(
+                                        0.1f,
+                                        1f,
+                                        0.1f,
+                                        1f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+                                    scaleImage2.duration = 500
+                                    scaleImage2.fillAfter = true
+                                    scaleButton2.duration = 500
+                                    scaleButton2.fillAfter = true
+                                    restartImage.startAnimation(scaleImage2)
+                                    restartButton.startAnimation(scaleButton2)
+                                    delay(300)
+                                    restartImage.clearAnimation()
+                                    restartButton.clearAnimation()
+                                    pauseImage.visibility = View.VISIBLE
+                                    pauseButton.visibility = View.VISIBLE
+                                    restartImage.visibility = View.GONE
+                                    restartButton.visibility = View.GONE
+                                }
                             }
 
                             pauseButton.setOnClickListener {
+                                recordStop = false
                                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                                 stopWatch.stop()
 
-                                pauseImage.visibility = View.GONE
-                                pauseButton.visibility = View.INVISIBLE
-                                finishImage.visibility = View.VISIBLE
-                                finishButton.visibility = View.VISIBLE
-                                restartImage.visibility = View.VISIBLE
-                                restartButton.visibility = View.VISIBLE
+                                GlobalScope.launch(Dispatchers.Main) {
+                                    val scaleImage = ScaleAnimation(
+                                        1f,
+                                        0.6f,
+                                        1f,
+                                        0.6f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
 
-                                recordStop = false
+                                    val scaleButton = ScaleAnimation(
+                                        1f,
+                                        0.6f,
+                                        1f,
+                                        0.6f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+                                    scaleImage.duration = 300
+                                    scaleImage.fillAfter = true
+                                    scaleButton.duration = 300
+                                    scaleButton.fillAfter = true
+
+                                    pauseImage.startAnimation(scaleImage)
+                                    pauseButton.startAnimation(scaleButton)
+                                    delay(500)
+                                    pauseImage.clearAnimation()
+                                    pauseButton.clearAnimation()
+                                    pauseImage.visibility = View.GONE
+                                    pauseButton.visibility = View.INVISIBLE
+                                    val scaleRestartImage = ScaleAnimation(
+                                        0.6f,
+                                        1f,
+                                        0.6f,
+                                        1f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+
+                                    val scaleRestartButton = ScaleAnimation(
+                                        0.6f,
+                                        1f,
+                                        0.6f,
+                                        1f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+                                    val scaleFinishImage = ScaleAnimation(
+                                        0.6f,
+                                        1f,
+                                        0.6f,
+                                        1f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+
+                                    val scaleFinishButton = ScaleAnimation(
+                                        0.6f,
+                                        1f,
+                                        0.6f,
+                                        1f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f,
+                                        Animation.RELATIVE_TO_SELF,
+                                        0.5f
+                                    )
+
+                                    scaleRestartImage.let {
+                                        it.duration = 300
+                                        it.fillAfter = true
+                                    }
+                                    scaleRestartButton.let {
+                                        it.duration = 300
+                                        it.fillAfter = true
+                                    }
+                                    scaleFinishImage.let {
+                                        it.duration = 300
+                                        it.fillAfter = true
+                                    }
+                                    scaleFinishButton.let {
+                                        it.duration = 300
+                                        it.fillAfter = true
+                                    }
+
+                                    finishImage.visibility = View.VISIBLE
+                                    finishButton.visibility = View.VISIBLE
+                                    restartImage.visibility = View.VISIBLE
+                                    restartButton.visibility = View.VISIBLE
+
+                                    restartImage.startAnimation(scaleRestartImage)
+                                    restartButton.startAnimation(scaleRestartButton)
+                                    finishImage.startAnimation(scaleFinishImage)
+                                    finishButton.startAnimation(scaleFinishButton)
+                                    delay(300)
+                                    restartImage.clearAnimation()
+                                    restartButton.clearAnimation()
+                                    finishImage.clearAnimation()
+                                    finishButton.clearAnimation()
+                                }
                             }
 
                             finishButton.setOnClickListener {
@@ -367,5 +528,25 @@ class FragmentRun : Fragment() {
         val formatted = current.format(formatter)
         return formatted
     }
+
+//    private fun pushDown(view:View) {
+//        val scaleAnimation = ScaleAnimation(
+//            1f,
+//            0.7f,
+//            1f,
+//            0.7f,
+//            Animation.RELATIVE_TO_SELF,
+//            0.5f,
+//            Animation.RELATIVE_TO_SELF,
+//            0.5f
+//        ).let {
+//
+//            it.duration = 300
+//            it.fillAfter = true
+//        }
+//
+//        view.startAnimation(scaleAnimation)
+//        view.clearAnimation()
+//    }
 
 }
