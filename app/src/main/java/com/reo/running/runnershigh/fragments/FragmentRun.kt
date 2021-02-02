@@ -2,13 +2,11 @@ package com.reo.running.runnershigh.fragments
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.location.Location
-import android.os.Build
-import android.os.Bundle
-import android.os.Looper
-import android.os.SystemClock
+import android.os.*
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -49,6 +47,8 @@ class FragmentRun : Fragment() {
     var marker: Marker? = null
     private var runStart = false
     var lock = false
+    private lateinit var vibrator: Vibrator
+    val vibratorPattern = longArrayOf(500)
     val waveAnimation = TranslateAnimation(
         1f,
         1f,
@@ -362,8 +362,9 @@ class FragmentRun : Fragment() {
                         }
 
                         GlobalScope.launch(Dispatchers.Main) {
+                            vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                            vibrator.vibrate(500)
                             runStart = true
-
                             centerCircle.clearAnimation()
                             startNav.visibility = View.GONE
                             startNav2.visibility = View.GONE
@@ -379,6 +380,7 @@ class FragmentRun : Fragment() {
 //                            lockImage.visibility = View.GONE
 
                             restartButton.setOnClickListener {
+                                vibrator.vibrate(500)
                                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                                 stopWatch.start()
                                 recordStop = true
@@ -463,6 +465,7 @@ class FragmentRun : Fragment() {
                             }
 
                             pauseButton.setOnClickListener {
+                                vibrator.vibrate(VibrationEffect.createWaveform(vibratorPattern,0))
                                 recordStop = false
                                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                                 stopWatch.stop()
@@ -579,6 +582,7 @@ class FragmentRun : Fragment() {
                             }
 
                             finishButton.setOnClickListener {
+                                vibrator.vibrate(VibrationEffect.createWaveform(vibratorPattern,0))
                                 GlobalScope.launch(Dispatchers.Main) {
                                     val scaleFinishImage = ScaleAnimation(
                                         1f,
