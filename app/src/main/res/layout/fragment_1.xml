@@ -546,18 +546,15 @@
 <!--lock on & off-->
 
     <ImageView
-        android:id="@+id/lockOn"
+        android:id="@+id/lockImage"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/ic_lock"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="invisible"
         android:contentDescription="@string/lock" />
-
-
     <ImageView
         android:id="@+id/lockOff"
         android:layout_width="40dp"

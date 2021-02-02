@@ -375,6 +375,8 @@ class FragmentRun : Fragment() {
                             pauseButton.visibility = View.VISIBLE
                             timerScreen.visibility = View.VISIBLE
 
+                            // TODO 赤字になる
+//                            lockImage.visibility = View.GONE
 
                             restartButton.setOnClickListener {
                                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
