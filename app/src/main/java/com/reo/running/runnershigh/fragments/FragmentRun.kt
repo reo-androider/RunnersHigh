@@ -4,10 +4,17 @@ import android.Manifest
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import android.location.Location
+import android.media.AudioAttributes
+import android.media.AudioManager
+import android.media.SoundPool
 import android.os.*
+import android.provider.MediaStore
 import android.util.Log
+import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,6 +31,7 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
+import java.security.AllPermission
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -36,7 +44,7 @@ class FragmentRun : Fragment() {
     var stdLocation: Location? = null
     var totalDistance = 0.0
     var results = FloatArray(1)
-    val zoomValue = 21.0f
+    val zoomValue = 20.0f
     var gpsAdjust = 0
     var weight = 57.0
     var kmAmount: Double = 0.0
@@ -48,34 +56,16 @@ class FragmentRun : Fragment() {
     private var runStart = false
     var lock = false
     private lateinit var vibrator: Vibrator
+    private lateinit var vibrationEffect: VibrationEffect
     val vibratorPattern = longArrayOf(500)
+    val soundPool = SoundPool(1,AudioManager.STREAM_MUSIC,0)
     val waveAnimation = TranslateAnimation(
         1f,
         1f,
         1f,
         -100f
     )
-//    val scaleAnimation = ScaleAnimation(
-//        1f,
-//        0.7f,
-//        1f,
-//        0.7f,
-//        Animation.RELATIVE_TO_SELF,
-//        0.5f,
-//        Animation.RELATIVE_TO_SELF,
-//        0.5f
-//    )
-//
-//    val scaleDisplay = ScaleAnimation(
-//        1f,
-//        0f,
-//        0f,
-//        1f,
-//        Animation.RELATIVE_TO_SELF,
-//        0f,
-//        Animation.RELATIVE_TO_SELF,
-//        0f
-//    )
+    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -205,6 +195,28 @@ class FragmentRun : Fragment() {
                         binding.distance.text = "$kmAmount"
                         binding.calorieNum.text = "$calorieAmount"
 
+                        marker?.remove()
+                        marker = it.addMarker(
+                            MarkerOptions().position(
+                                LatLng(
+                                    lastLocation.latitude,
+                                    lastLocation.longitude
+                                )
+                            ))
+
+                    } else {
+
+                        marker?.remove()
+                        marker = it.addMarker(
+                            MarkerOptions().position(
+                                LatLng(
+                                    lastLocation.latitude,
+                                    lastLocation.longitude
+                                )
+                            )
+                                .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context,R.drawable.ic_running))
+                                )
+                        )
                     }
 
                     if (gpsAdjust < 10) {
@@ -253,16 +265,6 @@ class FragmentRun : Fragment() {
                             binding.startText.startAnimation(alphaAnimation2)
 
                         }
-
-                        marker?.remove()
-                        marker = it.addMarker(
-                            MarkerOptions().position(
-                                LatLng(
-                                    lastLocation.latitude,
-                                    lastLocation.longitude
-                                )
-                            )
-                        )
 
                         marker?.showInfoWindow()
                     }
@@ -317,6 +319,7 @@ class FragmentRun : Fragment() {
             )
 
             binding.centerCircle.setOnClickListener {
+                recordStop = false
                 lifecycleScope.launch(Dispatchers.Main) {
                     val scaleStartButton = ScaleAnimation(
                         1f,
@@ -350,7 +353,6 @@ class FragmentRun : Fragment() {
                         withContext(Dispatchers.IO) {
                             delay(1000)
                             Log.d("withContext", "withContext")
-                            // TODO アニメーションが起動しない
                             listOf(
                                 countNum3,
                                 countNum2,
@@ -363,7 +365,8 @@ class FragmentRun : Fragment() {
 
                         GlobalScope.launch(Dispatchers.Main) {
                             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                            vibrator.vibrate(500)
+                            vibrationEffect = VibrationEffect.createOneShot(1000,255)
+                            vibrator.vibrate(vibrationEffect)
                             runStart = true
                             centerCircle.clearAnimation()
                             startNav.visibility = View.GONE
@@ -376,14 +379,23 @@ class FragmentRun : Fragment() {
                             pauseButton.visibility = View.VISIBLE
                             timerScreen.visibility = View.VISIBLE
 
+//                            cameraImage.setOnClickListener {
+//                                if (ActivityCompat.requestPermissions(context,REQUIRED_PERMISSIONS,
+//                                        REQUEST_CAMERA_PERMISSION) {
+//
+//                                    }
+//                            }
+
                             // TODO 赤字になる
 //                            lockImage.visibility = View.GONE
 
                             restartButton.setOnClickListener {
-                                vibrator.vibrate(500)
+                                vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                vibrationEffect = VibrationEffect.createOneShot(800,255)
+                                vibrator.vibrate(vibrationEffect)
                                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                                 stopWatch.start()
-                                recordStop = true
+                                recordStop = false
                                 finishButton.visibility = View.GONE
                                 finishImage.visibility = View.GONE
 
@@ -465,8 +477,10 @@ class FragmentRun : Fragment() {
                             }
 
                             pauseButton.setOnClickListener {
-                                vibrator.vibrate(VibrationEffect.createWaveform(vibratorPattern,0))
-                                recordStop = false
+                                vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                vibrationEffect = VibrationEffect.createOneShot(500,255)
+                                vibrator.vibrate(vibrationEffect)
+                                recordStop = true
                                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                                 stopWatch.stop()
 
@@ -582,7 +596,9 @@ class FragmentRun : Fragment() {
                             }
 
                             finishButton.setOnClickListener {
-                                vibrator.vibrate(VibrationEffect.createWaveform(vibratorPattern,0))
+                                vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                vibrationEffect = VibrationEffect.createOneShot(600,255)
+                                vibrator.vibrate(vibrationEffect)
                                 GlobalScope.launch(Dispatchers.Main) {
                                     val scaleFinishImage = ScaleAnimation(
                                         1f,
@@ -722,5 +738,18 @@ class FragmentRun : Fragment() {
         val formatted = current.format(formatter)
         return formatted
     }
+
+//    private fun dispatchTakePictureIntent() {
+//        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+//            takePictureIntent.resolveActivity(object : PackageManager())?.also {
+//                startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE)
+//            }
+//        }
+//    }
+    companion object {
+        private const val REQUEST_CAMERA_PERMISSION = 1
+    }
+
+    private 
 
 }
