@@ -194,7 +194,8 @@
         android:layout_marginTop="150dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:contentDescription="@string/gps_search" />
 
     <!-- timer -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -214,7 +215,8 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintEnd_toEndOf="parent"
+            android:contentDescription="@string/result_camera" />
 
         <Chronometer
             android:id="@+id/stop_watch"
