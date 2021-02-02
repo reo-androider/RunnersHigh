@@ -48,6 +48,13 @@ class FragmentRun : Fragment() {
     private val recordDao = MyApplication.db.recordDao()
     var marker: Marker? = null
     private var runStart = false
+    var lock = false
+    val waveAnimation = TranslateAnimation(
+        1f,
+        1f,
+        1f,
+        -100f
+    )
 //    val scaleAnimation = ScaleAnimation(
 //        1f,
 //        0.7f,
@@ -82,9 +89,66 @@ class FragmentRun : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
+        binding.gpsSearch.visibility = View.VISIBLE
+        binding.sleepBat.visibility = View.VISIBLE
+        waveAnimation.let {
+            it.duration = 100
+        }
+
+        GlobalScope.launch(Dispatchers.Main) {
+            while (gpsAdjust < 10) {
+                binding.S.startAnimation(waveAnimation)
+                delay(100)
+                binding.S.clearAnimation()
+                binding.e.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.e.clearAnimation()
+                binding.a.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.a.clearAnimation()
+                binding.r.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.r.clearAnimation()
+                binding.c.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.c.clearAnimation()
+                binding.h.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.h.clearAnimation()
+                binding.F.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.F.clearAnimation()
+                binding.o.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.o.clearAnimation()
+                binding.r2.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.r2.clearAnimation()
+                binding.G.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.G.clearAnimation()
+                binding.P.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.P.clearAnimation()
+                binding.S2.startAnimation(waveAnimation)
+
+                delay(100)
+                binding.S2.clearAnimation()
+                delay(1000)
+            }
+        }
         context?.run {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         }
@@ -154,13 +218,27 @@ class FragmentRun : Fragment() {
                         if (gpsAdjust == 10) {
                             binding.sleepBat.visibility = View.GONE
                             binding.mapView.visibility = View.VISIBLE
-                            binding.gpsSearch.visibility = View.GONE
+//                            binding.gpsSearch.visibility = View.GONE
                             binding.cardObjective.visibility = View.GONE
                             binding.startNav.visibility = View.VISIBLE
                             binding.startNav2.visibility = View.VISIBLE
 
                             binding.startText.visibility = View.VISIBLE
                             binding.centerCircle.visibility = View.VISIBLE
+
+                            binding.S.visibility = View.GONE
+                            binding.e.visibility = View.GONE
+                            binding.a.visibility = View.GONE
+                            binding.r.visibility = View.GONE
+                            binding.c.visibility = View.GONE
+                            binding.h.visibility = View.GONE
+                            binding.F.visibility = View.GONE
+                            binding.o.visibility = View.GONE
+                            binding.r2.visibility = View.GONE
+                            binding.G.visibility = View.GONE
+                            binding.P.visibility = View.GONE
+                            binding.S2.visibility = View.GONE
+                            binding.sleepBat.visibility = View.GONE
 
                             val alphaAnimation = AlphaAnimation(0f, 1f)
                             alphaAnimation.duration = 1500
@@ -195,6 +273,7 @@ class FragmentRun : Fragment() {
                     it.uiSettings.isCompassEnabled = true
 
                     gpsAdjust++
+
                     Log.d("gsp", "$gpsAdjust")
                     context?.run {
                         if (ActivityCompat.checkSelfPermission(
@@ -238,6 +317,26 @@ class FragmentRun : Fragment() {
             )
 
             binding.centerCircle.setOnClickListener {
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val scaleStartButton = ScaleAnimation(
+                        1f,
+                        100f,
+                        1f,
+                        100f,
+                        Animation.RELATIVE_TO_SELF,
+                        0.5f,
+                        Animation.RELATIVE_TO_SELF,
+                        0.5f
+                    )
+                    scaleStartButton.let {
+                        it.duration = 2000
+                        it.fillAfter = true
+                    }
+
+                    binding.centerCircle.startAnimation(scaleStartButton)
+                    delay(1000)
+
+                }
                 binding.run {
                     mapView.visibility = View.GONE
                     startText.visibility = View.GONE
@@ -246,8 +345,10 @@ class FragmentRun : Fragment() {
                     startNav2.visibility = View.GONE
 
                     (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
+
                     GlobalScope.launch {
                         withContext(Dispatchers.IO) {
+                            delay(1000)
                             Log.d("withContext", "withContext")
                             // TODO アニメーションが起動しない
                             listOf(
@@ -256,13 +357,14 @@ class FragmentRun : Fragment() {
                                 countNum1,
                             ).map {
                                 animationCount(it)
-                                delay(500)
+                                delay(1000)
                             }
                         }
 
                         GlobalScope.launch(Dispatchers.Main) {
                             runStart = true
 
+                            centerCircle.clearAnimation()
                             startNav.visibility = View.GONE
                             startNav2.visibility = View.GONE
                             stopWatch.base = SystemClock.elapsedRealtime()
@@ -596,7 +698,7 @@ class FragmentRun : Fragment() {
             0.255f,
             Animation.RELATIVE_TO_SELF,
             0.55f
-        ).apply { duration = 500 })
+        ).apply { duration = 1000 })
     }
 
     private fun kmConvert(distance: Double): Double {

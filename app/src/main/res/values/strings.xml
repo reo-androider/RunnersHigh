@@ -36,6 +36,8 @@
     <string name="restart_descrption">restart running</string>
     <string name="finish_description">finish running</string>
 
+    <string name="lock">lock</string>
+
     <!--  result_fragment  -->
     <string name="result_title">Nice Run</string>
     <string name="result_time">Time</string>
@@ -54,4 +56,16 @@
     <string name="checkFab">checkFab</string>
     <string name="weatherSelect">weatherSelect</string>
 
+    <string name="S">S</string>
+    <string name="e">e</string>
+    <string name="a">a</string>
+    <string name="r">r</string>
+    <string name="c">c</string>
+    <string name="h">h</string>
+    <string name="F">F</string>
+    <string name="o">o</string>
+    <string name="r2">r</string>
+    <string name="G">G</string>
+    <string name="P">P</string>
+    <string name="S2">S</string>
 </resources>
