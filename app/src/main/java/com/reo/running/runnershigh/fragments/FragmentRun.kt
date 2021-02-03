@@ -1,17 +1,19 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
+import android.app.Activity
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.Intent
+import android.content.*
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.location.Location
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.SoundPool
+import android.net.Uri
 import android.os.*
+import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.util.Log
 import android.view.HapticFeedbackConstants
@@ -19,8 +21,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -31,10 +36,14 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment1Binding
 import kotlinx.coroutines.*
+import java.io.File
 import java.security.AllPermission
+import java.security.Permission
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.*
 import kotlin.math.ceil
 
 class FragmentRun : Fragment() {
@@ -45,10 +54,10 @@ class FragmentRun : Fragment() {
     var totalDistance = 0.0
     var results = FloatArray(1)
     val zoomValue = 20.0f
-    var gpsAdjust = 0
+    var gpsAdjust = 10
     var weight = 57.0
     var kmAmount: Double = 0.0
-    var calorieAmount:  Int = 0
+    var calorieAmount: Int = 0
     var recordStop = true
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.recordDao()
@@ -57,25 +66,31 @@ class FragmentRun : Fragment() {
     var lock = false
     private lateinit var vibrator: Vibrator
     private lateinit var vibrationEffect: VibrationEffect
-    val vibratorPattern = longArrayOf(500)
-    val soundPool = SoundPool(1,AudioManager.STREAM_MUSIC,0)
-    val waveAnimation = TranslateAnimation(
-        1f,
-        1f,
-        1f,
-        -100f
-    )
-    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+
+    //    val vibratorPattern = longArrayOf(500)
+//    val soundPool = SoundPool(1,AudioManager.STREAM_MUSIC,0)
+//    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
+//    val REQUEST_IMAGE_CAPTURE = 1
+//    val packageManager: PackageManager
+//        get() {
+//            TODO()
+//        }
+    private val PERMISSION_CODE = 1000
+    private val IMAGE_CAPTURE_CODE = 1001
+    var image_uri: Uri? = null
+    val contentResolver: ContentResolver? = null
+
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = Fragment1Binding.inflate(layoutInflater, container, false)
         return binding.root
     }
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -83,11 +98,17 @@ class FragmentRun : Fragment() {
         binding.mapView.onCreate(savedInstanceState)
         binding.gpsSearch.visibility = View.VISIBLE
         binding.sleepBat.visibility = View.VISIBLE
-        waveAnimation.let {
-            it.duration = 100
-        }
-
         GlobalScope.launch(Dispatchers.Main) {
+            val waveAnimation = TranslateAnimation(
+                1f,
+                1f,
+                1f,
+                -100f
+            )
+            waveAnimation.let {
+                it.duration = 100
+            }
+
             while (gpsAdjust < 10) {
                 binding.S.startAnimation(waveAnimation)
                 delay(100)
@@ -153,10 +174,27 @@ class FragmentRun : Fragment() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
                 val lastLocation = locationResult?.lastLocation ?: return
-
                 Log.d("checkLatLng", "${LatLng(lastLocation.latitude, lastLocation.longitude)}")
-
                 binding.mapView.getMapAsync {
+                    context?.run {
+                        if (ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.ACCESS_FINE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                                this,
+                                Manifest.permission.ACCESS_COARSE_LOCATION
+                            ) != PackageManager.PERMISSION_GRANTED
+                        ) {
+                            // TODO: Consider calling
+                            //    ActivityCompat#requestPermissions
+                            // here to request the missing permissions, and then overriding
+                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                            //                                          int[] grantResults)
+                            // to handle the case where the user grants the permission. See the documentation
+                            // for ActivityCompat#requestPermissions for more details.
+                            it.isMyLocationEnabled = true
+                        }
+                    }
                     it.moveCamera(
                         CameraUpdateFactory.newLatLngZoom(
                             LatLng(
@@ -202,7 +240,8 @@ class FragmentRun : Fragment() {
                                     lastLocation.latitude,
                                     lastLocation.longitude
                                 )
-                            ))
+                            )
+                        )
 
                     } else {
 
@@ -214,7 +253,13 @@ class FragmentRun : Fragment() {
                                     lastLocation.longitude
                                 )
                             )
-                                .icon(BitmapDescriptorFactory.fromBitmap(Resource.getBitmap(context,R.drawable.ic_running))
+                                .icon(
+                                    BitmapDescriptorFactory.fromBitmap(
+                                        Resource.getBitmap(
+                                            context,
+                                            R.drawable.ic_running
+                                        )
+                                    )
                                 )
                         )
                     }
@@ -277,25 +322,7 @@ class FragmentRun : Fragment() {
                     gpsAdjust++
 
                     Log.d("gsp", "$gpsAdjust")
-                    context?.run {
-                        if (ActivityCompat.checkSelfPermission(
-                                this,
-                                Manifest.permission.ACCESS_FINE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                this,
-                                Manifest.permission.ACCESS_COARSE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED
-                        ) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
-                            it.isMyLocationEnabled = true
-                        }
-                    }
+
                 }
             }
         }
@@ -359,13 +386,13 @@ class FragmentRun : Fragment() {
                                 countNum1,
                             ).map {
                                 animationCount(it)
-                                delay(1000)
+                                delay(10)
                             }
                         }
 
                         GlobalScope.launch(Dispatchers.Main) {
                             vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                            vibrationEffect = VibrationEffect.createOneShot(1000,255)
+                            vibrationEffect = VibrationEffect.createOneShot(1000, 255)
                             vibrator.vibrate(vibrationEffect)
                             runStart = true
                             centerCircle.clearAnimation()
@@ -379,19 +406,34 @@ class FragmentRun : Fragment() {
                             pauseButton.visibility = View.VISIBLE
                             timerScreen.visibility = View.VISIBLE
 
-//                            cameraImage.setOnClickListener {
-//                                if (ActivityCompat.requestPermissions(context,REQUIRED_PERMISSIONS,
-//                                        REQUEST_CAMERA_PERMISSION) {
-//
-//                                    }
-//                            }
+                            cameraImage.setOnClickListener {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    if (checkSelfPermission(Manifest.permission.CAMERA)
+                                        == PackageManager.PERMISSION_DENIED ||
+                                        checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                        == PackageManager.PERMISSION_DENIED
+                                    ) {
+                                        val permission = arrayOf(
+                                            Manifest.permission.CAMERA,
+                                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                        )
+                                        requestPermissions(permission, PERMISSION_CODE)
+
+                                    } else {
+                                        openCamera()
+                                    }
+                                } else {
+                                    openCamera()
+                                }
+                            }
+
 
                             // TODO 赤字になる
 //                            lockImage.visibility = View.GONE
 
                             restartButton.setOnClickListener {
                                 vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                                vibrationEffect = VibrationEffect.createOneShot(800,255)
+                                vibrationEffect = VibrationEffect.createOneShot(800, 255)
                                 vibrator.vibrate(vibrationEffect)
                                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                                 stopWatch.start()
@@ -478,7 +520,7 @@ class FragmentRun : Fragment() {
 
                             pauseButton.setOnClickListener {
                                 vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                                vibrationEffect = VibrationEffect.createOneShot(500,255)
+                                vibrationEffect = VibrationEffect.createOneShot(500, 255)
                                 vibrator.vibrate(vibrationEffect)
                                 recordStop = true
                                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
@@ -597,7 +639,7 @@ class FragmentRun : Fragment() {
 
                             finishButton.setOnClickListener {
                                 vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                                vibrationEffect = VibrationEffect.createOneShot(600,255)
+                                vibrationEffect = VibrationEffect.createOneShot(600, 255)
                                 vibrator.vibrate(vibrationEffect)
                                 GlobalScope.launch(Dispatchers.Main) {
                                     val scaleFinishImage = ScaleAnimation(
@@ -688,20 +730,20 @@ class FragmentRun : Fragment() {
     }
 
 
-        override fun onStart() {
-            super.onStart()
-            binding.mapView.onStart()
-        }
+    override fun onStart() {
+        super.onStart()
+        binding.mapView.onStart()
+    }
 
-        override fun onResume() {
-            super.onResume()
-            binding.mapView.onResume()
-        }
+    override fun onResume() {
+        super.onResume()
+        binding.mapView.onResume()
+    }
 
-        override fun onPause() {
-            super.onPause()
-            binding.mapView.onPause()
-        }
+    override fun onPause() {
+        super.onPause()
+        binding.mapView.onPause()
+    }
 /*
     override fun onDestroy() {
         super.onDestroy()
@@ -728,7 +770,7 @@ class FragmentRun : Fragment() {
     }
 
     private fun calorieConvert(distance: Double, weight: Double): Int {
-            return (ceil(distance) * weight / 1000).toInt()
+        return (ceil(distance) * weight / 1000).toInt()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -738,18 +780,81 @@ class FragmentRun : Fragment() {
         val formatted = current.format(formatter)
         return formatted
     }
-
+//
 //    private fun dispatchTakePictureIntent() {
-//        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-//            takePictureIntent.resolveActivity(object : PackageManager())?.also {
-//                startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE)
-//            }
+//        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        if (takePictureIntent.resolveActivity(packageManager) != null) {
+//            startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE)
 //        }
 //    }
-    companion object {
-        private const val REQUEST_CAMERA_PERMISSION = 1
+
+    //
+//        val cFolder: File? = context?.getExternalFilesDir(Environment.DIRECTORY_DCIM)
+//        val fileDate = SimpleDateFormat(
+//            "ddHHmmss",Locale.US).format(Date())
+//        val fileName = String.format("CameraIntent_&s.jpg",fileDate)
+//        val cameraFile = File(cFolder,"$fileName")
+//        image_uri = context?.let {
+//            FileProvider.getUriForFile(
+//                requireContext(),
+//                it.packageName,
+//                cameraFile
+//            )
+//        }
+    private fun openCamera() {
+        // TODO
+        val values = ContentValues()
+        values.put(MediaStore.Images.Media.TITLE, "New Picture")
+        values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
+        image_uri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
+        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
     }
 
-    private 
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            PERMISSION_CODE -> {
+                if (grantResults.size > 0 && grantResults[0] ==
+                    PackageManager.PERMISSION_DENIED
+                ) {
+                    openCamera()
+                } else {
+                    Toast.makeText(context, "Permission dined", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("photo_camera", "$data")
+        Log.d("photo_camera", "$image_uri")
+        if (resultCode == Activity.RESULT_OK) {
+            if (data?.extras != null) {
+
+                (data.extras?.get("data") as? Bitmap?).let {
+                    binding.cameraSet.setImageBitmap(it)
+                }
+//                var bitmap: Bitmap? = null
+//                bitmap = data.extras!!.get("data") as Bitmap?
+//                binding.cameraSet.setImageBitmap(bitmap)
+//            }
+            }
+        }
+    }
 }
+
+//    override fun onRequestPermissionsResult(
+//        requestCode: Int,
+//        permissions: Array<out String>,
+//        grantResults: IntArray
+//    ) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//    }
+
+
