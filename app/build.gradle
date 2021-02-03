@@ -119,10 +119,13 @@ dependencies {
     implementation 'com.caverock:androidsvg:1.2.1'
 
     //Camera
-    def camerax_version = '1.0.0-alpha06'
+    def camerax_version = '1.1.0-alpha01'
     implementation "androidx.camera:camera-core:${camerax_version}"
     implementation "androidx.camera:camera-camera2:${camerax_version}"
     implementation 'org.pytorch:pytorch_android:1.4.0'
     implementation 'org.pytorch:pytorch_android_torchvision:1.4.0'
+
+    //ripple
+    implementation 'com.github.traex.rippleeffect:library:1.3'
 
 }
