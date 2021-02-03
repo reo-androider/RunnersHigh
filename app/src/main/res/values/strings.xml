@@ -68,4 +68,11 @@
     <string name="G">G</string>
     <string name="P">P</string>
     <string name="S2">S</string>
+    <string name="course"></string>
+
+    <string name="perfectText">Excellent</string>
+    <string name="goodText">Good</string>
+    <string name="sosoText">soso</string>
+    <string name="badText">bad</string>
+    <string name="tooBadText">Too Bad</string>
 </resources>

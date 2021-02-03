@@ -19,4 +19,5 @@
     <color name="normal2">#757575</color>
     <color name="gray">#616161</color>
     <color name="gray2">#424242</color>
+    <color name="markDefault">#333333</color>
 </resources>
