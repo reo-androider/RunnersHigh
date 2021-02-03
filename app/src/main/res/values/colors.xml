@@ -20,4 +20,9 @@
     <color name="gray">#616161</color>
     <color name="gray2">#424242</color>
     <color name="markDefault">#333333</color>
+    <color name="perfect">#4CAF50</color>
+    <color name="good">#C0CA33</color>
+    <color name="soso">#FFC107</color>
+    <color name="bad">#FF9800</color>
+    <color name="tooBad">#f44336</color>
 </resources>
