@@ -45,7 +45,7 @@
     <string name="result_distance">Distance</string>
     <string name="total_distance">0.000km</string>
     <string name="result_calorie">Calorie</string>
-    <string name="total_calorie">0.0</string>
+    <string name="total_calorie">0kcal</string>
     <string name="result_memo">感想・メモ</string>
     <string name="resutl_finish">result_finish</string>
     <string name="today">yymmdd</string>

@@ -1,5 +1,6 @@
 package com.reo.running.runnershigh
 
+import android.graphics.Bitmap
 import androidx.room.*
 
 @Database(entities = [Record::class], version = 2)
