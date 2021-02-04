@@ -9,6 +9,9 @@ import android.view.ViewGroup
 import android.view.animation.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.reo.running.runnershigh.MyAdapter
 import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.*
@@ -18,8 +21,11 @@ class FragmentResult : Fragment() {
     private lateinit var binding: FragmentResultBinding
     private val readDao = MyApplication.db.recordDao()
     private var memo = ""
-    var select = false//二回押しても同じアニメーションが実行されない為
-    var selectMark = ""
+    private var select = false//二回押しても同じアニメーションが実行されない為
+    private var selectMark = ""
+
+    private var page = 1
+    private var myAdapter: MyAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -78,7 +84,7 @@ class FragmentResult : Fragment() {
                             binding.sosoImage.startAnimation(scaleAnimation)
                             binding.badImage.startAnimation(scaleAnimation)
                             binding.tooBadImage.startAnimation(scaleAnimation)
-                            delay(100)
+                            delay(500)
                             binding.goodImage.clearAnimation()
                             binding.sosoImage.clearAnimation()
                             binding.badImage.clearAnimation()
@@ -265,6 +271,166 @@ class FragmentResult : Fragment() {
                 }
 
 
+                binding.badImage.setOnClickListener {
+                    if (!select) {
+                        select = true
+                        selectMark = "bad"
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            val scaleAnimation = ScaleAnimation(
+                                1f,
+                                0.3f,
+                                1f,
+                                0.3f,
+                                50f,
+                                50f
+                            )
+                            scaleAnimation.let {
+                                it.duration = 500
+                                it.fillAfter = true
+                            }
+                            val translateAnimation2 = TranslateAnimation(
+                                1f,
+                                -580f,
+                                1f,
+                                1f
+                            )
+                            translateAnimation2.let {
+                                it.duration = 500
+                                it.fillAfter = true
+                            }
+
+                            binding.badImage.alpha = 1F
+                            binding.badImage.setColorFilter(Color.parseColor("#FF9800"))
+
+                            binding.perfectImage.startAnimation(scaleAnimation)
+                            binding.goodImage.startAnimation(scaleAnimation)
+                            binding.sosoImage.startAnimation(scaleAnimation)
+                            binding.tooBadImage.startAnimation(scaleAnimation)
+
+                            delay(500)
+
+                            binding.perfectImage.clearAnimation()
+                            binding.goodImage.clearAnimation()
+                            binding.sosoImage.clearAnimation()
+                            binding.tooBadImage.clearAnimation()
+
+                            binding.perfectImage.visibility = View.GONE
+                            binding.goodImage.visibility = View.GONE
+                            binding.sosoImage.visibility = View.GONE
+                            binding.tooBadImage.visibility = View.GONE
+
+                            delay(500)
+
+                            binding.badImage.startAnimation(translateAnimation2)
+
+                            delay(100)
+
+                            val translateAnimation = TranslateAnimation(
+                                500f,
+                                1f,
+                                1f,
+                                1f,
+                            )
+                            translateAnimation.duration = 500
+                            binding.score40.visibility = View.VISIBLE
+                            binding.score40.startAnimation(translateAnimation)
+                            val rotateAnimation = RotateAnimation(
+                                -90f,
+                                0f,
+                                0.5f,
+                                1f
+                            )
+                            rotateAnimation.duration = 500
+                            binding.cancel.visibility = View.VISIBLE
+                            binding.cancel.startAnimation(rotateAnimation)
+                        }
+                    }
+                }
+
+
+
+
+
+                binding.tooBadImage.setOnClickListener {
+                    if (!select) {
+                        select = true
+                        selectMark = "tooBad"
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            val scaleAnimation = ScaleAnimation(
+                                1f,
+                                0.3f,
+                                1f,
+                                0.3f,
+                                50f,
+                                50f
+                            )
+                            scaleAnimation.let {
+                                it.duration = 500
+                                it.fillAfter = true
+                            }
+                            val translateAnimation2 = TranslateAnimation(
+                                1f,
+                                -800f,
+                                1f,
+                                1f
+                            )
+                            translateAnimation2.let {
+                                it.duration = 500
+                                it.fillAfter = true
+                            }
+
+                            binding.tooBadImage.alpha = 1F
+                            binding.tooBadImage.setColorFilter(Color.parseColor("#f44336"))
+
+                            binding.perfectImage.startAnimation(scaleAnimation)
+                            binding.goodImage.startAnimation(scaleAnimation)
+                            binding.sosoImage.startAnimation(scaleAnimation)
+                            binding.badImage.startAnimation(scaleAnimation)
+
+                            delay(500)
+
+                            binding.perfectImage.clearAnimation()
+                            binding.goodImage.clearAnimation()
+                            binding.sosoImage.clearAnimation()
+                            binding.badImage.clearAnimation()
+
+                            binding.perfectImage.visibility = View.GONE
+                            binding.goodImage.visibility = View.GONE
+                            binding.sosoImage.visibility = View.GONE
+                            binding.badImage.visibility = View.GONE
+
+                            delay(500)
+
+                            binding.tooBadImage.startAnimation(translateAnimation2)
+
+                            delay(100)
+
+                            val translateAnimation = TranslateAnimation(
+                                500f,
+                                1f,
+                                1f,
+                                1f,
+                            )
+                            translateAnimation.duration = 500
+                            binding.score20.visibility = View.VISIBLE
+                            binding.score20.startAnimation(translateAnimation)
+                            val rotateAnimation = RotateAnimation(
+                                -90f,
+                                0f,
+                                0.5f,
+                                1f
+                            )
+                            rotateAnimation.duration = 500
+                            binding.cancel.visibility = View.VISIBLE
+                            binding.cancel.startAnimation(rotateAnimation)
+                        }
+                    }
+                }
+
+
+
+
+
 
 
 
@@ -331,9 +497,7 @@ class FragmentResult : Fragment() {
                                     1f,
                                     1f
                                 )
-                                translateAnimation.let {
-                                    it.duration = 500
-                                }
+                                translateAnimation.duration = 500
                                 scaleAnimation.duration = 100
                                 binding.goodImage.startAnimation(translateAnimation)
                                 binding.perfectImage.visibility = View.VISIBLE
@@ -362,14 +526,12 @@ class FragmentResult : Fragment() {
                                     50f
                                 )
                                 val translateAnimation = TranslateAnimation(
-                                    -200f,
+                                    -400f,
                                     1f,
                                     1f,
                                     1f
                                 )
-                                translateAnimation.let {
-                                    it.duration = 500
-                                }
+                                translateAnimation.duration = 500
                                 scaleAnimation.duration = 100
                                 binding.sosoImage.startAnimation(translateAnimation)
                                 binding.perfectImage.visibility = View.VISIBLE
@@ -384,14 +546,100 @@ class FragmentResult : Fragment() {
                                 binding.tooBadImage.visibility = View.VISIBLE
                                 binding.tooBadImage.startAnimation(scaleAnimation)
                             }
+
+                            "bad" -> {
+                                binding.badImage.alpha = 0.6F
+                                binding.badImage.setColorFilter(Color.parseColor("#757575"))
+                                binding.score40.visibility = View.GONE
+                                val scaleAnimation = ScaleAnimation(
+                                    0.3f,
+                                    1f,
+                                    0.3f,
+                                    1f,
+                                    50f,
+                                    50f
+                                )
+                                val translateAnimation = TranslateAnimation(
+                                    -580f,
+                                    1f,
+                                    1f,
+                                    1f
+                                )
+                                translateAnimation.duration = 500
+                                scaleAnimation.duration = 100
+                                binding.badImage.startAnimation(translateAnimation)
+                                binding.perfectImage.visibility = View.VISIBLE
+                                binding.perfectImage.startAnimation(scaleAnimation)
+                                delay(200)
+                                binding.goodImage.visibility = View.VISIBLE
+                                binding.goodImage.startAnimation(scaleAnimation)
+                                delay(200)
+                                binding.sosoImage.visibility = View.VISIBLE
+                                binding.sosoImage.startAnimation(scaleAnimation)
+                                delay(200)
+                                binding.tooBadImage.visibility = View.VISIBLE
+                                binding.tooBadImage.startAnimation(scaleAnimation)
+                            }
+
+
+                            "tooBad" -> {
+                                binding.tooBadImage.alpha = 0.6F
+                                binding.tooBadImage.setColorFilter(Color.parseColor("#757575"))
+                                binding.score20.visibility = View.GONE
+                                val scaleAnimation = ScaleAnimation(
+                                    0.3f,
+                                    1f,
+                                    0.3f,
+                                    1f,
+                                    50f,
+                                    50f
+                                )
+                                val translateAnimation = TranslateAnimation(
+                                    -800f,
+                                    1f,
+                                    1f,
+                                    1f
+                                )
+                                translateAnimation.duration = 500
+                                scaleAnimation.duration = 100
+                                binding.tooBadImage.startAnimation(translateAnimation)
+                                binding.perfectImage.visibility = View.VISIBLE
+                                binding.perfectImage.startAnimation(scaleAnimation)
+                                delay(200)
+                                binding.goodImage.visibility = View.VISIBLE
+                                binding.goodImage.startAnimation(scaleAnimation)
+                                delay(200)
+                                binding.sosoImage.visibility = View.VISIBLE
+                                binding.sosoImage.startAnimation(scaleAnimation)
+                                delay(200)
+                                binding.badImage.visibility = View.VISIBLE
+                                binding.badImage.startAnimation(scaleAnimation)
+                            }
                         }
                     }
                 }
+
+                binding.mainRecyclerView.setHasFixedSize(true)
+                val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
+                binding.mainRecyclerView.layoutManager = layoutManager
+                myAdapter = MyAdapter(createRowData(page))
+                binding.mainRecyclerView.adapter = myAdapter
+
+
+                binding.resultButton.setOnClickListener {
+                    memo = binding.memo.text.toString()
+                    Log.d("memo", memo)
+                }
             }
-            binding.resultButton.setOnClickListener {
-                memo = binding.memo.text.toString()
-                Log.d("memo", memo)
-            }
+        }
+    }
+
+    private fun createRowData(page: Int): List<RowData> {
+        val dataSet = MutableList<RowData> = ArrayList()
+        var i = 1
+        while (i < page * 20) {
+            val data = RowData()
+            data.
         }
     }
 }

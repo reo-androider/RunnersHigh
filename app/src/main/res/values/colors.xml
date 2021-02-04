@@ -24,5 +24,6 @@
     <color name="good">#C0CA33</color>
     <color name="soso">#FFC107</color>
     <color name="bad">#FF9800</color>
+    <color name="bad2">#FF5722</color>
     <color name="tooBad">#f44336</color>
 </resources>
