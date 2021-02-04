@@ -7,13 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
-import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.reo.running.runnershigh.MyAdapter
 import com.reo.running.runnershigh.MyApplication
+import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.*
 
@@ -115,6 +115,11 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
+                            binding.feedBack.let {
+                                it.setImageResource(R.drawable.ic_perfect)
+                                it.setColorFilter(Color.parseColor("#4CAF50"))
+                                it.visibility = View.VISIBLE
+                            }
                         }
                     }
                 }
@@ -185,6 +190,11 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
+                            binding.feedBack.let {
+                                it.setImageResource(R.drawable.ic_good)
+                                it.setColorFilter(Color.parseColor("#CDDC39"))
+                                it.visibility = View.VISIBLE
+                            }
                         }
                     }
                 }
@@ -264,6 +274,11 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
+                            binding.feedBack.let {
+                                it.setImageResource(R.drawable.ic_soso)
+                                it.setColorFilter(Color.parseColor("#FFC107"))
+                                it.visibility = View.VISIBLE
+                            }
                         }
                     }
                 }
@@ -341,6 +356,11 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
+                            binding.feedBack.let {
+                                it.setImageResource(R.drawable.ic_bad)
+                                it.setColorFilter(Color.parseColor("#FF9800"))
+                                it.visibility = View.VISIBLE
+                            }
                         }
                     }
                 }
@@ -421,204 +441,221 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-                        }
-                    }
-                }
-
-
-                binding.cancel.setOnClickListener {
-                    lifecycleScope.launch(Dispatchers.Main) {
-                        Log.d("selectMark", selectMark)
-                        select = false
-                        val rotateAnimation = RotateAnimation(
-                            0f,
-                            -90f,
-                            0.5f,
-                            1f
-                        )
-                        rotateAnimation.duration = 100
-                        rotateAnimation.fillAfter = true
-                        binding.cancel.startAnimation(rotateAnimation)
-                        delay(100)
-                        binding.cancel.clearAnimation()
-                        binding.cancel.visibility = View.GONE
-                        when (selectMark) {
-
-                            "perfect" -> {
-                                binding.perfectImage.alpha = 0.6F
-                                binding.perfectImage.setColorFilter(Color.parseColor("#757575"))
-                                binding.score100.visibility = View.GONE
-                                val scaleAnimation = ScaleAnimation(
-                                    0.3f,
-                                    1f,
-                                    0.3f,
-                                    1f,
-                                    50f,
-                                    50f
-                                )
-                                scaleAnimation.duration = 100
-                                binding.goodImage.visibility = View.VISIBLE
-                                binding.goodImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.sosoImage.visibility = View.VISIBLE
-                                binding.sosoImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.badImage.visibility = View.VISIBLE
-                                binding.badImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.tooBadImage.visibility = View.VISIBLE
-                                binding.tooBadImage.startAnimation(scaleAnimation)
-                            }
-
-                            "good" -> {
-                                binding.goodImage.alpha = 0.6F
-                                binding.goodImage.setColorFilter(Color.parseColor("#757575"))
-                                binding.score80.visibility = View.GONE
-                                val scaleAnimation = ScaleAnimation(
-                                    0.3f,
-                                    1f,
-                                    0.3f,
-                                    1f,
-                                    50f,
-                                    50f
-                                )
-                                val translateAnimation = TranslateAnimation(
-                                    -200f,
-                                    1f,
-                                    1f,
-                                    1f
-                                )
-                                translateAnimation.duration = 500
-                                scaleAnimation.duration = 100
-                                binding.goodImage.startAnimation(translateAnimation)
-                                binding.perfectImage.visibility = View.VISIBLE
-                                binding.perfectImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.sosoImage.visibility = View.VISIBLE
-                                binding.sosoImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.badImage.visibility = View.VISIBLE
-                                binding.badImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.tooBadImage.visibility = View.VISIBLE
-                                binding.tooBadImage.startAnimation(scaleAnimation)
-                            }
-
-                            "soso" -> {
-                                binding.sosoImage.alpha = 0.6F
-                                binding.sosoImage.setColorFilter(Color.parseColor("#757575"))
-                                binding.score60.visibility = View.GONE
-                                val scaleAnimation = ScaleAnimation(
-                                    0.3f,
-                                    1f,
-                                    0.3f,
-                                    1f,
-                                    50f,
-                                    50f
-                                )
-                                val translateAnimation = TranslateAnimation(
-                                    -400f,
-                                    1f,
-                                    1f,
-                                    1f
-                                )
-                                translateAnimation.duration = 500
-                                scaleAnimation.duration = 100
-                                binding.sosoImage.startAnimation(translateAnimation)
-                                binding.perfectImage.visibility = View.VISIBLE
-                                binding.perfectImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.goodImage.visibility = View.VISIBLE
-                                binding.goodImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.badImage.visibility = View.VISIBLE
-                                binding.badImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.tooBadImage.visibility = View.VISIBLE
-                                binding.tooBadImage.startAnimation(scaleAnimation)
-                            }
-
-                            "bad" -> {
-                                binding.badImage.alpha = 0.6F
-                                binding.badImage.setColorFilter(Color.parseColor("#757575"))
-                                binding.score40.visibility = View.GONE
-                                val scaleAnimation = ScaleAnimation(
-                                    0.3f,
-                                    1f,
-                                    0.3f,
-                                    1f,
-                                    50f,
-                                    50f
-                                )
-                                val translateAnimation = TranslateAnimation(
-                                    -580f,
-                                    1f,
-                                    1f,
-                                    1f
-                                )
-                                translateAnimation.duration = 500
-                                scaleAnimation.duration = 100
-                                binding.badImage.startAnimation(translateAnimation)
-                                binding.perfectImage.visibility = View.VISIBLE
-                                binding.perfectImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.goodImage.visibility = View.VISIBLE
-                                binding.goodImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.sosoImage.visibility = View.VISIBLE
-                                binding.sosoImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.tooBadImage.visibility = View.VISIBLE
-                                binding.tooBadImage.startAnimation(scaleAnimation)
-                            }
-
-
-                            "tooBad" -> {
-                                binding.tooBadImage.alpha = 0.6F
-                                binding.tooBadImage.setColorFilter(Color.parseColor("#757575"))
-                                binding.score20.visibility = View.GONE
-                                val scaleAnimation = ScaleAnimation(
-                                    0.3f,
-                                    1f,
-                                    0.3f,
-                                    1f,
-                                    50f,
-                                    50f
-                                )
-                                val translateAnimation = TranslateAnimation(
-                                    -800f,
-                                    1f,
-                                    1f,
-                                    1f
-                                )
-                                translateAnimation.duration = 500
-                                scaleAnimation.duration = 100
-                                binding.tooBadImage.startAnimation(translateAnimation)
-                                binding.perfectImage.visibility = View.VISIBLE
-                                binding.perfectImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.goodImage.visibility = View.VISIBLE
-                                binding.goodImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.sosoImage.visibility = View.VISIBLE
-                                binding.sosoImage.startAnimation(scaleAnimation)
-                                delay(200)
-                                binding.badImage.visibility = View.VISIBLE
-                                binding.badImage.startAnimation(scaleAnimation)
+                            binding.feedBack.let {
+                                it.setImageResource(R.drawable.ic_sick)
+                                it.setColorFilter(Color.parseColor("#f44336"))
+                                it.visibility = View.VISIBLE
                             }
                         }
                     }
                 }
 
-                val courseList = listOf<ImageView>(
-                )
 
-                binding.mainRecyclerView.adapter = MyAdapter(courseList)
-                binding.mainRecyclerView.layoutManager = LinearLayoutManager(context)
-                binding.resultButton.setOnClickListener {
-                    memo = binding.memo.text.toString()
-                    Log.d("memo", memo)
-                }
+                    binding.cancel.setOnClickListener {
+                        lifecycleScope.launch(Dispatchers.Main) {
+                            Log.d("selectMark", selectMark)
+                            select = false
+                            val rotateAnimation = RotateAnimation(
+                                0f,
+                                -90f,
+                                0.5f,
+                                1f
+                            )
+                            rotateAnimation.duration = 100
+                            rotateAnimation.fillAfter = true
+                            binding.cancel.startAnimation(rotateAnimation)
+                            delay(100)
+                            binding.cancel.clearAnimation()
+                            binding.cancel.visibility = View.GONE
+                            when (selectMark) {
+
+                                "perfect" -> {
+                                    binding.perfectImage.alpha = 0.6F
+                                    binding.perfectImage.setColorFilter(Color.parseColor("#757575"))
+                                    binding.score100.visibility = View.GONE
+                                    val scaleAnimation = ScaleAnimation(
+                                        0.3f,
+                                        1f,
+                                        0.3f,
+                                        1f,
+                                        50f,
+                                        50f
+                                    )
+                                    scaleAnimation.duration = 100
+                                    binding.goodImage.visibility = View.VISIBLE
+                                    binding.goodImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.sosoImage.visibility = View.VISIBLE
+                                    binding.sosoImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.badImage.visibility = View.VISIBLE
+                                    binding.badImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.tooBadImage.visibility = View.VISIBLE
+                                    binding.tooBadImage.startAnimation(scaleAnimation)
+                                    binding.feedBack.visibility = View.INVISIBLE
+                                }
+
+                                "good" -> {
+                                    binding.goodImage.alpha = 0.6F
+                                    binding.goodImage.setColorFilter(Color.parseColor("#757575"))
+                                    binding.score80.visibility = View.GONE
+                                    val scaleAnimation = ScaleAnimation(
+                                        0.3f,
+                                        1f,
+                                        0.3f,
+                                        1f,
+                                        50f,
+                                        50f
+                                    )
+                                    val translateAnimation = TranslateAnimation(
+                                        -200f,
+                                        1f,
+                                        1f,
+                                        1f
+                                    )
+                                    translateAnimation.duration = 500
+                                    scaleAnimation.duration = 100
+                                    binding.goodImage.startAnimation(translateAnimation)
+                                    binding.perfectImage.visibility = View.VISIBLE
+                                    binding.perfectImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.sosoImage.visibility = View.VISIBLE
+                                    binding.sosoImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.badImage.visibility = View.VISIBLE
+                                    binding.badImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.tooBadImage.visibility = View.VISIBLE
+                                    binding.tooBadImage.startAnimation(scaleAnimation)
+                                    binding.feedBack.visibility = View.INVISIBLE
+                                }
+
+                                "soso" -> {
+                                    binding.sosoImage.alpha = 0.6F
+                                    binding.sosoImage.setColorFilter(Color.parseColor("#757575"))
+                                    binding.score60.visibility = View.GONE
+                                    val scaleAnimation = ScaleAnimation(
+                                        0.3f,
+                                        1f,
+                                        0.3f,
+                                        1f,
+                                        50f,
+                                        50f
+                                    )
+                                    val translateAnimation = TranslateAnimation(
+                                        -400f,
+                                        1f,
+                                        1f,
+                                        1f
+                                    )
+                                    translateAnimation.duration = 500
+                                    scaleAnimation.duration = 100
+                                    binding.sosoImage.startAnimation(translateAnimation)
+                                    binding.perfectImage.visibility = View.VISIBLE
+                                    binding.perfectImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.goodImage.visibility = View.VISIBLE
+                                    binding.goodImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.badImage.visibility = View.VISIBLE
+                                    binding.badImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.tooBadImage.visibility = View.VISIBLE
+                                    binding.tooBadImage.startAnimation(scaleAnimation)
+                                    binding.feedBack.visibility = View.INVISIBLE
+                                }
+
+                                "bad" -> {
+                                    binding.badImage.alpha = 0.6F
+                                    binding.badImage.setColorFilter(Color.parseColor("#757575"))
+                                    binding.score40.visibility = View.GONE
+                                    val scaleAnimation = ScaleAnimation(
+                                        0.3f,
+                                        1f,
+                                        0.3f,
+                                        1f,
+                                        50f,
+                                        50f
+                                    )
+                                    val translateAnimation = TranslateAnimation(
+                                        -580f,
+                                        1f,
+                                        1f,
+                                        1f
+                                    )
+                                    translateAnimation.duration = 500
+                                    scaleAnimation.duration = 100
+                                    binding.badImage.startAnimation(translateAnimation)
+                                    binding.perfectImage.visibility = View.VISIBLE
+                                    binding.perfectImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.goodImage.visibility = View.VISIBLE
+                                    binding.goodImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.sosoImage.visibility = View.VISIBLE
+                                    binding.sosoImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.tooBadImage.visibility = View.VISIBLE
+                                    binding.tooBadImage.startAnimation(scaleAnimation)
+                                    binding.feedBack.visibility = View.INVISIBLE
+                                }
+
+
+                                "tooBad" -> {
+                                    binding.tooBadImage.alpha = 0.6F
+                                    binding.tooBadImage.setColorFilter(Color.parseColor("#757575"))
+                                    binding.score20.visibility = View.GONE
+                                    val scaleAnimation = ScaleAnimation(
+                                        0.3f,
+                                        1f,
+                                        0.3f,
+                                        1f,
+                                        50f,
+                                        50f
+                                    )
+                                    val translateAnimation = TranslateAnimation(
+                                        -800f,
+                                        1f,
+                                        1f,
+                                        1f
+                                    )
+                                    translateAnimation.duration = 500
+                                    scaleAnimation.duration = 100
+                                    binding.tooBadImage.startAnimation(translateAnimation)
+                                    binding.perfectImage.visibility = View.VISIBLE
+                                    binding.perfectImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.goodImage.visibility = View.VISIBLE
+                                    binding.goodImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.sosoImage.visibility = View.VISIBLE
+                                    binding.sosoImage.startAnimation(scaleAnimation)
+                                    delay(200)
+                                    binding.badImage.visibility = View.VISIBLE
+                                    binding.badImage.startAnimation(scaleAnimation)
+                                    binding.feedBack.visibility = View.INVISIBLE
+                                }
+                            }
+                        }
+                    }
+
+                    val courseList = listOf<Int>(
+                       // 1項目は、撮った写真をセットする
+                        R.drawable.ic_walk,
+                        R.drawable.ic_park1
+                    )
+
+                    binding.mainRecyclerView.adapter = MyAdapter(courseList)
+                    binding.mainRecyclerView.layoutManager =
+                        LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+
+
+
+                    binding.resultButton.setOnClickListener {
+                        memo = binding.memo.text.toString()
+                        Log.d("memo", memo)
+                    }
             }
         }
     }

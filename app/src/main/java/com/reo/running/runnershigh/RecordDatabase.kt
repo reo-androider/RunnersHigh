@@ -16,6 +16,7 @@ data class Record(
         val distance: Double,
         val calorie: Int,
         val runDate: String,
+        val photo: Bitmap,
 )
 
 @Dao
