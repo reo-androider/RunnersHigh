@@ -124,6 +124,7 @@
 <!--        android:layout_height="100dp"-->
 <!--        app:layout_constraintTop_toBottomOf="@id/backRound">-->
 
+
         <ImageView
             android:id="@+id/perfectImage"
             android:layout_width="50dp"
@@ -283,51 +284,62 @@
         app:layout_constraintStart_toStartOf="parent"/>
 
 <!--weather-->
-    <ImageView
-        android:id="@+id/sunny"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_sunny"
-        android:layout_marginTop="330dp"
-        android:layout_marginStart="80dp"
-        android:contentDescription="@string/weatherSet"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+<!--    <ImageView-->
+<!--        android:id="@+id/sunny"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:src="@drawable/ic_sunny"-->
+<!--        android:layout_marginTop="330dp"-->
+<!--        android:layout_marginStart="80dp"-->
+<!--        android:contentDescription="@string/weatherSet"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent" />-->
 
-    <ImageView
-        android:id="@+id/cloud"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_cloud"
-        android:layout_marginTop="330dp"
-        android:layout_marginStart="20dp"
-        android:contentDescription="@string/weatherSet"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/sunny"/>
+<!--    <ImageView-->
+<!--        android:id="@+id/cloud"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:src="@drawable/ic_cloud"-->
+<!--        android:layout_marginTop="330dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:contentDescription="@string/weatherSet"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/sunny"/>-->
 
-    <ImageView
-        android:id="@+id/rainy"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_rainy"
-        android:layout_marginTop="330dp"
-        android:layout_marginStart="20dp"
-        android:contentDescription="@string/weatherSet"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/cloud"/>
+<!--    <ImageView-->
+<!--        android:id="@+id/rainy"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:src="@drawable/ic_rainy"-->
+<!--        android:layout_marginTop="330dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:contentDescription="@string/weatherSet"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/cloud"/>-->
 
-    <ImageView
-        android:id="@+id/snow"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:src="@drawable/ic_snow"
-        android:layout_marginTop="330dp"
-        android:layout_marginStart="20dp"
-        android:contentDescription="@string/weatherSet"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/rainy" />
+<!--    <ImageView-->
+<!--        android:id="@+id/snow"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:src="@drawable/ic_snow"-->
+<!--        android:layout_marginTop="330dp"-->
+<!--        android:layout_marginStart="20dp"-->
+<!--        android:contentDescription="@string/weatherSet"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintStart_toEndOf="@id/rainy" />-->
 
 <!--course-->
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/main_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintTop_toBottomOf="@id/backRound"
+        android:orientation="horizontal" />
+
+
 
     <ImageView
         android:layout_width="50dp"
