@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,9 +24,6 @@ class FragmentResult : Fragment() {
     private var memo = ""
     private var select = false//二回押しても同じアニメーションが実行されない為
     private var selectMark = ""
-
-    private var page = 1
-    private var myAdapter: MyAdapter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -428,13 +426,6 @@ class FragmentResult : Fragment() {
                 }
 
 
-
-
-
-
-
-
-
                 binding.cancel.setOnClickListener {
                     lifecycleScope.launch(Dispatchers.Main) {
                         Log.d("selectMark", selectMark)
@@ -619,27 +610,16 @@ class FragmentResult : Fragment() {
                     }
                 }
 
-                binding.mainRecyclerView.setHasFixedSize(true)
-                val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(context)
-                binding.mainRecyclerView.layoutManager = layoutManager
-                myAdapter = MyAdapter(createRowData(page))
-                binding.mainRecyclerView.adapter = myAdapter
+                val courseList = listOf<ImageView>(
+                )
 
-
+                binding.mainRecyclerView.adapter = MyAdapter(courseList)
+                binding.mainRecyclerView.layoutManager = LinearLayoutManager(context)
                 binding.resultButton.setOnClickListener {
                     memo = binding.memo.text.toString()
                     Log.d("memo", memo)
                 }
             }
-        }
-    }
-
-    private fun createRowData(page: Int): List<RowData> {
-        val dataSet = MutableList<RowData> = ArrayList()
-        var i = 1
-        while (i < page * 20) {
-            val data = RowData()
-            data.
         }
     }
 }
