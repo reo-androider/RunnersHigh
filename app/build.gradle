@@ -127,5 +127,6 @@ dependencies {
 
     //ripple
     implementation 'com.github.traex.rippleeffect:library:1.3'
+    implementation 'androidx.fragment:fragment-ktx:1.3.0-rc02'
 
 }
