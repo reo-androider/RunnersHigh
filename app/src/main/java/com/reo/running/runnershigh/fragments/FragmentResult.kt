@@ -650,8 +650,6 @@ class FragmentResult : Fragment() {
                     binding.mainRecyclerView.layoutManager =
                         LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
 
-
-
                     binding.resultButton.setOnClickListener {
                         memo = binding.memo.text.toString()
                         Log.d("memo", memo)
