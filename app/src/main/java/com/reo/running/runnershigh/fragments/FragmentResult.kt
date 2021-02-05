@@ -1,17 +1,18 @@
 package com.reo.running.runnershigh.fragments
 
-import android.database.sqlite.SQLiteBindOrColumnIndexOutOfRangeException
-import android.graphics.Bitmap
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
-import android.graphics.Matrix
-import android.icu.text.Transliterator
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
-import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +22,6 @@ import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.*
-import kotlin.properties.Delegates
 
 class FragmentResult : Fragment() {
 
@@ -31,7 +31,12 @@ class FragmentResult : Fragment() {
     private var select = false//二回押しても同じアニメーションが実行されない為
     private var selectMark = ""
     var position = 0
+    private lateinit var packageManager: PackageManager
 
+    companion object {
+        const val CAMERA_REQUEST_CODE = 1
+        const val CAMERA_PERMISSION_REQUEST_CODE = 2
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -62,6 +67,23 @@ class FragmentResult : Fragment() {
 
                 if (record.last().takenPhoto) {
                     binding.cameraImage.visibility = View.GONE
+                }
+
+                binding.cameraImage.setOnClickListener {
+                        if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA)
+                            == PackageManager.PERMISSION_DENIED ||
+                            ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                            == PackageManager.PERMISSION_DENIED
+                        ){
+                            val permission = arrayOf(
+                                Manifest.permission.CAMERA,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                            )
+                            requestPermissions(permission, CAMERA_PERMISSION_REQUEST_CODE)
+                        } else {
+                            takePicture()
+                        }
                 }
 
                 binding.perfectImage.alpha = 0.6F
@@ -655,6 +677,18 @@ class FragmentResult : Fragment() {
 
                 val courseList = listOf<Int>(
                     R.drawable.ic_walk,
+                    R.drawable.ic_park1,
+                    R.drawable.ic_walk,
+                    R.drawable.ic_park1,
+                    R.drawable.ic_walk,
+                    R.drawable.ic_park1,
+                    R.drawable.ic_walk,
+                    R.drawable.ic_park1,
+                    R.drawable.ic_walk,
+                    R.drawable.ic_park1,
+                    R.drawable.ic_walk,
+                    R.drawable.ic_park1,
+                    R.drawable.ic_walk,
                     R.drawable.ic_park1
                 )
 
@@ -666,6 +700,7 @@ class FragmentResult : Fragment() {
                         override fun onItemClick(list: List<Int>,position: Int) {
                             binding.photoEmpty.setImageResource(courseList[position])
                             binding.cameraImage.visibility = View.GONE
+                            binding.cancel.visibility = View.VISIBLE
                         }
                     })
 
@@ -676,4 +711,20 @@ class FragmentResult : Fragment() {
             }
         }
     }
+
+    private fun checkCameraPermission() = PackageManager.PERMISSION_GRANTED ==
+            ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA)
+
+    private fun takePicture() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        onActivityResult(requestCode, resultCode, data)
+        if (requestCode == CAMERA_REQUEST_CODE) {
+
+        }
+    }
+
 }

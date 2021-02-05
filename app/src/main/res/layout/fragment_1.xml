@@ -566,7 +566,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/lock" />
+        android:contentDescription="@string/lock"
+        android:visibility="gone"/>
     <ImageView
         android:id="@+id/lockOff"
         android:layout_width="40dp"
@@ -576,7 +577,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:visibility="visible"
+        android:visibility="gone"
         android:contentDescription="@string/lock" />
 
 
