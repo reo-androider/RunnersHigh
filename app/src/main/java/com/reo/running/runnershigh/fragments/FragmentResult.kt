@@ -1,12 +1,17 @@
 package com.reo.running.runnershigh.fragments
 
+import android.database.sqlite.SQLiteBindOrColumnIndexOutOfRangeException
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Matrix
+import android.icu.text.Transliterator
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -16,6 +21,7 @@ import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.*
+import kotlin.properties.Delegates
 
 class FragmentResult : Fragment() {
 
@@ -24,6 +30,7 @@ class FragmentResult : Fragment() {
     private var memo = ""
     private var select = false//二回押しても同じアニメーションが実行されない為
     private var selectMark = ""
+    var position = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,19 +50,25 @@ class FragmentResult : Fragment() {
             Log.d("delete", readDao.getAll().last().time)
             Log.d("delete", "${readDao.getAll().last().distance}")
             Log.d("delete", "${readDao.getAll().last().calorie}")
-            binding.totalTime.text = readDao.getAll().last().time
-            binding.totalDistance.text = "${readDao.getAll().last().distance}km"
-            binding.totalCalorie.text = "${readDao.getAll().last().calorie}kcal"
-            binding.today.text = readDao.getAll().last().runDate
+
+            val record = readDao.getAll()
 
             withContext(Dispatchers.Main) {
+                binding.totalTime.text = record.last().time
+                binding.totalDistance.text = "${record.last().distance}km"
+                binding.totalCalorie.text = "${record.last().calorie}kcal"
+                binding.today.text = record.last().runDate
+                binding.photoEmpty.setImageBitmap(record.last().bitmap)
+
+                if (record.last().takenPhoto) {
+                    binding.cameraImage.visibility = View.GONE
+                }
+
                 binding.perfectImage.alpha = 0.6F
                 binding.goodImage.alpha = 0.6F
                 binding.sosoImage.alpha = 0.6F
                 binding.badImage.alpha = 0.6F
                 binding.tooBadImage.alpha = 0.6F
-
-
 
                 binding.perfectImage.setOnClickListener {
                     if (!select) {
@@ -640,20 +653,26 @@ class FragmentResult : Fragment() {
                         }
                     }
 
-                    val courseList = listOf<Int>(
-                       // 1項目は、撮った写真をセットする
-                        R.drawable.ic_walk,
-                        R.drawable.ic_park1
-                    )
+                val courseList = listOf<Int>(
+                    R.drawable.ic_walk,
+                    R.drawable.ic_park1
+                )
 
-                    binding.mainRecyclerView.adapter = MyAdapter(courseList)
-                    binding.mainRecyclerView.layoutManager =
-                        LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                val adapter = MyAdapter(courseList,position)
+                binding.mainRecyclerView.adapter = adapter
+                binding.mainRecyclerView.layoutManager =  LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                adapter.setOnItemClickListener(
+                    object: MyAdapter.OnCourseListener {
+                        override fun onItemClick(list: List<Int>,position: Int) {
+                            binding.photoEmpty.setImageResource(courseList[position])
+                            binding.cameraImage.visibility = View.GONE
+                        }
+                    })
 
-                    binding.resultButton.setOnClickListener {
-                        memo = binding.memo.text.toString()
-                        Log.d("memo", memo)
-                    }
+                binding.resultButton.setOnClickListener {
+                    memo = binding.memo.text.toString()
+                    Log.d("memo", memo)
+                }
             }
         }
     }

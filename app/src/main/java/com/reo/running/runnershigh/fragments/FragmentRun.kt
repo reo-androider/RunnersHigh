@@ -71,6 +71,7 @@ class FragmentRun : Fragment() {
     var image_uri: Uri? = null
     val contentResolver: ContentResolver? = null
     private var photo:Bitmap? = null
+    private var takePhoto = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -688,7 +689,8 @@ class FragmentRun : Fragment() {
                                                         kmAmount,
                                                         calorieAmount,
                                                         getRunDate(),
-                                                        photo
+                                                        photo,
+                                                        takePhoto
                                                     )
                                                     recordDao.insertRecord(record)
                                                     Log.d("room", "${recordDao.getAll()}")
@@ -800,6 +802,7 @@ class FragmentRun : Fragment() {
                 (data?.extras?.get("data") as? Bitmap?).let {
                     binding.cameraSet.setImageBitmap(it)
                     photo = it
+                    takePhoto = true
                     Log.d("photo","$photo")
                 }
         }

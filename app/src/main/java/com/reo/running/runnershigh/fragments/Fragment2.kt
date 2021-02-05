@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
-import com.reo.running.runnershigh.MyGestureListener
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.Fragment2Binding
 
