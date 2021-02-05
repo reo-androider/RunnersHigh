@@ -66,20 +66,11 @@ class FragmentRun : Fragment() {
     var lock = false
     private lateinit var vibrator: Vibrator
     private lateinit var vibrationEffect: VibrationEffect
-
-    //    val vibratorPattern = longArrayOf(500)
-//    val soundPool = SoundPool(1,AudioManager.STREAM_MUSIC,0)
-//    private val REQUIRED_PERMISSIONS = arrayOf(Manifest.permission.CAMERA)
-//    val REQUEST_IMAGE_CAPTURE = 1
-//    val packageManager: PackageManager
-//        get() {
-//            TODO()
-//        }
     private val PERMISSION_CODE = 1000
     private val IMAGE_CAPTURE_CODE = 1001
     var image_uri: Uri? = null
     val contentResolver: ContentResolver? = null
-
+    private var photo:Bitmap? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -691,12 +682,13 @@ class FragmentRun : Fragment() {
                                         .setPositiveButton("YES",
                                             DialogInterface.OnClickListener { dialog, id ->
                                                 lifecycleScope.launch(Dispatchers.IO) {
-                                                    var record = Record(
+                                                    val record = Record(
                                                         0,
                                                         stopWatch.text.toString(),
                                                         kmAmount,
                                                         calorieAmount,
-                                                        getRunDate()
+                                                        getRunDate(),
+                                                        photo
                                                     )
                                                     recordDao.insertRecord(record)
                                                     Log.d("room", "${recordDao.getAll()}")
@@ -705,30 +697,19 @@ class FragmentRun : Fragment() {
                                                     }
                                                 }
                                             })
-                                        .setNegativeButton("CANCEL",
-                                            DialogInterface.OnClickListener { dialog, which ->
-                                                dialog.dismiss()
-                                            })
+                                        .setNegativeButton("CANCEL"
+                                        ) { dialog, _ ->
+                                            dialog.dismiss()
+                                        }
                                     builder.show()
-//                                lifecycleScope.launch(Dispatchers.IO) {
-//                                    Log.d("read","${recordDao.getAll()}")
-//                                    val record = Record(0,timeAmount kmAmount, ,calorieAmount,SystemClock.elapsedRealtime())
-//                                    recordDao.insertRecord(record)
-//
-//                                    withContext(Dispatchers.Main) {
-//
-//                                    }
-//                             }
                                 }
                             }
                         }
-
                     }
                 }
             }
         }
     }
-
 
     override fun onStart() {
         super.onStart()
@@ -744,12 +725,13 @@ class FragmentRun : Fragment() {
         super.onPause()
         binding.mapView.onPause()
     }
+
 /*
     override fun onDestroy() {
         super.onDestroy()
         mapView.onDestroy()
     }
-    */
+*/
 
     private fun animationCount(view: View) {
         view.startAnimation(ScaleAnimation(
@@ -780,27 +762,7 @@ class FragmentRun : Fragment() {
         val formatted = current.format(formatter)
         return formatted
     }
-//
-//    private fun dispatchTakePictureIntent() {
-//        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//        if (takePictureIntent.resolveActivity(packageManager) != null) {
-//            startActivityForResult(takePictureIntent,REQUEST_IMAGE_CAPTURE)
-//        }
-//    }
 
-    //
-//        val cFolder: File? = context?.getExternalFilesDir(Environment.DIRECTORY_DCIM)
-//        val fileDate = SimpleDateFormat(
-//            "ddHHmmss",Locale.US).format(Date())
-//        val fileName = String.format("CameraIntent_&s.jpg",fileDate)
-//        val cameraFile = File(cFolder,"$fileName")
-//        image_uri = context?.let {
-//            FileProvider.getUriForFile(
-//                requireContext(),
-//                it.packageName,
-//                cameraFile
-//            )
-//        }
     private fun openCamera() {
         // TODO
         val values = ContentValues()
@@ -820,7 +782,7 @@ class FragmentRun : Fragment() {
     ) {
         when (requestCode) {
             PERMISSION_CODE -> {
-                if (grantResults.size > 0 && grantResults[0] ==
+                if (grantResults.isNotEmpty() && grantResults[0] ==
                     PackageManager.PERMISSION_DENIED
                 ) {
                     openCamera()
@@ -835,26 +797,12 @@ class FragmentRun : Fragment() {
         Log.d("photo_camera", "$data")
         Log.d("photo_camera", "$image_uri")
         if (resultCode == Activity.RESULT_OK) {
-            if (data?.extras != null) {
-
-                (data.extras?.get("data") as? Bitmap?).let {
+                (data?.extras?.get("data") as? Bitmap?).let {
                     binding.cameraSet.setImageBitmap(it)
+                    photo = it
+                    Log.d("photo","$photo")
                 }
-//                var bitmap: Bitmap? = null
-//                bitmap = data.extras!!.get("data") as Bitmap?
-//                binding.cameraSet.setImageBitmap(bitmap)
-//            }
-            }
         }
     }
 }
-
-//    override fun onRequestPermissionsResult(
-//        requestCode: Int,
-//        permissions: Array<out String>,
-//        grantResults: IntArray
-//    ) {
-//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//    }
-
 

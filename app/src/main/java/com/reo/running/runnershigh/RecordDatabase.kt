@@ -3,7 +3,8 @@ package com.reo.running.runnershigh
 import android.graphics.Bitmap
 import androidx.room.*
 
-@Database(entities = [Record::class], version = 2)
+@Database(entities = [Record::class], version = 1)
+@TypeConverters(BitmapConverter::class)
 abstract class RecordDatabase : RoomDatabase() {
     abstract fun recordDao(): RecordDao
 }
@@ -16,7 +17,7 @@ data class Record(
         val distance: Double,
         val calorie: Int,
         val runDate: String,
-        val photo: Bitmap,
+        val bitmap: Bitmap?
 )
 
 @Dao
