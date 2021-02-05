@@ -8,15 +8,16 @@ import java.io.ByteArrayOutputStream
 
 class BitmapConverter {
     @TypeConverter
-    fun Bitmap.toEncodedString(): String {
-        val bos = ByteArrayOutputStream().also { 
-            if (!compress(Bitmap.CompressFormat.PNG,50,it)) return ""
-        }
-        return Base64.encodeToString(bos.toByteArray(),Base64.DEFAULT)
-    }
+    fun toEncodedString(bitmap: Bitmap?): String =
+        bitmap?.let { b->
+            val bos = ByteArrayOutputStream().also {
+                if (!b.compress(Bitmap.CompressFormat.PNG,50,it)) return ""
+            }
+            Base64.encodeToString(bos.toByteArray(),Base64.DEFAULT)
+        } ?:""
 
     @TypeConverter
-    fun String.toBitmap(): Bitmap {
+    fun String.toBitmap(): Bitmap? {
         return Base64.decode(this,Base64.DEFAULT).let {
             BitmapFactory.decodeByteArray(it,0,it.size)
         }
