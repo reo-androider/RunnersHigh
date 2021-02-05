@@ -378,7 +378,7 @@ class FragmentRun : Fragment() {
                                 countNum1,
                             ).map {
                                 animationCount(it)
-                                delay(10)
+                                delay(1000)
                             }
                         }
 
@@ -399,21 +399,18 @@ class FragmentRun : Fragment() {
                             timerScreen.visibility = View.VISIBLE
 
                             cameraImage.setOnClickListener {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                    if (checkSelfPermission(Manifest.permission.CAMERA)
-                                        == PackageManager.PERMISSION_DENIED ||
-                                        checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                        == PackageManager.PERMISSION_DENIED
-                                    ) {
-                                        val permission = arrayOf(
-                                            Manifest.permission.CAMERA,
-                                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                        )
-                                        requestPermissions(permission, PERMISSION_CODE)
+                                if (checkSelfPermission(Manifest.permission.CAMERA)
+                                    == PackageManager.PERMISSION_DENIED ||
+                                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                                    == PackageManager.PERMISSION_DENIED
+                                ) {
+                                    val permission = arrayOf(
+                                        Manifest.permission.CAMERA,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                    )
+                                    requestPermissions(permission, PERMISSION_CODE)
 
-                                    } else {
-                                        openCamera()
-                                    }
                                 } else {
                                     openCamera()
                                 }

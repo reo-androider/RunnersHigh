@@ -15,16 +15,16 @@
         android:elevation="-10dp"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <ImageView
-        android:id="@+id/photoEmpty"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:contentDescription="@string/imageSet"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/backRound"
-        android:elevation="-10dp"/>
+        <ImageView
+            android:id="@+id/photoEmpty"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:contentDescription="@string/imageSet"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/backRound"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:scaleType="centerCrop"/>
 
     <ImageView
         android:id="@+id/weather"
@@ -204,7 +204,7 @@
         android:layout_height="30dp"
         android:src="@drawable/ic_cancel"
         android:layout_marginTop="45dp"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="50dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/backRound"
         app:layout_constraintEnd_toEndOf="parent"
@@ -334,13 +334,16 @@
 <!--course-->
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/main_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginTop="100dp"
+    <ImageView
+        android:id="@+id/courseCancel"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:src="@drawable/ic_cancel"
+        android:layout_marginTop="140dp"
+        android:layout_marginEnd="20dp"
         app:layout_constraintTop_toBottomOf="@id/backRound"
-        android:orientation="horizontal" />
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"/>
 
 
 
@@ -378,6 +381,7 @@
         android:inputType="textMultiLine"
         android:layout_marginBottom="140dp"
         android:layout_marginStart="20dp"
+        android:focusableInTouchMode="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/memoImage"/>
 
