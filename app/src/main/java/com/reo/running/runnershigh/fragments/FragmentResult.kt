@@ -819,6 +819,7 @@ class FragmentResult : Fragment() {
             val myEdit = EditText(requireContext())
             val dialog = AlertDialog.Builder(requireContext())
             dialog.setTitle("気づいたことやメモ")
+            dialog.setCancelable(false)
             dialog.setView(myEdit)
             dialog.setPositiveButton("記録",DialogInterface.OnClickListener {_,_ ->
             })
@@ -826,9 +827,18 @@ class FragmentResult : Fragment() {
         }
 
         binding.memo.setOnClickListener {
-            val dialog = MyDialog().Builder()
+            val myEdit = EditText(requireContext())
+            val dialog = AlertDialog.Builder(requireContext())
+            dialog.setTitle("気づいたことやメモ")
+            dialog.setCancelable(false)
+            dialog.setView(myEdit)
+            dialog.setPositiveButton("キャンセル") { _, _ ->
+                
+            }
+            dialog.setPositiveButton("保存") {_,_ ->
 
-
+            }
+            dialog.show()
         }
     }
 
