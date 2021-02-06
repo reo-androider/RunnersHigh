@@ -68,8 +68,8 @@ class FragmentRun : Fragment() {
     private lateinit var vibrationEffect: VibrationEffect
     private val PERMISSION_CODE = 1000
     private val IMAGE_CAPTURE_CODE = 1001
-    var image_uri: Uri? = null
-    val contentResolver: ContentResolver? = null
+    private var image_uri: Uri? = null
+    private val contentResolver: ContentResolver? = null
     private var photo:Bitmap? = null
     private var takePhoto = false
 
@@ -249,7 +249,7 @@ class FragmentRun : Fragment() {
                                     BitmapDescriptorFactory.fromBitmap(
                                         Resource.getBitmap(
                                             context,
-                                            R.drawable.ic_running
+                                            R.drawable.in_trace
                                         )
                                     )
                                 )

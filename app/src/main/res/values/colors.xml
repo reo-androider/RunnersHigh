@@ -26,4 +26,5 @@
     <color name="bad">#FF9800</color>
     <color name="bad2">#FF5722</color>
     <color name="tooBad">#f44336</color>
+    <color name="green">#4CAF50</color>
 </resources>
