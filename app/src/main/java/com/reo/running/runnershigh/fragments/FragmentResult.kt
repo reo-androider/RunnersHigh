@@ -8,12 +8,10 @@ import android.content.ContentValues
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Matrix
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -28,12 +26,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.reo.running.runnershigh.MyAdapter
-import com.reo.running.runnershigh.MyApplication
-import com.reo.running.runnershigh.MyDialog
-import com.reo.running.runnershigh.R
+import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
+import io.realm.Realm
+import io.realm.RealmConfiguration
+import io.realm.RealmResults
+import io.realm.kotlin.where
 import kotlinx.coroutines.*
+import java.util.*
 
 class FragmentResult : Fragment() {
 
@@ -45,6 +45,8 @@ class FragmentResult : Fragment() {
     private var image_uri: Uri? = null
     private val contentResolver: ContentResolver? = null
     private var position = 0
+    private lateinit var mRealm: Realm
+    private lateinit var copy: String
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -63,6 +65,7 @@ class FragmentResult : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO) {
+
             Log.d("delete", "${readDao.getAll()}")
             Log.d("delete", "${readDao.getAll().last()}")
             Log.d("delete", readDao.getAll().last().time)
@@ -70,6 +73,18 @@ class FragmentResult : Fragment() {
             Log.d("delete", "${readDao.getAll().last().calorie}")
 
             val record = readDao.getAll()
+//
+//            Realm.init(requireContext())
+//            val realmConfig = RealmConfiguration.Builder()
+//                .deleteRealmIfMigrationNeeded()
+//                .build()
+//            mRealm = Realm.getInstance(realmConfig)
+//
+//            create("Realm")
+//            create("Realm2")
+//
+//            val getData = read()
+//            Log.d("Realm","$getData")
 
             withContext(Dispatchers.Main) {
                 binding.totalTime.text = record.last().time
@@ -688,7 +703,7 @@ class FragmentResult : Fragment() {
                         }
                     }
 
-                val courseList = listOf<Int>(
+                val courseList = listOf(
                     R.drawable.ic_black,
                     R.drawable.ic_red,
                     R.drawable.ic_blue,
@@ -815,29 +830,44 @@ class FragmentResult : Fragment() {
             binding.cameraImage.visibility = View.GONE
         }
 
-        binding.memoImage.setOnClickListener {
-            val myEdit = EditText(requireContext())
-            val dialog = AlertDialog.Builder(requireContext())
-            dialog.setTitle("気づいたことやメモ")
-            dialog.setCancelable(false)
-            dialog.setView(myEdit)
-            dialog.setPositiveButton("記録",DialogInterface.OnClickListener {_,_ ->
-            })
-            dialog.show()
-        }
-
         binding.memo.setOnClickListener {
             val myEdit = EditText(requireContext())
             val dialog = AlertDialog.Builder(requireContext())
             dialog.setTitle("気づいたことやメモ")
             dialog.setCancelable(false)
             dialog.setView(myEdit)
-            dialog.setPositiveButton("キャンセル") { _, _ ->
-                
-            }
-            dialog.setPositiveButton("保存") {_,_ ->
+            dialog.setPositiveButton("保存",DialogInterface.OnClickListener { dialog, id->
 
-            }
+                lifecycleScope.launch(Dispatchers.IO) {
+
+                    mRealm = Realm.getDefaultInstance()
+
+                    val memoData = Memo(id,myEdit.text.toString())
+
+                    mRealm.beginTransaction()
+                    mRealm.insert(memoData)
+                    mRealm.commitTransaction()
+
+                    val catch = mRealm.where<Memo>().findAll()
+                    copy = catch.last()?.memo.toString()
+
+                    Log.d("Realm","$copy")
+
+
+
+                    mRealm.close()
+
+                    withContext(Dispatchers.Main) {
+
+
+                        Toast.makeText(requireContext(),"保存しました",Toast.LENGTH_LONG).show()
+                    }
+
+                }
+            })
+            dialog.setNegativeButton("戻る",DialogInterface.OnClickListener { dialog, which ->
+                Toast.makeText(requireContext(),"下書きを保存しました",Toast.LENGTH_LONG).show()
+            })
             dialog.show()
         }
     }
@@ -889,6 +919,51 @@ class FragmentResult : Fragment() {
             }
         }
     }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        mRealm = Realm.getDefaultInstance()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        mRealm.close()
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        mRealm.close()
+//    }
+//
+//    fun create(memo: String) {
+//        mRealm.executeTransaction {
+//            var book = mRealm.createObject(Memo::class.java,UUID.randomUUID().toString())
+//            book.memo = memo
+//            mRealm.copyToRealm(book)
+//            Log.d("Realm","${book}")
+//        }
+//    }
+//
+//    fun read() : RealmResults<Memo> {
+//        return mRealm.where(Memo::class.java).findAll()
+//    }
+//
+//    fun update(id: String, memo: String) {
+//        mRealm.executeTransaction {
+//            var book = mRealm.where(Memo::class.java).equalTo("id",id).findFirst()
+//            book?.memo = memo
+//            if (memo != 0.toString()) {
+//                book?.memo = memo
+//            }
+//        }
+//    }
+//
+//    fun delete(id:String) {
+//        mRealm.executeTransaction {
+//            var book = mRealm.where(Memo::class.java).equalTo("id",id).findAll()
+//            book.deleteFromRealm(0)
+//        }
+//    }
 //    private fun checkCameraPermission() = PackageManager.PERMISSION_GRANTED ==
 //            ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA)
 //
