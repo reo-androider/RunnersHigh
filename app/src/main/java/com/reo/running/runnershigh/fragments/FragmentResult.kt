@@ -6,6 +6,7 @@ import android.content.ContentResolver
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.net.Uri
@@ -21,7 +22,11 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.reo.running.runnershigh.MyAdapter
 import com.reo.running.runnershigh.MyApplication
+import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.*
 
@@ -34,6 +39,7 @@ class FragmentResult : Fragment() {
     private var selectMark = ""
     private var image_uri: Uri? = null
     private val contentResolver: ContentResolver? = null
+    private var position = 0
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -675,40 +681,124 @@ class FragmentResult : Fragment() {
                             }
                         }
                     }
-//
-//                val courseList = listOf<Int>(
-//                    R.drawable.ic_walk,
-//                    R.drawable.ic_park1,
-//                    R.drawable.ic_walk,
-//                    R.drawable.ic_park1,
-//                    R.drawable.ic_walk,
-//                    R.drawable.ic_park1,
-//                    R.drawable.ic_walk,
-//                    R.drawable.ic_park1,
-//                    R.drawable.ic_walk,
-//                    R.drawable.ic_park1,
-//                    R.drawable.ic_walk,
-//                    R.drawable.ic_park1,
-//                    R.drawable.ic_walk,
-//                    R.drawable.ic_park1
-//                )
-//
-//                val adapter = MyAdapter(courseList,position)
-//                binding.mainRecyclerView.adapter = adapter
-//                binding.mainRecyclerView.layoutManager =  LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-//                adapter.setOnItemClickListener(
-//                    object: MyAdapter.OnCourseListener {
-//                        override fun onItemClick(list: List<Int>,position: Int) {
-//                            binding.photoEmpty.setImageResource(courseList[position])
-//                            binding.cameraImage.visibility = View.GONE
-//                            binding.cancel.visibility = View.VISIBLE
-//                        }
-//                    })
-//
-//                binding.resultButton.setOnClickListener {
-//                    memo = binding.memo.text.toString()
-//                    Log.d("memo", memo)
-//                }
+
+                val courseList = listOf<Int>(
+                    R.drawable.ic_black,
+                    R.drawable.ic_red,
+                    R.drawable.ic_blue,
+                    R.drawable.ic_green,
+                    R.drawable.ic_pink,
+                    R.drawable.ic_yellow,
+                    R.drawable.ic_purple,
+                    R.drawable.ic_brown,
+                    R.drawable.ic_gray,
+                    R.drawable.ic_return2
+                )
+
+                val adapter = MyAdapter(courseList,position)
+                binding.mainRecyclerView.adapter = adapter
+                binding.mainRecyclerView.layoutManager =  LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+                adapter.setOnItemClickListener(
+                    object: MyAdapter.OnCourseListener {
+                        override fun onItemClick(list: List<Int>,position: Int) {
+                            when(courseList[position]) {
+                                R.drawable.ic_black -> {
+                                    val color = "#FF000000"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+
+                                R.drawable.ic_red -> {
+                                    val color = "#f44336"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+
+                                R.drawable.ic_return2 -> {
+                                    val color = "#FFFFFFFF"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+
+                                R.drawable.ic_blue -> {
+                                    val color = "#2196F3"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+
+                                R.drawable.ic_green -> {
+                                    val color = "#4CAF50"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+
+                                R.drawable.ic_pink -> {
+                                    val color = "#ff1493"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+
+                                R.drawable.ic_yellow -> {
+                                    val color = "#FFFF00"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+
+                                R.drawable.ic_purple -> {
+                                    val color = "#800080"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+
+                                R.drawable.ic_brown -> {
+                                    val color = "#795548"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+
+                                R.drawable.ic_gray -> {
+                                    val color = "#757575"
+                                    binding.totalTime.setTextColor(Color.parseColor(color))
+                                    binding.totalDistance.setTextColor(Color.parseColor(color))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
+                                    binding.today.setTextColor(Color.parseColor(color))
+                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                }
+                            }
+                        }
+                    })
+
+                binding.resultButton.setOnClickListener {
+                    memo = binding.memo.text.toString()
+                    Log.d("memo", memo)
+                }
             }
 
     private fun openCamera() {
