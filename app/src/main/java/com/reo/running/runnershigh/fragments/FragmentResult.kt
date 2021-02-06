@@ -2,13 +2,16 @@ package com.reo.running.runnershigh.fragments
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.ContentValues
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.ColorStateList
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
+import android.widget.EditText
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -26,6 +30,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.reo.running.runnershigh.MyAdapter
 import com.reo.running.runnershigh.MyApplication
+import com.reo.running.runnershigh.MyDialog
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.*
@@ -78,6 +83,7 @@ class FragmentResult : Fragment() {
                 }
 
                 binding.cameraImage.setOnClickListener {
+                    binding.photoReturn.visibility = View.GONE
                         if (ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA)
                             == PackageManager.PERMISSION_DENIED ||
                             ContextCompat.checkSelfPermission(requireContext(),Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -795,11 +801,36 @@ class FragmentResult : Fragment() {
                         }
                     })
 
-                binding.resultButton.setOnClickListener {
-                    memo = binding.memo.text.toString()
-                    Log.d("memo", memo)
-                }
-            }
+        binding.photoCancel.setOnClickListener {
+            binding.photoCancel.visibility = View.GONE
+            binding.cameraImage.visibility = View.VISIBLE
+            binding.photoEmpty.visibility = View.GONE
+            binding.photoReturn.visibility = View.VISIBLE
+        }
+
+        binding.photoReturn.setOnClickListener {
+            binding.photoReturn.visibility = View.GONE
+            binding.photoCancel.visibility = View.VISIBLE
+            binding.photoEmpty.visibility = View.VISIBLE
+            binding.cameraImage.visibility = View.GONE
+        }
+
+        binding.memoImage.setOnClickListener {
+            val myEdit = EditText(requireContext())
+            val dialog = AlertDialog.Builder(requireContext())
+            dialog.setTitle("気づいたことやメモ")
+            dialog.setView(myEdit)
+            dialog.setPositiveButton("記録",DialogInterface.OnClickListener {_,_ ->
+            })
+            dialog.show()
+        }
+
+        binding.memo.setOnClickListener {
+            val dialog = MyDialog().Builder()
+
+
+        }
+    }
 
     private fun openCamera() {
         val value = ContentValues()
@@ -833,13 +864,18 @@ class FragmentResult : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
-            (data?.extras?.get("data") as? Bitmap).let {
-                binding.photoEmpty.setImageBitmap(it)
-                val width = binding.photoEmpty.width.toFloat()
-                val height = binding.photoEmpty.height.toFloat()
-                val rotateValue = arrayOf(90f,width,height)
-                binding.photoEmpty.rotation = 90f
-
+            (data?.extras?.get("data") as? Bitmap)?.let { bitmap ->
+                Matrix().apply {
+                    postRotate(90f)
+                }.run {
+                    Bitmap.createBitmap(bitmap,0,0,bitmap.width,bitmap.height,this,true)
+                }.run {
+                    binding.photoEmpty.visibility = View.VISIBLE
+                    binding.resultButton.visibility = View.GONE
+                    binding.photoEmpty.setImageBitmap(this)
+                    binding.cameraImage.visibility = View.GONE
+                    binding.photoCancel.visibility = View.VISIBLE
+                }
             }
         }
     }
