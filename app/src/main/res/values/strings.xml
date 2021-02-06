@@ -46,7 +46,7 @@
     <string name="total_distance">0.000km</string>
     <string name="result_calorie">Calorie</string>
     <string name="total_calorie">0kcal</string>
-    <string name="result_memo">感想・メモ</string>
+    <string name="result_memo">気づき・メモ</string>
     <string name="resutl_finish">result_finish</string>
     <string name="today">yymmdd</string>
     <string name="result_camera">cameraSet</string>
@@ -70,9 +70,11 @@
     <string name="S2">S</string>
     <string name="course"></string>
 
-    <string name="perfectText">Excellent</string>
-    <string name="goodText">Good</string>
-    <string name="sosoText">soso</string>
-    <string name="badText">bad</string>
-    <string name="tooBadText">Too Bad</string>
+    <string name="perfectText">最高</string>
+    <string name="goodText">良い感じ</string>
+    <string name="sosoText">まずまず</string>
+    <string name="badText">微妙</string>
+    <string name="tooBadText">全然走れなかった</string>
+
+    <string name="color">color</string>
 </resources>

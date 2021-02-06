@@ -1,9 +1,14 @@
 package com.reo.running.runnershigh.fragments
 
 import android.Manifest
+import android.app.Activity
+import android.content.ContentResolver
+import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,14 +17,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.reo.running.runnershigh.MyAdapter
 import com.reo.running.runnershigh.MyApplication
-import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.*
 
@@ -30,12 +32,12 @@ class FragmentResult : Fragment() {
     private var memo = ""
     private var select = false//二回押しても同じアニメーションが実行されない為
     private var selectMark = ""
-    var position = 0
-    private lateinit var packageManager: PackageManager
+    private var image_uri: Uri? = null
+    private val contentResolver: ContentResolver? = null
 
     companion object {
-        const val CAMERA_REQUEST_CODE = 1
-        const val CAMERA_PERMISSION_REQUEST_CODE = 2
+        const val PERMISSION_CODE = 1
+        const val IMAGE_CAPTURE_CODE = 2
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,9 +82,9 @@ class FragmentResult : Fragment() {
                                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                 Manifest.permission.READ_EXTERNAL_STORAGE
                             )
-                            requestPermissions(permission, CAMERA_PERMISSION_REQUEST_CODE)
+                            requestPermissions(permission, PERMISSION_CODE)
                         } else {
-                            takePicture()
+                            openCamera()
                         }
                 }
 
@@ -150,11 +152,11 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-                            binding.feedBack.let {
-                                it.setImageResource(R.drawable.ic_perfect)
-                                it.setColorFilter(Color.parseColor("#4CAF50"))
-                                it.visibility = View.VISIBLE
-                            }
+//                            binding.feedBack.let {
+//                                it.setImageResource(R.drawable.ic_perfect)
+//                                it.setColorFilter(Color.parseColor("#4CAF50"))
+//                                it.visibility = View.VISIBLE
+//                            }
                         }
                     }
                 }
@@ -225,11 +227,11 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-                            binding.feedBack.let {
-                                it.setImageResource(R.drawable.ic_good)
-                                it.setColorFilter(Color.parseColor("#CDDC39"))
-                                it.visibility = View.VISIBLE
-                            }
+//                            binding.feedBack.let {
+//                                it.setImageResource(R.drawable.ic_good)
+//                                it.setColorFilter(Color.parseColor("#CDDC39"))
+//                                it.visibility = View.VISIBLE
+//                            }
                         }
                     }
                 }
@@ -309,10 +311,10 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-                            binding.feedBack.let {
-                                it.setImageResource(R.drawable.ic_soso)
-                                it.setColorFilter(Color.parseColor("#FFC107"))
-                                it.visibility = View.VISIBLE
+//                            binding.feedBack.let {
+//                                it.setImageResource(R.drawable.ic_soso)
+//                                it.setColorFilter(Color.parseColor("#FFC107"))
+//                                it.visibility = View.VISIBLE
                             }
                         }
                     }
@@ -391,10 +393,10 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-                            binding.feedBack.let {
-                                it.setImageResource(R.drawable.ic_bad)
-                                it.setColorFilter(Color.parseColor("#FF9800"))
-                                it.visibility = View.VISIBLE
+//                            binding.feedBack.let {
+//                                it.setImageResource(R.drawable.ic_bad)
+//                                it.setColorFilter(Color.parseColor("#FF9800"))
+//                                it.visibility = View.VISIBLE
                             }
                         }
                     }
@@ -476,11 +478,11 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-                            binding.feedBack.let {
-                                it.setImageResource(R.drawable.ic_sick)
-                                it.setColorFilter(Color.parseColor("#f44336"))
-                                it.visibility = View.VISIBLE
-                            }
+//                            binding.feedBack.let {
+//                                it.setImageResource(R.drawable.ic_sick)
+//                                it.setColorFilter(Color.parseColor("#f44336"))
+//                                it.visibility = View.VISIBLE
+//                            }
                         }
                     }
                 }
@@ -528,7 +530,7 @@ class FragmentResult : Fragment() {
                                     delay(200)
                                     binding.tooBadImage.visibility = View.VISIBLE
                                     binding.tooBadImage.startAnimation(scaleAnimation)
-                                    binding.feedBack.visibility = View.INVISIBLE
+//                                    binding.feedBack.visibility = View.INVISIBLE
                                 }
 
                                 "good" -> {
@@ -563,7 +565,7 @@ class FragmentResult : Fragment() {
                                     delay(200)
                                     binding.tooBadImage.visibility = View.VISIBLE
                                     binding.tooBadImage.startAnimation(scaleAnimation)
-                                    binding.feedBack.visibility = View.INVISIBLE
+//                                    binding.feedBack.visibility = View.INVISIBLE
                                 }
 
                                 "soso" -> {
@@ -598,7 +600,7 @@ class FragmentResult : Fragment() {
                                     delay(200)
                                     binding.tooBadImage.visibility = View.VISIBLE
                                     binding.tooBadImage.startAnimation(scaleAnimation)
-                                    binding.feedBack.visibility = View.INVISIBLE
+//                                    binding.feedBack.visibility = View.INVISIBLE
                                 }
 
                                 "bad" -> {
@@ -633,7 +635,7 @@ class FragmentResult : Fragment() {
                                     delay(200)
                                     binding.tooBadImage.visibility = View.VISIBLE
                                     binding.tooBadImage.startAnimation(scaleAnimation)
-                                    binding.feedBack.visibility = View.INVISIBLE
+//                                    binding.feedBack.visibility = View.INVISIBLE
                                 }
 
 
@@ -669,62 +671,100 @@ class FragmentResult : Fragment() {
                                     delay(200)
                                     binding.badImage.visibility = View.VISIBLE
                                     binding.badImage.startAnimation(scaleAnimation)
-                                    binding.feedBack.visibility = View.INVISIBLE
                                 }
                             }
                         }
                     }
+//
+//                val courseList = listOf<Int>(
+//                    R.drawable.ic_walk,
+//                    R.drawable.ic_park1,
+//                    R.drawable.ic_walk,
+//                    R.drawable.ic_park1,
+//                    R.drawable.ic_walk,
+//                    R.drawable.ic_park1,
+//                    R.drawable.ic_walk,
+//                    R.drawable.ic_park1,
+//                    R.drawable.ic_walk,
+//                    R.drawable.ic_park1,
+//                    R.drawable.ic_walk,
+//                    R.drawable.ic_park1,
+//                    R.drawable.ic_walk,
+//                    R.drawable.ic_park1
+//                )
+//
+//                val adapter = MyAdapter(courseList,position)
+//                binding.mainRecyclerView.adapter = adapter
+//                binding.mainRecyclerView.layoutManager =  LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+//                adapter.setOnItemClickListener(
+//                    object: MyAdapter.OnCourseListener {
+//                        override fun onItemClick(list: List<Int>,position: Int) {
+//                            binding.photoEmpty.setImageResource(courseList[position])
+//                            binding.cameraImage.visibility = View.GONE
+//                            binding.cancel.visibility = View.VISIBLE
+//                        }
+//                    })
+//
+//                binding.resultButton.setOnClickListener {
+//                    memo = binding.memo.text.toString()
+//                    Log.d("memo", memo)
+//                }
+            }
 
-                val courseList = listOf<Int>(
-                    R.drawable.ic_walk,
-                    R.drawable.ic_park1,
-                    R.drawable.ic_walk,
-                    R.drawable.ic_park1,
-                    R.drawable.ic_walk,
-                    R.drawable.ic_park1,
-                    R.drawable.ic_walk,
-                    R.drawable.ic_park1,
-                    R.drawable.ic_walk,
-                    R.drawable.ic_park1,
-                    R.drawable.ic_walk,
-                    R.drawable.ic_park1,
-                    R.drawable.ic_walk,
-                    R.drawable.ic_park1
-                )
+    private fun openCamera() {
+        val value = ContentValues()
+        value.put(MediaStore.Images.Media.TITLE,"New Picture")
+        value.put(MediaStore.Images.Media.DESCRIPTION,"From Picture")
+        image_uri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,value)
 
-                val adapter = MyAdapter(courseList,position)
-                binding.mainRecyclerView.adapter = adapter
-                binding.mainRecyclerView.layoutManager =  LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
-                adapter.setOnItemClickListener(
-                    object: MyAdapter.OnCourseListener {
-                        override fun onItemClick(list: List<Int>,position: Int) {
-                            binding.photoEmpty.setImageResource(courseList[position])
-                            binding.cameraImage.visibility = View.GONE
-                            binding.cancel.visibility = View.VISIBLE
-                        }
-                    })
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,image_uri)
+        startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
 
-                binding.resultButton.setOnClickListener {
-                    memo = binding.memo.text.toString()
-                    Log.d("memo", memo)
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when(requestCode) {
+            PERMISSION_CODE -> {
+                if (grantResults.isEmpty() && grantResults[0] ==
+                        PackageManager.PERMISSION_DENIED
+                ) {
+                    openCamera()
+                } else {
+                    Toast.makeText(requireContext(),"カメラが拒否されました",Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
 
-    private fun checkCameraPermission() = PackageManager.PERMISSION_GRANTED ==
-            ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA)
-
-    private fun takePicture() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
-    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        onActivityResult(requestCode, resultCode, data)
-        if (requestCode == CAMERA_REQUEST_CODE) {
+        if (resultCode == Activity.RESULT_OK) {
+            (data?.extras?.get("data") as? Bitmap).let {
+                binding.photoEmpty.setImageBitmap(it)
+                val width = binding.photoEmpty.width.toFloat()
+                val height = binding.photoEmpty.height.toFloat()
+                val rotateValue = arrayOf(90f,width,height)
+                binding.photoEmpty.rotation = 90f
 
+            }
         }
     }
-
+//    private fun checkCameraPermission() = PackageManager.PERMISSION_GRANTED ==
+//            ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA)
+//
+//    private fun takePicture() {
+//        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+//        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
+//    }
+//
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        onActivityResult(requestCode, resultCode, data)
+//        if (requestCode == CAMERA_REQUEST_CODE) {
+//
+//        }
+//    }
 }
