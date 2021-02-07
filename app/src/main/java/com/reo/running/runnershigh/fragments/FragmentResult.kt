@@ -15,6 +15,7 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -840,6 +841,7 @@ class FragmentResult : Fragment() {
 
         binding.memo.setOnClickListener {
             val myEdit = EditText(requireContext())
+            myEdit.isSingleLine = false
             val dialog = AlertDialog.Builder(requireContext())
             dialog.setTitle("気づいたことやメモ")
             dialog.setCancelable(false)
@@ -882,6 +884,7 @@ class FragmentResult : Fragment() {
                 val data = runData(copy)
                 val databaseRef = Firebase.database.reference
                 databaseRef.setValue(data)
+                Log.d("RealtimeDB","$data")
 
 //
 //                val db = Firebase.firestore
