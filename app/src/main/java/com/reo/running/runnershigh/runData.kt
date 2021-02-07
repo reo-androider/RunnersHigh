@@ -1,4 +1,6 @@
 package com.reo.running.runnershigh
 
-data class runData(val memo:String = ""// distance: Float,time: Long,calorie: Float,date: Long,feedBack: String,bitmap:Bitmap
+import android.graphics.Bitmap
+
+data class runData ( val distance: Double, val time: String, val calorie: Int, val date: String, val feedBack: String, val bitmap: Bitmap?, val memo: String , val colorId: Int
 )
