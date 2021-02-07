@@ -4,6 +4,5 @@ import androidx.room.PrimaryKey
 import io.realm.RealmObject
 
 open class Memo (
-    @PrimaryKey var id: Int = 0,
-    var memo: String = ""
+    @PrimaryKey var memo: String = ""
 ) : RealmObject()

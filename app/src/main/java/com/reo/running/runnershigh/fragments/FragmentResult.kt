@@ -5,17 +5,15 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.ContentResolver
 import android.content.ContentValues
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
-import android.graphics.Insets.add
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.InputType
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -30,37 +28,29 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import io.realm.Realm
-import io.realm.RealmConfiguration
-import io.realm.RealmResults
-import io.realm.kotlin.where
 import kotlinx.coroutines.*
-import java.util.*
 
 class FragmentResult : Fragment() {
 
     private lateinit var binding: FragmentResultBinding
     private val readDao = MyApplication.db.recordDao()
-    private var memo = ""
     private var select = false//二回押しても同じアニメーションが実行されない為
     private var selectMark = ""
     private var image_uri: Uri? = null
     private val contentResolver: ContentResolver? = null
     private var position = 0
-    private lateinit var mRealm: Realm
-    private lateinit var copy: String
-    private lateinit var database: DatabaseReference
+    private var draft: String = ""
+    private var selectColor = ""
 
     companion object {
         const val PERMISSION_CODE = 1
         const val IMAGE_CAPTURE_CODE = 2
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -80,20 +70,7 @@ class FragmentResult : Fragment() {
             Log.d("delete", readDao.getAll().last().time)
             Log.d("delete", "${readDao.getAll().last().distance}")
             Log.d("delete", "${readDao.getAll().last().calorie}")
-
             val record = readDao.getAll()
-//
-//            Realm.init(requireContext())
-//            val realmConfig = RealmConfiguration.Builder()
-//                .deleteRealmIfMigrationNeeded()
-//                .build()
-//            mRealm = Realm.getInstance(realmConfig)
-//
-//            create("Realm")
-//            create("Realm2")
-//
-//            val getData = read()
-//            Log.d("Realm","$getData")
 
             withContext(Dispatchers.Main) {
                 binding.totalTime.text = record.last().time
@@ -733,93 +710,93 @@ class FragmentResult : Fragment() {
                         override fun onItemClick(list: List<Int>,position: Int) {
                             when(courseList[position]) {
                                 R.drawable.ic_black -> {
-                                    val color = "#FF000000"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor = "#FF000000"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_red -> {
-                                    val color = "#f44336"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor = "#f44336"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_return2 -> {
-                                    val color = "#FFFFFFFF"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor = "#FFFFFFFF"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_blue -> {
-                                    val color = "#2196F3"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor= "#2196F3"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_green -> {
-                                    val color = "#4CAF50"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor = "#4CAF50"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_pink -> {
-                                    val color = "#ff1493"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor = "#ff1493"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_yellow -> {
-                                    val color = "#FFFF00"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor = "#FFFF00"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_purple -> {
-                                    val color = "#800080"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor = "#800080"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_brown -> {
-                                    val color = "#795548"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor = "#795548"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_gray -> {
-                                    val color = "#757575"
-                                    binding.totalTime.setTextColor(Color.parseColor(color))
-                                    binding.totalDistance.setTextColor(Color.parseColor(color))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(color))
-                                    binding.today.setTextColor(Color.parseColor(color))
-                                    binding.photoText.setTextColor(Color.parseColor(color))
+                                    selectColor = "#757575"
+                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    binding.today.setTextColor(Color.parseColor(selectColor))
+                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
                             }
                         }
@@ -839,64 +816,59 @@ class FragmentResult : Fragment() {
             binding.cameraImage.visibility = View.GONE
         }
 
-        binding.memo.setOnClickListener {
+        binding.edit.setOnClickListener {
             val myEdit = EditText(requireContext())
             myEdit.isSingleLine = false
+            myEdit.text = draft.toEditable()
+            myEdit.width = 20
             val dialog = AlertDialog.Builder(requireContext())
-            dialog.setTitle("気づいたことやメモ")
+            dialog.setTitle("気づき・メモ")
             dialog.setCancelable(false)
             dialog.setView(myEdit)
-            dialog.setPositiveButton("保存",DialogInterface.OnClickListener { dialog, id->
+            dialog.setPositiveButton("完了") { dialog, id->
+                draft = myEdit.text.toString()
+                binding.memo.text = draft
 
-                lifecycleScope.launch(Dispatchers.IO) {
+            }
 
-                    mRealm = Realm.getDefaultInstance()
+            dialog.setNegativeButton("戻る") { dialog, which ->
+                dialog.dismiss()
 
-                    val memoData = Memo(id,myEdit.text.toString())
+            }
+            dialog.show()
+        }
 
-                    mRealm.beginTransaction()
-                    mRealm.insert(memoData)
-                    mRealm.commitTransaction()
-
-                    val catch = mRealm.where<Memo>().findAll()
-                    copy = catch.last()?.memo.toString()
-
-                    Log.d("Realm","$copy")
-
-                    mRealm.close()
-
-                    withContext(Dispatchers.Main) {
-
-
-                        Toast.makeText(requireContext(),"保存しました",Toast.LENGTH_LONG).show()
-                    }
-
-                }
-            })
-            dialog.setNegativeButton("戻る",DialogInterface.OnClickListener { dialog, which ->
-                Toast.makeText(requireContext(),"下書きを保存しました",Toast.LENGTH_LONG).show()
-            })
+        binding.delete.setOnClickListener {
+            val dialog = AlertDialog.Builder(requireContext())
+            dialog.setTitle("メモを削除しますか？")
+            dialog.setCancelable(false)
+            dialog.setPositiveButton ("はい") { dialog, id->
+                draft = ""
+                binding.memo.text = draft
+            }
+            dialog.setNegativeButton("いいえ") {dialog, which->
+                dialog.dismiss()
+            }
             dialog.show()
         }
 
         binding.resultButton.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                val data = runData(copy)
+                val record = readDao.getAll()
+//                val data = runData(
+//                    record.last().distance,
+//                    record.last().time,
+//                    record.last().calorie,
+//                    record.last().runDate,
+//                    selectMark,
+//                    draft,
+//                    selectColor
+//                )
                 val databaseRef = Firebase.database.reference
-                databaseRef.setValue(data)
-                Log.d("RealtimeDB","$data")
+//                databaseRef.setValue(data)
+                databaseRef.push()
+//                Log.d("RealtimeDB","$data")
 
-//
-//                val db = Firebase.firestore
-//                val data = runData(copy)
-//                db.collection("runData")
-//                    .add(data)
-//                    .addOnSuccessListener {
-//                        Log.d("FireStore","Success!!!")
-//                    }
-//                    .addOnFailureListener {
-//                        Log.w("FireStore","Failure!!!")
-//                    }
             }
         }
     }
@@ -932,8 +904,11 @@ class FragmentResult : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("photo","${data?.extras?.get("data")}")
         if (resultCode == Activity.RESULT_OK) {
             (data?.extras?.get("data") as? Bitmap)?.let { bitmap ->
+                Log.d("photo","$bitmap")
+
                 Matrix().apply {
                     postRotate(90f)
                 }.run {
@@ -941,6 +916,8 @@ class FragmentResult : Fragment() {
                 }.run {
                     binding.photoEmpty.visibility = View.VISIBLE
                     binding.resultButton.visibility = View.GONE
+                    Log.d("photo","$this")
+
                     binding.photoEmpty.setImageBitmap(this)
                     binding.cameraImage.visibility = View.GONE
                     binding.photoCancel.visibility = View.VISIBLE
@@ -948,6 +925,8 @@ class FragmentResult : Fragment() {
             }
         }
     }
+
+    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 //
 //    override fun onResume() {
 //        super.onResume()
