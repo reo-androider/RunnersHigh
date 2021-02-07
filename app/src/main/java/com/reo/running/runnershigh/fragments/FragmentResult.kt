@@ -10,6 +10,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Color
+import android.graphics.Insets.add
 import android.graphics.Matrix
 import android.net.Uri
 import android.os.Bundle
@@ -26,6 +27,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import io.realm.Realm
@@ -47,6 +54,7 @@ class FragmentResult : Fragment() {
     private var position = 0
     private lateinit var mRealm: Realm
     private lateinit var copy: String
+    private lateinit var database: DatabaseReference
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -853,8 +861,6 @@ class FragmentResult : Fragment() {
 
                     Log.d("Realm","$copy")
 
-
-
                     mRealm.close()
 
                     withContext(Dispatchers.Main) {
@@ -869,6 +875,26 @@ class FragmentResult : Fragment() {
                 Toast.makeText(requireContext(),"下書きを保存しました",Toast.LENGTH_LONG).show()
             })
             dialog.show()
+        }
+
+        binding.resultButton.setOnClickListener {
+            lifecycleScope.launch(Dispatchers.IO) {
+                val data = runData(copy)
+                val databaseRef = Firebase.database.reference
+                databaseRef.setValue(data)
+
+//
+//                val db = Firebase.firestore
+//                val data = runData(copy)
+//                db.collection("runData")
+//                    .add(data)
+//                    .addOnSuccessListener {
+//                        Log.d("FireStore","Success!!!")
+//                    }
+//                    .addOnFailureListener {
+//                        Log.w("FireStore","Failure!!!")
+//                    }
+            }
         }
     }
 
