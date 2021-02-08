@@ -26,9 +26,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import io.realm.Realm
@@ -45,6 +42,8 @@ class FragmentResult : Fragment() {
     private var position = 0
     private var draft: String = ""
     private var selectColor = ""
+    private lateinit var myRealm: Realm
+    private var bitmap: Bitmap? = null
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -78,6 +77,7 @@ class FragmentResult : Fragment() {
                 binding.totalCalorie.text = "${record.last().calorie}kcal"
                 binding.today.text = record.last().runDate
                 binding.photoEmpty.setImageBitmap(record.last().bitmap)
+
 
                 if (record.last().takenPhoto) {
                     binding.cameraImage.visibility = View.GONE
@@ -173,8 +173,6 @@ class FragmentResult : Fragment() {
                         }
                     }
                 }
-
-
 
                 binding.goodImage.setOnClickListener {
                     if (!select) {
@@ -854,21 +852,29 @@ class FragmentResult : Fragment() {
 
         binding.resultButton.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                val record = readDao.getAll()
-//                val data = runData(
-//                    record.last().distance,
-//                    record.last().time,
-//                    record.last().calorie,
-//                    record.last().runDate,
-//                    selectMark,
-//                    draft,
-//                    selectColor
-//                )
-                val databaseRef = Firebase.database.reference
-//                databaseRef.setValue(data)
-                databaseRef.push()
-//                Log.d("RealtimeDB","$data")
+                myRealm = Realm.getDefaultInstance()
+                val resultData = ResultDataModel(draft,selectMark)
+                myRealm = Realm.getDefaultInstance()
+                myRealm.beginTransaction()
+                myRealm.insert(resultData)
+                myRealm.commitTransaction()
+//                val record = readDao.getAll()
+////                val data = runData(
+////                    record.last().distance,
+////                    record.last().time,
+////                    record.last().calorie,
+////                    record.last().runDate,
+////                    selectMark,
+////                    draft,
+////                    selectColor
+////                )
+//                val databaseRef = Firebase.database.reference
+////                databaseRef.setValue(data)
+//                databaseRef.push()
+////                Log.d("RealtimeDB","$data")
+                withContext(Dispatchers.Main) {
 
+                }
             }
         }
     }
@@ -908,7 +914,6 @@ class FragmentResult : Fragment() {
         if (resultCode == Activity.RESULT_OK) {
             (data?.extras?.get("data") as? Bitmap)?.let { bitmap ->
                 Log.d("photo","$bitmap")
-
                 Matrix().apply {
                     postRotate(90f)
                 }.run {
@@ -917,7 +922,6 @@ class FragmentResult : Fragment() {
                     binding.photoEmpty.visibility = View.VISIBLE
                     binding.resultButton.visibility = View.GONE
                     Log.d("photo","$this")
-
                     binding.photoEmpty.setImageBitmap(this)
                     binding.cameraImage.visibility = View.GONE
                     binding.photoCancel.visibility = View.VISIBLE

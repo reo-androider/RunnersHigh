@@ -6,6 +6,7 @@ import io.realm.Realm
 import io.realm.RealmConfiguration
 
 class MyApplication: Application() {
+
     companion object {
         lateinit var db: RecordDatabase
     }

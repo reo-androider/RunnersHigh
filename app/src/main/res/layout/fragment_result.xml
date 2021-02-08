@@ -357,48 +357,55 @@
 <!--color-->
 
 <!--memo-->
-
     <ImageView
         android:id="@+id/edit"
         android:layout_width="35dp"
         android:layout_height="35dp"
-        android:src="@drawable/ic_edit"
-        android:contentDescription="@string/result_memo"
-        android:layout_marginStart="36dp"
-        android:layout_marginBottom="155dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
-
-    <ScrollView
-        android:id="@+id/memoDisplay"
-        android:layout_width="200dp"
-        android:layout_height="50dp"
         android:layout_marginStart="28dp"
-        android:layout_marginTop="312dp"
-        app:layout_constraintStart_toEndOf="@id/edit"
-        app:layout_constraintTop_toBottomOf="@id/backRound">
+        android:layout_marginBottom="152dp"
+        android:contentDescription="@string/result_memo"
+        android:src="@drawable/ic_edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!--    <ScrollView-->
+<!--        android:id="@+id/memoDisplay"-->
+<!--        android:layout_width="200dp"-->
+<!--        android:layout_height="50dp"-->
+<!--        android:layout_marginStart="28dp"-->
+<!--        android:layout_marginTop="312dp"-->
+<!--        app:layout_constraintStart_toEndOf="@id/edit"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/backRound">-->
 
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+<!--        <LinearLayout-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent">-->
 
-            <TextView
-                android:id="@+id/memo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="←メモ追加    メモ削除→"
-                android:textColor="@color/normal2"
-                android:textSize="15sp"
-                android:layout_marginStart="130dp"
-                android:layout_marginTop="280dp"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+<!--            <TextView-->
+<!--                android:id="@+id/memo"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="←メモ追加    メモ削除→"-->
+<!--                android:textColor="@color/normal2"-->
+<!--                android:textSize="15sp"-->
+<!--                android:layout_marginStart="130dp"-->
+<!--                android:layout_marginTop="280dp"-->
+<!--                app:layout_constraintTop_toTopOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"/>-->
 
-        </LinearLayout>
+<!--        </LinearLayout>-->
 
-    </ScrollView>
+<!--</ScrollView>-->
+    <TextView
+        android:id="@+id/memo"
+        android:layout_width="250dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="152dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/delete"
+        app:layout_constraintStart_toEndOf="@id/edit" />
 
     <ImageView
         android:id="@+id/delete"
@@ -408,7 +415,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginBottom="155dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/memoDisplay" />
+        app:layout_constraintStart_toEndOf="@id/memo" />
 
 <!--    <TextView-->
 <!--        android:id="@+id/memo"-->
