@@ -77,4 +77,6 @@
     <string name="tooBadText">全然走れなかった</string>
 
     <string name="color">color</string>
+
+    <string name="memo">気づき・メモ</string>
 </resources>
