@@ -14,12 +14,14 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
+import android.text.method.ScrollingMovementMethod
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
 import android.widget.EditText
+import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -104,6 +106,7 @@ class FragmentResult : Fragment() {
                 binding.sosoImage.alpha = 0.6F
                 binding.badImage.alpha = 0.6F
                 binding.tooBadImage.alpha = 0.6F
+                binding.memo.movementMethod = ScrollingMovementMethod()
 
                 binding.perfectImage.setOnClickListener {
                     if (!select) {
