@@ -6,17 +6,11 @@ import android.app.AlertDialog
 import android.content.*
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.location.Location
-import android.media.AudioAttributes
-import android.media.AudioManager
-import android.media.SoundPool
 import android.net.Uri
 import android.os.*
-import android.provider.ContactsContract
 import android.provider.MediaStore
 import android.util.Log
-import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,8 +18,6 @@ import android.view.animation.*
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -39,7 +31,6 @@ import kotlinx.coroutines.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.*
 import kotlin.math.ceil
 
 class FragmentRun : Fragment() {
@@ -59,7 +50,6 @@ class FragmentRun : Fragment() {
     private val recordDao = MyApplication.db.recordDao()
     var marker: Marker? = null
     private var runStart = false
-    var lock = false
     private lateinit var vibrator: Vibrator
     private lateinit var vibrationEffect: VibrationEffect
     private val PERMISSION_CODE = 1000
@@ -264,8 +254,7 @@ class FragmentRun : Fragment() {
                         if (gpsAdjust == 10) {
                             binding.sleepBat.visibility = View.GONE
                             binding.mapView.visibility = View.VISIBLE
-//                            binding.gpsSearch.visibility = View.GONE
-                            binding.cardObjective.visibility = View.GONE
+                            binding.gpsSearch.visibility = View.GONE
                             binding.startNav.visibility = View.VISIBLE
                             binding.startNav2.visibility = View.VISIBLE
 
@@ -287,10 +276,10 @@ class FragmentRun : Fragment() {
                             binding.sleepBat.visibility = View.GONE
 
                             val alphaAnimation = AlphaAnimation(0f, 1f)
-                            alphaAnimation.duration = 1500
+                            alphaAnimation.duration = 1000
 
                             val alphaAnimation2 = AlphaAnimation(0f, 1f)
-                            alphaAnimation2.duration = 1500
+                            alphaAnimation2.duration = 1000
 
                             binding.startNav.startAnimation(alphaAnimation)
                             binding.startNav2.startAnimation(alphaAnimation)
@@ -338,6 +327,7 @@ class FragmentRun : Fragment() {
                 countStart = true
                 binding.centerCircle.setOnClickListener {
                     recordStop = false
+                    binding.run {
                     lifecycleScope.launch(Dispatchers.Main) {
                         val scaleStartButton = ScaleAnimation(
                             1f,
@@ -350,20 +340,22 @@ class FragmentRun : Fragment() {
                             0.5f
                         )
                         scaleStartButton.let {
-                            it.duration = 2000
+                            it.duration = 1500
                             it.fillAfter = true
                         }
 
-                        binding.centerCircle.startAnimation(scaleStartButton)
-                        delay(1000)
-
-                    }
-                    binding.run {
                         mapView.visibility = View.GONE
                         startText.visibility = View.GONE
                         centerCircle.visibility = View.GONE
                         startNav.visibility = View.GONE
                         startNav2.visibility = View.GONE
+
+                        delay(10)
+                        binding.centerCircle.startAnimation(scaleStartButton)
+                        delay(1000)
+
+                    }
+
 
                         (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
 
@@ -679,8 +671,7 @@ class FragmentRun : Fragment() {
                                         builder
                                             .setCancelable(false)
                                             .setMessage("ランニングを終了しますか？")
-                                            .setPositiveButton("YES",
-                                                DialogInterface.OnClickListener { dialog, id ->
+                                            .setPositiveButton("YES") { _, _ ->
                                                     lifecycleScope.launch(Dispatchers.IO) {
                                                         val record = Record(
                                                             0,
@@ -697,11 +688,10 @@ class FragmentRun : Fragment() {
                                                             findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                                                         }
                                                     }
-                                                })
+                                                }
                                             .setNegativeButton(
                                                 "CANCEL"
-                                            ) { dialog, _ ->
-                                                dialog.dismiss()
+                                            ) { _, _ ->
                                             }
                                         builder.show()
                                     }

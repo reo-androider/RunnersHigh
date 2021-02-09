@@ -520,41 +520,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_objective"
-        android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:layout_margin="50dp"
-        android:layout_marginTop="15dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:backgroundTint="@color/teal_200"
-        android:elevation="0dp"
-        android:visibility="gone">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/card_object"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="30dp"
-            android:elevation="0dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/card_object2"
-            android:textSize="20sp"
-            android:textColor="@color/white"
-            android:layout_marginTop="70dp"
-            android:layout_marginStart="30dp"
-            android:elevation="0dp"/>
-
-    </androidx.cardview.widget.CardView>
 
 <!--lock on & off-->
 
@@ -562,13 +527,14 @@
         android:id="@+id/lockImage"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_lock"
+        android:src="@drawable/ic_cancel"
         android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/lock"
         android:visibility="gone"/>
+
     <ImageView
         android:id="@+id/lockOff"
         android:layout_width="40dp"

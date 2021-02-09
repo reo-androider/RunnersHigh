@@ -28,13 +28,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
-import io.realm.Realm
 import kotlinx.coroutines.*
 
 class FragmentResult : Fragment() {
 
     private lateinit var binding: FragmentResultBinding
     private val readDao = MyApplication.db.recordDao()
+    private val runDB = MyApplication.db.recordDao2()
     private var select = false//二回押しても同じアニメーションが実行されない為
     private var selectMark = ""
     private var image_uri: Uri? = null
@@ -42,8 +42,6 @@ class FragmentResult : Fragment() {
     private var position = 0
     private var draft: String = ""
     private var selectColor = ""
-    private lateinit var myRealm: Realm
-    private var bitmap: Bitmap? = null
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -65,21 +63,21 @@ class FragmentResult : Fragment() {
         lifecycleScope.launch(Dispatchers.IO) {
 
             Log.d("delete", "${readDao.getAll()}")
-            Log.d("delete", "${readDao.getAll().last()}")
-            Log.d("delete", readDao.getAll().last().time)
-            Log.d("delete", "${readDao.getAll().last().distance}")
-            Log.d("delete", "${readDao.getAll().last().calorie}")
+            Log.d("delete", "${readDao.getAll().lastOrNull()}")
+            readDao.getAll().lastOrNull()?.time?.let { Log.d("delete", it) }
+            Log.d("delete", "${readDao.getAll().lastOrNull()?.distance}")
+            Log.d("delete", "${readDao.getAll().lastOrNull()?.calorie}")
             val record = readDao.getAll()
 
             withContext(Dispatchers.Main) {
-                binding.totalTime.text = record.last().time
-                binding.totalDistance.text = "${record.last().distance}km"
-                binding.totalCalorie.text = "${record.last().calorie}kcal"
-                binding.today.text = record.last().runDate
-                binding.photoEmpty.setImageBitmap(record.last().bitmap)
+                binding.totalTime.text = record.lastOrNull()?.time
+                binding.totalDistance.text = "${record.lastOrNull()?.distance}km"
+                binding.totalCalorie.text = "${record.lastOrNull()?.calorie}kcal"
+                binding.today.text = record.lastOrNull()?.runDate
+                binding.photoEmpty.setImageBitmap(record.lastOrNull()?.bitmap)
 
 
-                if (record.last().takenPhoto) {
+                if (record.lastOrNull()?.takenPhoto == true) {
                     binding.cameraImage.visibility = View.GONE
                 }
 
@@ -823,14 +821,13 @@ class FragmentResult : Fragment() {
             dialog.setTitle("気づき・メモ")
             dialog.setCancelable(false)
             dialog.setView(myEdit)
-            dialog.setPositiveButton("完了") { dialog, id->
+            dialog.setPositiveButton("完了") { _, _->
                 draft = myEdit.text.toString()
                 binding.memo.text = draft
 
             }
 
-            dialog.setNegativeButton("戻る") { dialog, which ->
-                dialog.dismiss()
+            dialog.setNegativeButton("戻る") { _, _ ->
 
             }
             dialog.show()
@@ -840,24 +837,54 @@ class FragmentResult : Fragment() {
             val dialog = AlertDialog.Builder(requireContext())
             dialog.setTitle("メモを削除しますか？")
             dialog.setCancelable(false)
-            dialog.setPositiveButton ("はい") { dialog, id->
+            dialog.setPositiveButton ("はい") { _, _ ->
                 draft = ""
                 binding.memo.text = draft
             }
-            dialog.setNegativeButton("いいえ") {dialog, which->
-                dialog.dismiss()
+            dialog.setNegativeButton("いいえ") { _, _ ->
             }
             dialog.show()
         }
 
         binding.resultButton.setOnClickListener {
             lifecycleScope.launch(Dispatchers.IO) {
-                myRealm = Realm.getDefaultInstance()
-                val resultData = ResultDataModel(draft,selectMark)
-                myRealm = Realm.getDefaultInstance()
-                myRealm.beginTransaction()
-                myRealm.insert(resultData)
-                myRealm.commitTransaction()
+                val record = readDao.getAll().lastOrNull()
+                val record2 = record?.time?.let { it1 ->
+                    Record2(
+                        0,
+                        record.bitmap,
+                        it1,
+                        record.distance,
+                        record.calorie,
+                        record.runDate,
+                        selectColor,
+                        selectMark,
+                        draft
+                    )
+                }
+
+                if (record2 != null) {
+                    runDB.insertRecord2(record2)
+                }
+
+                Log.d("ROOM","${runDB.getAll2()}")
+
+
+//                myRealm = Realm.getDefaultInstance()
+//                myRealm.executeTransaction {
+//                    var data = myRealm.createObject(ResultDataModel::class.java,id)
+//                    data.memo = draft
+//                    data.colorId = selectColor
+//                    data.feedBack = selectMark
+//                    myRealm.copyToRealm(data)
+//                    Log.d("Realm","${myRealm.where(ResultDataModel::class.java).findAll()}")
+//                }
+//                myRealm = Realm.getDefaultInstance()
+//                val resultData = ResultDataModel(draft,selectMark)
+//                myRealm = Realm.getDefaultInstance()
+//                myRealm.beginTransaction()
+//                myRealm.insert(resultData)
+//                myRealm.commitTransaction()
 //                val record = readDao.getAll()
 ////                val data = runData(
 ////                    record.last().distance,
@@ -872,9 +899,9 @@ class FragmentResult : Fragment() {
 ////                databaseRef.setValue(data)
 //                databaseRef.push()
 ////                Log.d("RealtimeDB","$data")
-                withContext(Dispatchers.Main) {
-
-                }
+//                withContext(Dispatchers.Main) {
+//
+//                }
             }
         }
     }
@@ -901,9 +928,9 @@ class FragmentResult : Fragment() {
                 if (grantResults.isEmpty() && grantResults[0] ==
                         PackageManager.PERMISSION_DENIED
                 ) {
-                    openCamera()
+                    Toast.makeText(requireContext(),"カメラ拒否されました",Toast.LENGTH_LONG).show()
                 } else {
-                    Toast.makeText(requireContext(),"カメラが拒否されました",Toast.LENGTH_LONG).show()
+                    openCamera()
                 }
             }
         }
@@ -930,7 +957,7 @@ class FragmentResult : Fragment() {
         }
     }
 
-    fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
+    private fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
 //
 //    override fun onResume() {
 //        super.onResume()
