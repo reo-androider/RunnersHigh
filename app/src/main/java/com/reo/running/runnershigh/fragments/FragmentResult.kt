@@ -198,6 +198,7 @@ class FragmentResult : Fragment() {
                                 1f,
                                 1f
                             )
+
                             translateAnimation2.let {
                                 it.duration = 500
                                 it.fillAfter = true
@@ -842,7 +843,7 @@ class FragmentResult : Fragment() {
             dialog.setCancelable(false)
             dialog.setPositiveButton ("はい") { _, _ ->
                 draft = ""
-                binding.memo.text = draft
+                binding.memo.text = resources.getString(R.string.memo)
             }
             dialog.setNegativeButton("いいえ") { _, _ ->
             }
