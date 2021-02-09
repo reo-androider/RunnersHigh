@@ -388,6 +388,22 @@ class FragmentRun : Fragment() {
                                 pauseImage.visibility = View.VISIBLE
                                 pauseButton.visibility = View.VISIBLE
                                 timerScreen.visibility = View.VISIBLE
+                                lockOff.visibility = View.VISIBLE
+
+                                lockOff.setOnClickListener {
+                                    lockOff.visibility = View.GONE
+                                    pauseImage.visibility = View.GONE
+                                    pauseButton.visibility = View.GONE
+                                    lockImage.visibility = View.VISIBLE
+                                }
+
+                                lockImage.setOnClickListener {
+                                    lockImage.visibility = View.GONE
+                                    pauseImage.visibility = View.VISIBLE
+                                    pauseButton.visibility = View.VISIBLE
+                                    lockOff.visibility = View.VISIBLE
+
+                                }
 
                                 cameraImage.setOnClickListener {
                                     if (checkSelfPermission(Manifest.permission.CAMERA)
