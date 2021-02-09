@@ -26,6 +26,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.reo.running.runnershigh.*
@@ -873,39 +874,10 @@ class FragmentResult : Fragment() {
 
                 Log.d("ROOM","${runDB.getAll2()}")
 
-
-//                myRealm = Realm.getDefaultInstance()
-//                myRealm.executeTransaction {
-//                    var data = myRealm.createObject(ResultDataModel::class.java,id)
-//                    data.memo = draft
-//                    data.colorId = selectColor
-//                    data.feedBack = selectMark
-//                    myRealm.copyToRealm(data)
-//                    Log.d("Realm","${myRealm.where(ResultDataModel::class.java).findAll()}")
-//                }
-//                myRealm = Realm.getDefaultInstance()
-//                val resultData = ResultDataModel(draft,selectMark)
-//                myRealm = Realm.getDefaultInstance()
-//                myRealm.beginTransaction()
-//                myRealm.insert(resultData)
-//                myRealm.commitTransaction()
-//                val record = readDao.getAll()
-////                val data = runData(
-////                    record.last().distance,
-////                    record.last().time,
-////                    record.last().calorie,
-////                    record.last().runDate,
-////                    selectMark,
-////                    draft,
-////                    selectColor
-////                )
-//                val databaseRef = Firebase.database.reference
-////                databaseRef.setValue(data)
-//                databaseRef.push()
-////                Log.d("RealtimeDB","$data")
-//                withContext(Dispatchers.Main) {
-//
-//                }
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(requireContext(), "ランニングを記録しました", Toast.LENGTH_LONG).show()
+                    findNavController().navigate(R.id.action_fragmentResult_to_navi_setting)
+                }
             }
         }
     }

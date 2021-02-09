@@ -32,6 +32,9 @@
         android:id="@+id/fragmentResult"
         android:name="com.reo.running.runnershigh.fragments.FragmentResult"
         android:label="FragmentResult" >
+        <action
+            android:id="@+id/action_fragmentResult_to_navi_setting"
+            app:destination="@id/navi_setting" />
     </fragment>
 
 </navigation>

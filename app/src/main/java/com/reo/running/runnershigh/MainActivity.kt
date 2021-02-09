@@ -28,9 +28,4 @@ class MainActivity : AppCompatActivity() {
         setupWithNavController(binding.bottomNavigation,navController)
 
     }
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-
-        return super.onTouchEvent(event)
-    }
 }
