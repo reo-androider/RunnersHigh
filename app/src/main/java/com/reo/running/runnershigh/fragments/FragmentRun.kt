@@ -276,10 +276,10 @@ class FragmentRun : Fragment() {
                             binding.sleepBat.visibility = View.GONE
 
                             val alphaAnimation = AlphaAnimation(0f, 1f)
-                            alphaAnimation.duration = 1000
+                            alphaAnimation.duration = 500
 
                             val alphaAnimation2 = AlphaAnimation(0f, 1f)
-                            alphaAnimation2.duration = 1000
+                            alphaAnimation2.duration = 500
 
                             binding.startNav.startAnimation(alphaAnimation)
                             binding.startNav2.startAnimation(alphaAnimation)
@@ -350,7 +350,7 @@ class FragmentRun : Fragment() {
                         startNav.visibility = View.GONE
                         startNav2.visibility = View.GONE
 
-                        delay(10)
+                        delay(50)
                         binding.centerCircle.startAnimation(scaleStartButton)
                         delay(1000)
 
@@ -473,6 +473,7 @@ class FragmentRun : Fragment() {
                                         restartImage.startAnimation(scaleRestartImage)
                                         restartButton.startAnimation(scaleRestartButton)
                                         delay(600)
+                                        lockOff.visibility = View.VISIBLE
                                         restartImage.clearAnimation()
                                         restartButton.clearAnimation()
                                         pauseImage.visibility = View.VISIBLE
@@ -516,6 +517,7 @@ class FragmentRun : Fragment() {
                                 }
 
                                 pauseButton.setOnClickListener {
+                                    lockOff.visibility = View.GONE
                                     vibrator =
                                         getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                                     vibrationEffect = VibrationEffect.createOneShot(500, 255)
