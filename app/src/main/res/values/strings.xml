@@ -79,4 +79,6 @@
     <string name="color">color</string>
 
     <string name="memo">気づき・メモ</string>
+
+    <string name="heigh_title">走った距離の記録</string>
 </resources>

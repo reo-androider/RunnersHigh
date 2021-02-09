@@ -75,8 +75,8 @@ class FragmentRun : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
-        binding.gpsSearch.visibility = View.VISIBLE
-        binding.sleepBat.visibility = View.VISIBLE
+//        binding.gpsSearch.visibility = View.VISIBLE
+//        binding.sleepBat.visibility = View.VISIBLE
         GlobalScope.launch(Dispatchers.Main) {
             val waveAnimation = TranslateAnimation(
                 1f,
@@ -88,56 +88,56 @@ class FragmentRun : Fragment() {
                 it.duration = 100
             }
 
-            while (gpsAdjust < 10) {
-                binding.S.startAnimation(waveAnimation)
-                delay(100)
-                binding.S.clearAnimation()
-                binding.e.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.e.clearAnimation()
-                binding.a.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.a.clearAnimation()
-                binding.r.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.r.clearAnimation()
-                binding.c.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.c.clearAnimation()
-                binding.h.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.h.clearAnimation()
-                binding.F.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.F.clearAnimation()
-                binding.o.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.o.clearAnimation()
-                binding.r2.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.r2.clearAnimation()
-                binding.G.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.G.clearAnimation()
-                binding.P.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.P.clearAnimation()
-                binding.S2.startAnimation(waveAnimation)
-
-                delay(100)
-                binding.S2.clearAnimation()
-                delay(1000)
-            }
+//            while (gpsAdjust < 10) {
+//                binding.S.startAnimation(waveAnimation)
+//                delay(100)
+//                binding.S.clearAnimation()
+//                binding.e.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.e.clearAnimation()
+//                binding.a.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.a.clearAnimation()
+//                binding.r.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.r.clearAnimation()
+//                binding.c.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.c.clearAnimation()
+//                binding.h.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.h.clearAnimation()
+//                binding.F.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.F.clearAnimation()
+//                binding.o.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.o.clearAnimation()
+//                binding.r2.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.r2.clearAnimation()
+//                binding.G.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.G.clearAnimation()
+//                binding.P.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.P.clearAnimation()
+//                binding.S2.startAnimation(waveAnimation)
+//
+//                delay(100)
+//                binding.S2.clearAnimation()
+//                delay(1000)
+//            }
         }
         context?.run {
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -252,28 +252,28 @@ class FragmentRun : Fragment() {
                     } else {
 
                         if (gpsAdjust == 10) {
-                            binding.sleepBat.visibility = View.GONE
+//                            binding.sleepBat.visibility = View.GONE
                             binding.mapView.visibility = View.VISIBLE
-                            binding.gpsSearch.visibility = View.GONE
+//                            binding.gpsSearch.visibility = View.GONE
                             binding.startNav.visibility = View.VISIBLE
                             binding.startNav2.visibility = View.VISIBLE
 
                             binding.startText.visibility = View.VISIBLE
                             binding.centerCircle.visibility = View.VISIBLE
-
-                            binding.S.visibility = View.GONE
-                            binding.e.visibility = View.GONE
-                            binding.a.visibility = View.GONE
-                            binding.r.visibility = View.GONE
-                            binding.c.visibility = View.GONE
-                            binding.h.visibility = View.GONE
-                            binding.F.visibility = View.GONE
-                            binding.o.visibility = View.GONE
-                            binding.r2.visibility = View.GONE
-                            binding.G.visibility = View.GONE
-                            binding.P.visibility = View.GONE
-                            binding.S2.visibility = View.GONE
-                            binding.sleepBat.visibility = View.GONE
+//
+//                            binding.S.visibility = View.GONE
+//                            binding.e.visibility = View.GONE
+//                            binding.a.visibility = View.GONE
+//                            binding.r.visibility = View.GONE
+//                            binding.c.visibility = View.GONE
+//                            binding.h.visibility = View.GONE
+//                            binding.F.visibility = View.GONE
+//                            binding.o.visibility = View.GONE
+//                            binding.r2.visibility = View.GONE
+//                            binding.G.visibility = View.GONE
+//                            binding.P.visibility = View.GONE
+//                            binding.S2.visibility = View.GONE
+//                            binding.sleepBat.visibility = View.GONE
 
                             val alphaAnimation = AlphaAnimation(0f, 1f)
                             alphaAnimation.duration = 500
