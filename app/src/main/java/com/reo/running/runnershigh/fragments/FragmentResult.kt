@@ -21,7 +21,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.*
 import android.widget.EditText
-import android.widget.ScrollView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment

@@ -1,30 +1,32 @@
 package com.reo.running.runnershigh.fragments
 
 import android.os.Bundle
-import android.os.DropBoxManager
+import android.util.Log
 import android.view.*
 import androidx.core.view.GestureDetectorCompat
 import androidx.fragment.app.Fragment
-import com.github.mikephil.charting.charts.LineChart
+import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.components.XAxis
+import com.reo.running.runnershigh.R
+import com.reo.running.runnershigh.databinding.Fragment2Binding
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
-import com.mapbox.mapboxsdk.style.expressions.Expression
-import com.reo.running.runnershigh.R
-import com.reo.running.runnershigh.databinding.Fragment2Binding
-import java.security.KeyStore
+import com.reo.running.runnershigh.MyApplication
+import com.reo.running.runnershigh.runData
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.invoke
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class Fragment2 : Fragment() {
     private lateinit var binding: Fragment2Binding
-    private lateinit var mLineChar:LineChart
+    private var totalDistance = 0
+    private val runDatabase = MyApplication.db.recordDao2()
+    private var entries:ArrayList<Entry> = ArrayList()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = Fragment2Binding.inflate(layoutInflater,container,false)
         return binding.root
@@ -32,53 +34,60 @@ class Fragment2 : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        //表示用サンプルデータの作成//
-//        val x = listOf<Float>(1f, 2f, 3f, 5f, 8f, 13f, 21f, 34f)//X軸データ
-//        val y = x.map{it*it}//Y軸データ（X軸の2乗）
-//
-//        //①Entryにデータ格納
-//        var entryList = mutableListOf<Entry>()//1本目の線
-//        for(i in x.indices){
-//            entryList.add(
-//                Entry(x[i], y[i])
-//            )
-//        }
-//
-//        //LineDataSetのList
-//        val lineDataSets = mutableListOf<ILine>()
-//        //②DataSetにデータ格納
-//        val lineDataSet = LineDataSet(entryList, "square")
-//        //③DataSetにフォーマット指定(3章で詳説)
-//        lineDataSet.color = Color.BLUE
-//        //リストに格納
-//        lineDataSets.add(lineDataSet)
-//
-//        //④LineDataにLineDataSet格納
-//        val lineData = LineData()
-//        //⑤LineChartにLineData格納
-////        lineChart = findViewById(R.id.lineChartExample)
-//        binding.lineChart.data = lineData
-////        lineChart.data = lineData
-//        //⑥Chartのフォーマット指定(3章で詳説)
-//        //X軸の設定
-//        binding.lineChart.xAxis.apply {
-//            isEnabled = true
-//            textColor = Color.BLACK
-//        }
-//        //⑦linechart更新
-//        binding.lineChart.invalidate()
-        val entries:ArrayList<Entry> = ArrayList()
-        entries.add(Entry(4f,10))
+        lifecycleScope.launch(Dispatchers.IO) {
 
-        val dataset = LineDataSet(entries,"lineChart")
-        val x = Array<String>(3) {"kotlin"}
 
-        val data = LineData(x,dataset)
-        dataset.setColors(ColorTemplate.COLORFUL_COLORS)
+            //日にちをインクリメント順に取れれば勝ち
+            val read = runDatabase.getAll2()
+            Log.d("array","${read.size}")
+            Log.d("array","${read}")
+            Log.d("array","${read[0].runData}")
+            Log.d("array","${read[1].runData}")
 
-        binding.lineChart.let {
-            it.data = data
-            it.animateY(5000)
+            val x = mutableListOf<String>()
+            var i = 0
+            val lastId = read.last().id -1
+            for (i in 0..lastId) {
+                x.add(read[i].runData)
+            }
+
+            val y = mutableListOf<Double>()
+            for (i in 0..lastId) {
+                y.add(read[i].distance)
+            }
+            Log.d("array","$y")
+
+            Log.d("array","${x}")
+            // 点を作っている
+            (read.lastOrNull()?.distance)?.toFloat()?.let { Entry(it,10) }?.let { entries.add(it) }
+        }
+
+        lifecycleScope.launch(Dispatchers.Main) {
+
+            // 線を作っている
+            val dataset = LineDataSet(entries, "")
+            val x = Array<String>(1) { "" }
+
+            //Dataそのもの
+            val data = LineData(x, dataset)
+            dataset.setColors(ColorTemplate.COLORFUL_COLORS)
+
+            //設定
+            val leftAxis = binding.lineChart.getAxisLeft()
+            leftAxis.axisMaxValue = 100f
+            leftAxis.axisMinValue = 0f
+            val rightAxis = binding.lineChart.getAxisRight()
+            rightAxis.isEnabled = false
+
+
+            //更新
+            binding.lineChart.invalidate()
+
+            // Dataを格納する箱
+            binding.lineChart.data = data
+            binding.lineChart.animateY(0)
+
         }
     }
 }
+

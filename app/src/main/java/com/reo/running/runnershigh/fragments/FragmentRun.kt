@@ -75,8 +75,6 @@ class FragmentRun : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
-//        binding.gpsSearch.visibility = View.VISIBLE
-//        binding.sleepBat.visibility = View.VISIBLE
         GlobalScope.launch(Dispatchers.Main) {
             val waveAnimation = TranslateAnimation(
                 1f,
