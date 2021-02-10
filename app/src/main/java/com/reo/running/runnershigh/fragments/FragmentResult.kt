@@ -38,7 +38,7 @@ class FragmentResult : Fragment() {
     private lateinit var binding: FragmentResultBinding
     private val readDao = MyApplication.db.recordDao()
     private val runDB = MyApplication.db.recordDao2()
-    private var select = false//二回押しても同じアニメーションが実行されない為
+    private var select = false //二回押しても同じアニメーションが実行されない為
     private var selectMark = ""
     private var image_uri: Uri? = null
     private val contentResolver: ContentResolver? = null
@@ -167,11 +167,7 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-//                            binding.feedBack.let {
-//                                it.setImageResource(R.drawable.ic_perfect)
-//                                it.setColorFilter(Color.parseColor("#4CAF50"))
-//                                it.visibility = View.VISIBLE
-//                            }
+
                         }
                     }
                 }
@@ -241,11 +237,7 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-//                            binding.feedBack.let {
-//                                it.setImageResource(R.drawable.ic_good)
-//                                it.setColorFilter(Color.parseColor("#CDDC39"))
-//                                it.visibility = View.VISIBLE
-//                            }
+
                         }
                     }
                 }
@@ -325,10 +317,7 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-//                            binding.feedBack.let {
-//                                it.setImageResource(R.drawable.ic_soso)
-//                                it.setColorFilter(Color.parseColor("#FFC107"))
-//                                it.visibility = View.VISIBLE
+
                             }
                         }
                     }
@@ -407,15 +396,11 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-//                            binding.feedBack.let {
-//                                it.setImageResource(R.drawable.ic_bad)
-//                                it.setColorFilter(Color.parseColor("#FF9800"))
-//                                it.visibility = View.VISIBLE
+
                             }
                         }
                     }
                 }
-
 
 
 
@@ -492,11 +477,7 @@ class FragmentResult : Fragment() {
                             rotateAnimation.duration = 500
                             binding.cancel.visibility = View.VISIBLE
                             binding.cancel.startAnimation(rotateAnimation)
-//                            binding.feedBack.let {
-//                                it.setImageResource(R.drawable.ic_sick)
-//                                it.setColorFilter(Color.parseColor("#f44336"))
-//                                it.visibility = View.VISIBLE
-//                            }
+
                         }
                     }
                 }
@@ -544,7 +525,6 @@ class FragmentResult : Fragment() {
                                     delay(200)
                                     binding.tooBadImage.visibility = View.VISIBLE
                                     binding.tooBadImage.startAnimation(scaleAnimation)
-//                                    binding.feedBack.visibility = View.INVISIBLE
                                 }
 
                                 "good" -> {
@@ -579,7 +559,6 @@ class FragmentResult : Fragment() {
                                     delay(200)
                                     binding.tooBadImage.visibility = View.VISIBLE
                                     binding.tooBadImage.startAnimation(scaleAnimation)
-//                                    binding.feedBack.visibility = View.INVISIBLE
                                 }
 
                                 "soso" -> {
@@ -614,7 +593,6 @@ class FragmentResult : Fragment() {
                                     delay(200)
                                     binding.tooBadImage.visibility = View.VISIBLE
                                     binding.tooBadImage.startAnimation(scaleAnimation)
-//                                    binding.feedBack.visibility = View.INVISIBLE
                                 }
 
                                 "bad" -> {
@@ -649,7 +627,6 @@ class FragmentResult : Fragment() {
                                     delay(200)
                                     binding.tooBadImage.visibility = View.VISIBLE
                                     binding.tooBadImage.startAnimation(scaleAnimation)
-//                                    binding.feedBack.visibility = View.INVISIBLE
                                 }
 
 
@@ -934,63 +911,4 @@ class FragmentResult : Fragment() {
     }
 
     private fun String.toEditable(): Editable = Editable.Factory.getInstance().newEditable(this)
-//
-//    override fun onResume() {
-//        super.onResume()
-//        mRealm = Realm.getDefaultInstance()
-//    }
-//
-//    override fun onPause() {
-//        super.onPause()
-//        mRealm.close()
-//    }
-//
-//    override fun onDestroy() {
-//        super.onDestroy()
-//        mRealm.close()
-//    }
-//
-//    fun create(memo: String) {
-//        mRealm.executeTransaction {
-//            var book = mRealm.createObject(Memo::class.java,UUID.randomUUID().toString())
-//            book.memo = memo
-//            mRealm.copyToRealm(book)
-//            Log.d("Realm","${book}")
-//        }
-//    }
-//
-//    fun read() : RealmResults<Memo> {
-//        return mRealm.where(Memo::class.java).findAll()
-//    }
-//
-//    fun update(id: String, memo: String) {
-//        mRealm.executeTransaction {
-//            var book = mRealm.where(Memo::class.java).equalTo("id",id).findFirst()
-//            book?.memo = memo
-//            if (memo != 0.toString()) {
-//                book?.memo = memo
-//            }
-//        }
-//    }
-//
-//    fun delete(id:String) {
-//        mRealm.executeTransaction {
-//            var book = mRealm.where(Memo::class.java).equalTo("id",id).findAll()
-//            book.deleteFromRealm(0)
-//        }
-//    }
-//    private fun checkCameraPermission() = PackageManager.PERMISSION_GRANTED ==
-//            ContextCompat.checkSelfPermission(requireContext(),android.Manifest.permission.CAMERA)
-//
-//    private fun takePicture() {
-//        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-//        startActivityForResult(cameraIntent, CAMERA_REQUEST_CODE)
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        onActivityResult(requestCode, resultCode, data)
-//        if (requestCode == CAMERA_REQUEST_CODE) {
-//
-//        }
-//    }
 }
