@@ -1,6 +1,5 @@
 package com.reo.running.runnershigh.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.os.DropBoxManager
 import android.view.*
