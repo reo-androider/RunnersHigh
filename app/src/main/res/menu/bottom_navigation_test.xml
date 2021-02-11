@@ -4,19 +4,20 @@
     <item
         android:id="@+id/navi_run"
         android:icon="@drawable/ic_running"
-        android:title="RUN" />
+        android:iconTint="@color/teal_200"
+        android:title="Run" />
     <item
         android:id="@+id/navi_high"
-        android:icon="@drawable/ic_height"
-        android:title="HIGH"/>
+        android:icon="@drawable/ic_road"
+        android:title="Distance"/>
     <item
         android:id="@+id/navi_calorie"
         android:icon="@drawable/ic_calorie2"
-        android:title="CALORIE"/>
+        android:title="Calorie"/>
 
     <item
         android:id="@+id/navi_setting"
         android:icon="@drawable/ic_profile"
-        android:title="PROFILE"/>
+        android:title="Profile"/>
 
 </menu>

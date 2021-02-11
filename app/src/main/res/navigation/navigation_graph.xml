@@ -17,7 +17,7 @@
     </fragment>
 
     <fragment android:id="@+id/navi_high"
-        android:name="com.reo.running.runnershigh.fragments.Fragment2"
+        android:name="com.reo.running.runnershigh.fragments.FragmentDistance"
         android:label="Fragment2"/>
 
     <fragment android:id="@+id/navi_calorie"
@@ -25,7 +25,7 @@
         android:label="Fragment3"/>
 
     <fragment android:id="@+id/navi_setting"
-        android:name="com.reo.running.runnershigh.fragments.Fragment3"
+        android:name="com.reo.running.runnershigh.fragments.FragmentCalorie"
         android:label="Fragment4"/>
 
     <fragment
