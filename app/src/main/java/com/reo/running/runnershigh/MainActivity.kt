@@ -3,20 +3,16 @@ package com.reo.running.runnershigh
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MotionEvent
-import android.view.View
-import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.reo.running.runnershigh.databinding.ActivityMainBinding
-import com.reo.running.runnershigh.databinding.Fragment2Binding
-import com.reo.running.runnershigh.fragments.Fragment2
-import java.util.zip.Inflater
+import com.reo.running.runnershigh.fragments.FragmentDistance
 
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding:ActivityMainBinding
-    val fragment = Fragment2()
+    val fragment = FragmentDistance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
