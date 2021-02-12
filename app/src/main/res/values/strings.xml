@@ -27,7 +27,7 @@
     <string name="startNav">Tap under button</string>
     <string name="startNav2">and run</string>
     <string name="objective">目標</string>
-    <string name="objective_sample">(例)週20キロ走る</string>
+    <string name="objective_sample">未登録</string>
 
     <string name="count_down5">5</string>
     <string name="count_down4">4</string>
@@ -72,7 +72,6 @@
     <string name="G">G</string>
     <string name="P">P</string>
     <string name="S2">S</string>
-    <string name="course"></string>
 
     <string name="perfectText">最高</string>
     <string name="goodText">良い感じ</string>
@@ -88,15 +87,15 @@
     <string name="calorie_title">消費カロリーの記録</string>
 
     <string name="profile_name">あなたの名前</string>
-    <string name="login_day">ログインした日</string>
+    <string name="login_day">非ログイン</string>
 
     <string name="profile_distance_level">距離レベル</string>
-    <string name="profile_distance_metaphor">(例)縦にすると酸素が地上の大体半分になるくらいな距離</string>
+    <string name="profile_distance_metaphor">縦にすると酸素が地上の大体半分になるくらいな距離</string>
     <string name="profile_level_num">(例)Lv.6</string>
 
-    <string name="profile_calorie_level">カロリーレベル</string>
+    <string name="profile_calorie_level">消費カロリーレベル</string>
     <string name="profile_calorie_level_num">(例)Lv.6</string>
-    <string name="profile_calorie_metaphor">(例)ビックマックとコーラSサイズな消費カロリー</string>
+    <string name="profile_calorie_metaphor">ビックマックとコーラSサイズな消費カロリー</string>
 
     <string name="profile">profile</string>
     <string name="profile_photo">写真を変更</string>
