@@ -106,6 +106,7 @@
     <string name="weight_num">60kg</string>
     <string name="profile_marker">マーカー</string>
     <string name="profile_delete">データを削除する</string>
+    <string name="profile_marker_image">ランニング中のマーカーの画像を指定</string>
 
 
 </resources>
