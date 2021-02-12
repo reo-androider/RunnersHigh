@@ -13,18 +13,24 @@
         tools:layout="@layout/fragment_run"/>
 
     <fragment
-        android:id="@+id/fragment2"
+        android:id="@+id/fragmentGraph"
         android:name="com.reo.running.runnershigh.fragments.FragmentDistance"
         android:label="fragment_2"
         tools:layout="@layout/fragment_distance" />
+
+<!--    <fragment-->
+<!--        android:id="@+id/fragment2"-->
+<!--        android:name="com.reo.running.runnershigh.fragments.FragmentDistance"-->
+<!--        android:label="fragment_2"-->
+<!--        tools:layout="@layout/fragment_distance" />-->
+<!--    <fragment-->
+<!--        android:id="@+id/fragment3"-->
+<!--        android:name="com.reo.running.runnershigh.fragments.FragmentCalorie"-->
+<!--        android:label="fragment_3"-->
+<!--        tools:layout="@layout/fragment_profile" />-->
     <fragment
         android:id="@+id/fragment3"
-        android:name="com.reo.running.runnershigh.fragments.FragmentCalorie"
+        android:name="com.reo.running.runnershigh.fragments.FragmentProfile"
         android:label="fragment_3"
-        tools:layout="@layout/fragment_calorie" />
-    <fragment
-        android:id="@+id/fragment4"
-        android:name="com.reo.running.runnershigh.fragments.Fragment4"
-        android:label="fragment_4"
         tools:layout="@layout/fragment_profile" />
 </navigation>

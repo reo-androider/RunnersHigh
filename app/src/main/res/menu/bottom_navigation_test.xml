@@ -5,19 +5,16 @@
         android:id="@+id/navi_run"
         android:icon="@drawable/ic_running"
         android:iconTint="@color/teal_200"
-        android:title="Run" />
+        android:title="@string/navi_run" />
+
     <item
-        android:id="@+id/navi_high"
-        android:icon="@drawable/ic_road"
-        android:title="Distance"/>
-    <item
-        android:id="@+id/navi_calorie"
-        android:icon="@drawable/ic_calorie2"
-        android:title="Calorie"/>
+        android:id="@+id/navi_graph"
+        android:icon="@drawable/ic_graph"
+        android:title="@string/navi_graph"/>
 
     <item
         android:id="@+id/navi_setting"
         android:icon="@drawable/ic_profile"
-        android:title="Profile"/>
+        android:title="@string/navi_Profile"/>
 
 </menu>

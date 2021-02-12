@@ -16,16 +16,16 @@
             app:destination="@id/fragmentResult" />
     </fragment>
 
-    <fragment android:id="@+id/navi_high"
+    <fragment android:id="@+id/navi_graph"
         android:name="com.reo.running.runnershigh.fragments.FragmentDistance"
-        android:label="Fragment2"/>
+        android:label="FragmentDistance"/>
 
-    <fragment android:id="@+id/navi_calorie"
-        android:name="com.reo.running.runnershigh.fragments.Fragment4"
-        android:label="Fragment3"/>
+<!--    <fragment android:id="@+id/navi_calorie"-->
+<!--        android:name="com.reo.running.runnershigh.fragments.FragmentCalorie"-->
+<!--        android:label="Fragment3"/>-->
 
     <fragment android:id="@+id/navi_setting"
-        android:name="com.reo.running.runnershigh.fragments.FragmentCalorie"
+        android:name="com.reo.running.runnershigh.fragments.FragmentProfile"
         android:label="Fragment4"/>
 
     <fragment

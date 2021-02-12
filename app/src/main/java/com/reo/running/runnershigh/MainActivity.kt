@@ -11,7 +11,7 @@ import com.reo.running.runnershigh.fragments.FragmentDistance
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var binding:ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     val fragment = FragmentDistance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
