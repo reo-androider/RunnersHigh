@@ -1,13 +1,10 @@
 package com.reo.running.runnershigh.fragments
 
-import android.database.sqlite.SQLiteBindOrColumnIndexOutOfRangeException
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.reo.running.runnershigh.R
-import com.reo.running.runnershigh.databinding.FragmentCalorieBinding
 import com.reo.running.runnershigh.databinding.FragmentProfileBinding
 
 class FragmentProfile : Fragment(){
