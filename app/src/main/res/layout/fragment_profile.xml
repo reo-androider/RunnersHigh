@@ -87,11 +87,10 @@
                         android:layout_height="30dp"
                         android:src="@drawable/ic_login"
                         app:tint="@color/black"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="355dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="15dp"
                         android:contentDescription="@string/profile"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
                     <TextView

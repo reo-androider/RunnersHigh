@@ -719,7 +719,6 @@ class FragmentRun : Fragment() {
     }
 
     private fun openCamera() {
-        // TODO
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
