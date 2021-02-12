@@ -76,8 +76,8 @@
                     android:layout_height="30dp"
                     android:src="@drawable/ic_login"
                     app:tint="@color/black"
-                    android:layout_marginTop="225dp"
-                    android:layout_marginStart="250dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="355dp"
                     android:contentDescription="@string/profile" />
 
                 <TextView
