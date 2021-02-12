@@ -26,7 +26,8 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/profile" />
+        android:contentDescription="@string/profile"
+        app:tint="@color/black" />
 
 
     <ScrollView
@@ -66,7 +67,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/profile_name"
                     android:textSize="30sp"
-                    android:textColor="@color/normal"
+                    android:textColor="@color/normal2"
                     android:layout_marginTop="100dp"
                     android:layout_gravity="center_horizontal"/>
 
@@ -74,10 +75,10 @@
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:src="@drawable/ic_login"
-                    app:tint="@color/normal"
+                    app:tint="@color/black"
                     android:layout_marginTop="225dp"
                     android:layout_marginStart="250dp"
-                    android:contentDescription="@string/profile"/>
+                    android:contentDescription="@string/profile" />
 
                 <TextView
                     android:id="@+id/loginDay"
@@ -129,7 +130,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_question"
-                    app:tint="@color/normal"
+                    app:tint="@color/black"
                     android:layout_marginTop="10dp"
                     android:layout_marginStart="365dp"
                     android:contentDescription="@string/profile"/>
@@ -171,7 +172,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_question"
-                    app:tint="@color/normal"
+                    app:tint="@color/black"
                     android:layout_marginTop="10dp"
                     android:layout_marginStart="365dp"
                     android:contentDescription="@string/profile"/>
