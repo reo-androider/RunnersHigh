@@ -8,6 +8,7 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="wall_white">#f5f5f5</color>
     <color name="pink">#ffc9d2</color>
     <color name="orange">#ff7f50</color>
     <color name="deeppink">#ff1493</color>
@@ -16,6 +17,7 @@
     <color name="beige">#f5f5dc</color>
     <color name="purple">#800080</color>
     <color name="yellow">#FFFF00</color>
+    <color name="normal1">#EEEEEE</color>
     <color name="normal">#9E9E9E</color>
     <color name="normal2">#757575</color>
     <color name="gray">#616161</color>
@@ -29,5 +31,6 @@
     <color name="tooBad">#f44336</color>
     <color name="green">#4CAF50</color>
     <color name="brown">#795548</color>
+
 
 </resources>
