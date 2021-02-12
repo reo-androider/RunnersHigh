@@ -70,6 +70,15 @@
                     android:layout_marginTop="100dp"
                     android:layout_gravity="center_horizontal"/>
 
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:src="@drawable/ic_login"
+                    app:tint="@color/normal"
+                    android:layout_marginTop="225dp"
+                    android:layout_marginStart="250dp"
+                    android:contentDescription="@string/profile"/>
+
                 <TextView
                     android:id="@+id/loginDay"
                     android:layout_width="wrap_content"
