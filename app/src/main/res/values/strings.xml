@@ -99,6 +99,13 @@
     <string name="profile_calorie_metaphor">(例)ビックマックとコーラSサイズな消費カロリー</string>
 
     <string name="profile">profile</string>
+    <string name="profile_photo">写真を変更</string>
+    <string name="profile_family_name">姓</string>
+    <string name="profile_first_name">名</string>
+    <string name="profile_weight">体重(kg)</string>
+    <string name="weight_num">60kg</string>
+    <string name="profile_marker">マーカー</string>
+    <string name="profile_delete">データを削除する</string>
 
 
 </resources>
