@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
 import kotlinx.coroutines.Dispatchers
@@ -25,10 +27,7 @@ class FragmentProfileSetting : Fragment() {
     private lateinit var binding:FragmentProfileSettingBinding
     private lateinit var database:DatabaseReference
     private var profilePhoto:Bitmap? = null
-    private var firstName:String? = null
-    private var familyName:String? = null
-    private var objective:String? = null
-    private var weight:Float? = null
+    private val readDao = MyApplication.db.recordDao()
 
     companion object {
         val PERMISSION_CODE = 1
@@ -40,14 +39,21 @@ class FragmentProfileSetting : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         binding.run {
-            firstName = editFirstName.text.toString()
-            familyName = editFamilyName.text.toString()
-            objective = editObjective.text.toString()
-            val profileData = ProfileData(profilePhoto,firstName,familyName,objective,weight)
+            lifecycleScope.launch(Dispatchers.IO) {
+                Log.d("ROOM","${readDao.getAll()}")
+            }
 
             profileBack.setOnClickListener {
+
+                var firstName = editFirstName.text.toString()
+                var familyName = editFamilyName.text.toString()
+                val objective = editObjective.text.toString()
+                val weight = editWeight.text.toString()
+                if (firstName == "" && familyName == "") {
+                    firstName = "あなたの名前"
+                }
+                val profileData = ProfileData(profilePhoto,firstName,familyName,objective,weight)
                 val databaseRef = Firebase.database.reference
                 databaseRef.setValue(profileData)
                 findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
