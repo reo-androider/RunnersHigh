@@ -100,13 +100,6 @@ class FragmentRun : Fragment() {
                                 Manifest.permission.ACCESS_COARSE_LOCATION
                             ) != PackageManager.PERMISSION_GRANTED
                         ) {
-                            // TODO: Consider calling
-                            //    ActivityCompat#requestPermissions
-                            // here to request the missing permissions, and then overriding
-                            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                            //                                          int[] grantResults)
-                            // to handle the case where the user grants the permission. See the documentation
-                            // for ActivityCompat#requestPermissions for more details.
                             it.isMyLocationEnabled = true
                         }
                     }
@@ -224,7 +217,6 @@ class FragmentRun : Fragment() {
             }
         }
 
-        // 位置情報を更新
         context?.run {
             if (ActivityCompat.checkSelfPermission(
                     this,
@@ -659,7 +651,6 @@ class FragmentRun : Fragment() {
             0f,
             400f,
             Animation.RELATIVE_TO_SELF,
-            // 0に近づけると右に移動される
             0.255f,
             Animation.RELATIVE_TO_SELF,
             0.55f

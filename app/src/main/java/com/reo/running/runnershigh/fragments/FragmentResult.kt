@@ -64,12 +64,6 @@ class FragmentResult : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch(Dispatchers.IO) {
-
-            Log.d("delete", "${readDao.getAll()}")
-            Log.d("delete", "${readDao.getAll().lastOrNull()}")
-            readDao.getAll().lastOrNull()?.time?.let { Log.d("delete", it) }
-            Log.d("delete", "${readDao.getAll().lastOrNull()?.distance}")
-            Log.d("delete", "${readDao.getAll().lastOrNull()?.calorie}")
             val record = readDao.getAll()
 
             withContext(Dispatchers.Main) {
