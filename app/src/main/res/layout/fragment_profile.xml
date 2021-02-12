@@ -213,7 +213,7 @@
 
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="20dp"
+                android:layout_height="10dp"
                 android:backgroundTint="@color/wall_white"/>
 
         </LinearLayout>
