@@ -20,6 +20,10 @@ buildscript {
 
         //Realm
         classpath "io.realm:realm-gradle-plugin:6.0.2"
+
+        //Glide
+        classpath "com.android.tools.build:gradle:4.1.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
