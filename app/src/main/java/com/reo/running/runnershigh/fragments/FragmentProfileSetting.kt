@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,7 +80,17 @@ class FragmentProfileSetting : Fragment() {
                 override fun onCancelled(error: DatabaseError) {}
             })
 
-            profileBack.setOnClickListener {
+            val databaseReferenceWeight = Firebase.database.getReference("weight")
+            databaseReferenceWeight.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val weight = snapshot.value.toString()
+                    Log.d("Weight","$weight")
+                    editWeight.setText(weight)
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
+
+                profileBack.setOnClickListener {
                 val alertDialog = AlertDialog.Builder(requireContext())
                     .setIcon(R.drawable.ic_running)
                     .setTitle("記録を保存しますか？")
