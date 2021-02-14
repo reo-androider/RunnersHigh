@@ -1,52 +1,34 @@
 package com.reo.running.runnershigh.fragments
 
-import android.Manifest
 import android.app.Activity
-import android.content.Context
+import android.app.AlertDialog
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.drawable.BitmapDrawable
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat.checkSelfPermission
-import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
-import com.google.firebase.internal.InternalTokenProvider
 import com.google.firebase.ktx.Firebase
-import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
-import com.reo.running.runnershigh.Resource
 import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.IOException
-import java.net.URI
 
 class FragmentProfileSetting : Fragment() {
 
     private lateinit var binding:FragmentProfileSettingBinding
-    private var profilePhoto:Bitmap? = null
-    private val readDao = MyApplication.db.recordDao()
-    private var takePhoto:Bitmap? = null
     private var myUri = ""
-    var uri:Uri? = null
-    var input = false //カメラロールから写真を撮ったかどうかの確認
-
+    private var uri:Uri? = null
+    private var input = false //カメラロールから写真を撮ったかどうかの確認
+    private var firstName = ""
+    private var familyName = ""
+    private var objective = ""
+    private var weight = ""
     companion object {
-        val PERMISSION_CODE = 1
         val READ_REQUEST_CODE = 2
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -57,20 +39,83 @@ class FragmentProfileSetting : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-            profileBack.setOnClickListener {
-                var firstName = editFirstName.text.toString()
-                var familyName = editFamilyName.text.toString()
-                val objective = editObjective.text.toString()
-                val weight = editWeight.text.toString()
-                if (firstName == "" && familyName == "") {
-                    firstName = "あなたの名前"
+            val databaseRefPhoto = Firebase.database.getReference("photo")
+            databaseRefPhoto.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.value != null) {
+                        myUri = snapshot.value.toString()
+                        // TODO
+//                            profileImage.setImageURI(Uri.parse(fireStore.toString()))
+                    }
                 }
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
 
-                //TODO
-                val databaseRef = Firebase.database.getReference("user")
-                databaseRef.setValue(myUri)
+            val databaseRefFirstName = Firebase.database.getReference("firstName")
+            databaseRefFirstName.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val fireStore = snapshot.value.toString()
+                    editFirstName.setText(fireStore)
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
 
-                findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
+            val databaseRefFamily = Firebase.database.getReference("familyName")
+            databaseRefFamily.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val fireStore = snapshot.value.toString()
+                    editFamilyName.setText(fireStore)
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
+
+            val databaseRefObjective = Firebase.database.getReference("objective")
+            databaseRefObjective.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val fireStore = snapshot.value.toString()
+                    editObjective.setText(fireStore)
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
+
+            profileBack.setOnClickListener {
+                val alertDialog = AlertDialog.Builder(requireContext())
+                    .setIcon(R.drawable.ic_running)
+                    .setTitle("記録を保存しますか？")
+                    .setPositiveButton("Yes") { _, _ ->
+                        firstName = editFirstName.text.toString()
+                        familyName = editFamilyName.text.toString()
+                        objective = editObjective.text.toString()
+                        weight = editWeight.text.toString()
+                        if (firstName == "" && familyName == "") {
+                            familyName = "あなたの"
+                            firstName = "名前"
+                        }
+
+                        if (objective == "") objective = "未登録"
+
+                        val profileData =
+                            ProfileData(myUri, firstName, familyName, objective, weight)
+
+                        val databaseRefPhoto = Firebase.database.getReference("photo")
+                        val databaseRefFirstName = Firebase.database.getReference("firstName")
+                        val databaseRefFamily = Firebase.database.getReference("familyName")
+                        val databaseRefObjective = Firebase.database.getReference("objective")
+                        val databaseRefWeight = Firebase.database.getReference("weight")
+
+                        databaseRefPhoto.setValue(myUri)
+                        databaseRefFirstName.setValue(firstName)
+                        databaseRefFamily.setValue(familyName)
+                        databaseRefObjective.setValue(objective)
+                        databaseRefWeight.setValue(weight)
+
+                        findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
+                    }
+                    .setNegativeButton("No") { _, _ ->
+                        findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
+                    }
+                    .show()
             }
 
             profileImage.setOnClickListener {
@@ -89,7 +134,6 @@ class FragmentProfileSetting : Fragment() {
                 uri = data.data
                 myUri = uri.toString()
                 binding.profileImage.setImageURI(uri)
-
             } else {
                 input = false
             }

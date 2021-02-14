@@ -86,7 +86,8 @@
     <string name="heigh_title">走行距離の記録</string>
     <string name="calorie_title">消費カロリーの記録</string>
 
-    <string name="profile_name">あなたの名前</string>
+    <string name="profile_name">ユーザー</string>
+    <string name="profile_name2">太郎</string>
     <string name="login_day">非ログイン</string>
 
     <string name="profile_distance_level">距離レベル</string>
