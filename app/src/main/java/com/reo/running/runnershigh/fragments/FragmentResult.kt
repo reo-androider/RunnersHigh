@@ -827,11 +827,9 @@ class FragmentResult : Fragment() {
             dialog.setPositiveButton("完了") { _, _->
                 draft = myEdit.text.toString()
                 binding.memo.text = draft
-
             }
 
             dialog.setNegativeButton("戻る") { _, _ ->
-
             }
             dialog.show()
         }

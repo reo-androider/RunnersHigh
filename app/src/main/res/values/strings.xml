@@ -88,6 +88,7 @@
 
     <string name="profile_name">ユーザー</string>
     <string name="profile_name2">太郎</string>
+    <string name="login_day_text">ログイン日</string>
     <string name="login_day">非ログイン</string>
 
     <string name="profile_distance_level">距離レベル</string>
