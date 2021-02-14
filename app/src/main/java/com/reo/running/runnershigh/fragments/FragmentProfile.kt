@@ -1,7 +1,9 @@
 package com.reo.running.runnershigh.fragments
 
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.icu.text.Normalizer2
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -45,21 +47,46 @@ class FragmentProfile : Fragment() {
                 findNavController().navigate(R.id.action_navi_setting_to_fragmentProfileSetting)
             }
 
-                val databaseRef = Firebase.database.getReference("user")
-                databaseRef.addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.value != null) {
-                            val fireStore = snapshot.value
-                            Log.d("Photo", "$fireStore")
-                            myUri = Uri.parse(fireStore.toString())
-                            profileImage.setImageURI(myUri)
-                        }
+            val databaseRefPhoto = Firebase.database.getReference("photo")
+            databaseRefPhoto.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.value != null) {
+                        val fireStore = snapshot.value
+                    // TODO
+//                            profileImage.setImageURI(Uri.parse(fireStore.toString()))
                     }
+                }
+                override fun onCancelled(error: DatabaseError) {
+                }
+            })
 
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
-                })
+            val databaseRefFirstName = Firebase.database.getReference("firstName")
+            databaseRefFirstName.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val fireStore = snapshot.value
+                    profileFirstName.text = "$fireStore"
+                    profileFirstName.setTextColor(resources.getColor(R.color.normal2))
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
+
+            val databaseRefFamily = Firebase.database.getReference("familyName")
+            databaseRefFamily.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val fireStore = snapshot.value
+                    profileFamilyName.text = "$fireStore"
+                }
+                override fun onCancelled(error: DatabaseError) {}
+
+            })
+            val databaseRefObjective = Firebase.database.getReference("objective")
+            databaseRefObjective.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val fireStore = snapshot.value
+                    objectiveText.text = "$fireStore"
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
         }
     }
 }

@@ -24,6 +24,11 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentRunBinding
@@ -76,6 +81,18 @@ class FragmentRun : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.mapView.onCreate(savedInstanceState)
         binding.run {
+            val databaseRefWeight = Firebase.database.getReference("weight")
+            databaseRefWeight.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val myWeight = snapshot.value
+                    if (myWeight.toString() != "") weight = myWeight.toString().toDouble()
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
             GlobalScope.launch(Dispatchers.Main) {
                 val waveAnimation = TranslateAnimation(
                     1f,
