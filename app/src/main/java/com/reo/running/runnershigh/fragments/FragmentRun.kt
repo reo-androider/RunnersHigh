@@ -47,7 +47,7 @@ class FragmentRun : Fragment() {
     var results = FloatArray(1)
     val zoomValue = 20.0f
     var gpsAdjust = 10
-    var weight = 57.0
+    var weight = 60.0
     var kmAmount: Double = 0.0
     var calorieAmount: Int = 0
     var recordStop = true
@@ -82,6 +82,7 @@ class FragmentRun : Fragment() {
         binding.mapView.onCreate(savedInstanceState)
         binding.run {
             val databaseRefWeight = Firebase.database.getReference("weight")
+            databaseRefWeight.setValue("")
             databaseRefWeight.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val myWeight = snapshot.value
