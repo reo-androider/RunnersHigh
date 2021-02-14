@@ -2,8 +2,9 @@ package com.reo.running.runnershigh.fragments
 
 import android.Manifest
 import android.app.Activity
-import android.content.ContentResolver
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
@@ -17,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.PermissionChecker
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -36,12 +38,12 @@ import java.net.URI
 class FragmentProfileSetting : Fragment() {
 
     private lateinit var binding:FragmentProfileSettingBinding
-    private lateinit var database:DatabaseReference
     private var profilePhoto:Bitmap? = null
     private val readDao = MyApplication.db.recordDao()
     private var takePhoto:Bitmap? = null
-    private var contentResolver: ContentResolver? = null
-    var uri:String = ""
+    private var myUri = ""
+    var uri:Uri? = null
+    var input = false //カメラロールから写真を撮ったかどうかの確認
 
     companion object {
         val PERMISSION_CODE = 1
@@ -55,17 +57,7 @@ class FragmentProfileSetting : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-            lifecycleScope.launch(Dispatchers.IO) {
-                Log.d("ROOM","${readDao.getAll()}")
-                takePhoto = readDao.getAll().last().bitmap
-                val d:Drawable = BitmapDrawable(resources,takePhoto)
-                val sample = takePhoto.toString()
-                Log.d("ROOM","$takePhoto")
-                Log.d("ROOM2","$sample")
-            }
-
             profileBack.setOnClickListener {
-
                 var firstName = editFirstName.text.toString()
                 var familyName = editFamilyName.text.toString()
                 val objective = editObjective.text.toString()
@@ -74,34 +66,32 @@ class FragmentProfileSetting : Fragment() {
                     firstName = "あなたの名前"
                 }
 
-                val profileData = ProfileData(uri,firstName,familyName,objective,weight)
-                val databaseRef = Firebase.database.reference
-                databaseRef.setValue(profileData)
+                //TODO
+                val databaseRef = Firebase.database.getReference("user")
+                databaseRef.setValue(myUri)
+
                 findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
             }
 
             profileImage.setOnClickListener {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
-
                 intent.setType("image/*")
                 startActivityForResult(intent,READ_REQUEST_CODE)
             }
-
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
-                uri = data.data.toString()
-                Log.d("photo","$uri")
-                try {
-//                    profilePhoto = MediaStore.Images.Media.getBitmap(context?.contentResolver,uri)
-                    Log.d("photo","$profilePhoto")
-                }catch (e:IOException) {
-                    e.printStackTrace()
-                }
+                input = true
+                uri = data.data
+                myUri = uri.toString()
+                binding.profileImage.setImageURI(uri)
+
+            } else {
+                input = false
             }
         }
     }
