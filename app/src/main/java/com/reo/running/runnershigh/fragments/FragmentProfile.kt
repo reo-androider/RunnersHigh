@@ -31,6 +31,7 @@ import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentProfileBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -48,8 +49,10 @@ class FragmentProfile : Fragment() {
     private val isSignIn:Boolean
         get() = auth.currentUser != null
     private val runDB = MyApplication.db.recordDao2()
-    private var lastId = 0
-    private var i = 0 //カウント変数用
+    private var lastId:Int = 0
+    private var i:Int? = 0  //カウント変数用
+    private var totalDistance = 0.0
+    private var totalCalorie = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -70,9 +73,38 @@ class FragmentProfile : Fragment() {
             if (user != null) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val data = runDB.getAll2()
-                    lastId = (data.lastOrNull()?.id)?.minus(1) ?:
+                    lastId = data.last().id - 1
                     Log.d("lastID","$lastId")
-                    for (i in 0..lastId) {}
+                    if (lastId != null) {
+                        for (i in 0..lastId) {
+                            totalDistance += data[i].distance
+                            totalCalorie += data[i].calorie
+                        }
+                    }
+                    withContext(Dispatchers.Main) {
+                        distanceLevel.text = "Lv.${totalDistance / 1000}"
+                        when{
+                            totalDistance < 5 -> {
+                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_level0))
+                                distanceLevelText.text = "${R.string.profile_distance_num_metaphor_0}"
+                            }
+
+                            totalDistance < 10 -> {
+                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_5km))
+                                distanceLevelText.text = "${R.string.profile_distance_num_metaphor_5}"
+                            }
+
+                            totalDistance < 100 -> {
+                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_plane))
+                                distanceLevelText.text = "${R.string.profile_distance_num_metaphor_50}"
+                            }
+
+                            totalDistance > 100 -> {
+                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_space_human))
+                                distanceLevelText.text = "${R.string.profile_distance_num_metaphor_100}"
+                            }
+                        }
+                    }
                 }
                 Toast.makeText(requireContext(),"Loginされています",Toast.LENGTH_LONG).show()
                 databaseReferenceLogin.setValue(login)
