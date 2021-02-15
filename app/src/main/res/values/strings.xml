@@ -92,12 +92,52 @@
     <string name="login_day">非ログイン</string>
 
     <string name="profile_distance_level">距離レベル</string>
-    <string name="profile_distance_metaphor">縦にすると酸素が地上の大体半分になるくらいな距離</string>
-    <string name="profile_level_num">Lv.1</string>
+    <string name="profile_level_num">Lv.0</string>
+    <string name="profile_distance_num_metaphor_0">ここから積み上げていくぞー！</string>
+    <string name="profile_distance_num_metaphor_1"></string>
+    <string name="profile_distance_num_metaphor_2"></string>
+    <string name="profile_distance_num_metaphor_3"></string>
+    <string name="profile_distance_num_metaphor_4"></string>
+    <string name="profile_distance_num_metaphor_5">縦にすると酸素が地上の大体半分になるくらいな距離</string>
+    <string name="profile_distance_num_metaphor_10">縦にするとエベレスト越えちゃうくらいな距離</string>
+    <string name="profile_distance_num_metaphor_20"></string>
+    <string name="profile_distance_num_metaphor_30"></string>
+    <string name="profile_distance_num_metaphor_40"></string>
+    <string name="profile_distance_num_metaphor_50"></string>
+    <string name="profile_distance_num_metaphor_100">縦にすると宇宙突入するくらいな距離</string>
+    <string name="profile_distance_num_metaphor_200"></string>
+    <string name="profile_distance_num_metaphor_300"></string>
+    <string name="profile_distance_metaphor_400">縦にするとはやぶさに届くくらいな</string>
+    <string name="profile_distance_metaphor_500">東京から大阪まで走っちゃった</string>
+    <string name="profile_distance_metaphor_600"></string>
+    <string name="profile_distance_metaphor_700"></string>
+    <string name="profile_distance_metaphor_850">東京から札幌まで走っちゃう</string>
+    <string name="profile_distance_metaphor_900"></string>
+    <string name="profile_distance_metaphor_2000">東京から北京まで走れる</string>
+    <string name="profile_distance_metaphor_12000">日本一周！！！！</string>
+    <string name="profile_distance_metaphor_1000"></string>
+
 
     <string name="profile_calorie_level">消費カロリーレベル</string>
-    <string name="profile_calorie_level_num">Lv.1</string>
-    <string name="profile_calorie_metaphor">ビックマックとコーラSサイズな消費カロリー</string>
+    <string name="profile_calorie_level_num">Lv.0</string>
+    <string name="profile_calorie_metaphor_1">ここから積み上げるぞー</string>
+    <string name="profile_calorie_metaphor_160">おにぎり一個分</string>
+    <string name="profile_calorie_metaphor_2"></string>
+    <string name="profile_calorie_metaphor_3">ビックマック並</string>
+    <string name="profile_calorie_metaphor_4">ショートケーキ並</string>
+    <string name="profile_calorie_metaphor_5"></string>
+    <string name="profile_calorie_metaphor_6"></string>
+    <string name="profile_calorie_metaphor_7"></string>
+    <string name="profile_calorie_metaphor_8"></string>
+    <string name="profile_calorie_metaphor_9"></string>
+    <string name="profile_calorie_metaphor_10">カツカレー</string>
+    <string name="profile_calorie_metaphor_20">某ましましラーメン並</string>
+    <string name="profile_calorie_metaphor_"></string>
+    <string name="profile_calorie_metaphor_48">おにぎり300個分</string>
+    <string name="profile_calorie_metaphor_50"></string>
+    <string name="profile_calorie_metaphor_72">脂肪1キロ君</string>
+    <string name="profile_calorie_metaphor_720">脂肪10キロ君</string>
+
 
     <string name="profile">profile</string>
     <string name="profile_photo">写真を変更</string>

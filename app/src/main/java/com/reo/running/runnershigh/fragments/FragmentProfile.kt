@@ -66,18 +66,29 @@ class FragmentProfile : Fragment() {
                 databaseReferenceLogin.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val loginStatus = snapshot.value.toString()
-                            loginImage.visibility = View.GONE
-                            logoutImage.visibility = View.VISIBLE
-                            loginText.visibility = View.VISIBLE
-                            databaseReferenceLoginDay.addValueEventListener(object : ValueEventListener {
-                                override fun onDataChange(snapshot: DataSnapshot) {
-                                    val day = snapshot.value.toString()
-                                    loginDay.text = day
-                                }
-                                override fun onCancelled(error: DatabaseError) {}
-                            })
+                        loginImage.visibility = View.GONE
+                        logoutImage.visibility = View.VISIBLE
+                        loginText.visibility = View.VISIBLE
+                        databaseReferenceLoginDay.addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val day = snapshot.value.toString()
+                                loginDay.text = day
+                            }
+                            override fun onCancelled(error: DatabaseError) {}
+                        })
                     }
                     override fun onCancelled(error: DatabaseError) {} })
+
+                calorieLock.visibility = View.GONE
+                distanceLock.visibility = View.GONE
+
+                distanceLevel.visibility = View.VISIBLE
+                distanceLevelText.visibility = View.VISIBLE
+                distanceLevelImage.visibility = View.VISIBLE
+
+                calorieLevel.visibility = View.VISIBLE
+                calorieLevelText.visibility = View.VISIBLE
+                calorieLevelImage.visibility = View.VISIBLE
 
             } else {
                 Toast.makeText(requireContext(),"Loginされていません",Toast.LENGTH_LONG).show()

@@ -253,7 +253,7 @@
                         android:id="@+id/distance_level_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/profile_distance_metaphor"
+                        android:text="@string/profile_distance_num_metaphor_5"
                         android:textColor="@color/normal"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="170dp"
@@ -318,7 +318,7 @@
                         android:layout_height="80dp"
                         android:src="@drawable/ic_600kcal"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="80dp"
                         app:tint="@color/tooBad"
                         android:contentDescription="@string/profile"
                         app:layout_constraintTop_toTopOf="parent"
@@ -339,9 +339,10 @@
                         android:contentDescription="@string/lock" />
 
                     <TextView
+                        android:id="@+id/calorie_level_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/profile_calorie_metaphor"
+                        android:text="@string/profile_distance_num_metaphor_1"
                         android:textColor="@color/normal"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="170dp"
