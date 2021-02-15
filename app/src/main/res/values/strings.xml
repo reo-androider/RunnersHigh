@@ -93,10 +93,10 @@
 
     <string name="profile_distance_level">距離レベル</string>
     <string name="profile_distance_metaphor">縦にすると酸素が地上の大体半分になるくらいな距離</string>
-    <string name="profile_level_num">(例)Lv.6</string>
+    <string name="profile_level_num">Lv.1</string>
 
     <string name="profile_calorie_level">消費カロリーレベル</string>
-    <string name="profile_calorie_level_num">(例)Lv.6</string>
+    <string name="profile_calorie_level_num">Lv.1</string>
     <string name="profile_calorie_metaphor">ビックマックとコーラSサイズな消費カロリー</string>
 
     <string name="profile">profile</string>

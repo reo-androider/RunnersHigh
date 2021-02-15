@@ -1,6 +1,7 @@
 package com.reo.running.runnershigh.fragments
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -77,6 +78,7 @@ class FragmentProfile : Fragment() {
                             })
                     }
                     override fun onCancelled(error: DatabaseError) {} })
+
             } else {
                 Toast.makeText(requireContext(),"Loginされていません",Toast.LENGTH_LONG).show()
             }
@@ -143,6 +145,24 @@ class FragmentProfile : Fragment() {
             logoutImage.setOnClickListener {
                 AuthUI.getInstance()
                     .delete(requireContext())
+            }
+
+            explainDistanceLevel.setOnClickListener {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("距離レベルとは")
+                    .setMessage("\n" + "今まで走った距離に応じてレベルアップ" + "\n" + "※1kmごとにレベルが1上がる" +  "\n\n" +
+                            "また、その距離がどれくらい凄いかを" + "\n" + "比喩を用いてお教えします^_^" + "\n\n" +
+                    "ログインするとお楽しみ頂けます")
+                    .show()
+            }
+
+            explainCalorieLevel.setOnClickListener {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("消費カロリーレベルとは")
+                    .setMessage("\n" + "総消費カロリーに応じてレベルアップ" + "\n" + "※100kcalごとにレベルが1上がる" + "\n\n"
+                            + "また、その総消費カロリーがどれくらい" + "\n" + "凄いかを比喩を用いてお教えします^_^"
+                    + "\n\n" + "ログインするとお楽しみ頂けます")
+                    .show()
             }
         }
     }
