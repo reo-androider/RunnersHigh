@@ -7,14 +7,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -32,6 +37,10 @@ class FragmentProfile : Fragment() {
     private var login = ""
     private val databaseReferenceLogin = Firebase.database.getReference("Login")
     private val databaseReferenceLoginDay = Firebase.database.getReference("LoginDay")
+    private lateinit var auth:FirebaseAuth
+    private lateinit var googleSignInClient:GoogleSignInClient
+    private val isSignIn:Boolean
+        get() = auth.currentUser != null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,26 +55,33 @@ class FragmentProfile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-            databaseReferenceLogin.setValue(login)
-            databaseReferenceLogin.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val loginStatus = snapshot.value.toString()
-                    if (loginStatus == "true") {
-                        loginImage.visibility = View.GONE
-                        logoutImage.visibility = View.VISIBLE
-                        loginText.visibility = View.VISIBLE
-                        databaseReferenceLoginDay.addValueEventListener(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                val day = snapshot.value.toString()
-                                loginDay.text = day
-                            }
-                            override fun onCancelled(error: DatabaseError) {}
-                        })
-                    }
-                }
+            auth = FirebaseAuth.getInstance()
 
-                override fun onCancelled(error: DatabaseError) {}
-            })
+
+            val user = Firebase.auth.currentUser
+            if (user != null) {
+                Toast.makeText(requireContext(),"Loginされています",Toast.LENGTH_LONG).show()
+                databaseReferenceLogin.setValue(login)
+                databaseReferenceLogin.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val loginStatus = snapshot.value.toString()
+                            loginImage.visibility = View.GONE
+                            logoutImage.visibility = View.VISIBLE
+                            loginText.visibility = View.VISIBLE
+                            databaseReferenceLoginDay.addValueEventListener(object : ValueEventListener {
+                                override fun onDataChange(snapshot: DataSnapshot) {
+                                    val day = snapshot.value.toString()
+                                    loginDay.text = day
+                                }
+                                override fun onCancelled(error: DatabaseError) {}
+                            })
+                    }
+                    override fun onCancelled(error: DatabaseError) {} })
+            } else {
+                Toast.makeText(requireContext(),"Loginされていません",Toast.LENGTH_LONG).show()
+            }
+
+
             val databaseRefPhoto = Firebase.database.getReference("photo")
             databaseRefPhoto.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -162,6 +178,7 @@ class FragmentProfile : Fragment() {
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
+                FirebaseDatabase.getInstance().setPersistenceEnabled(true)
                 binding.loginText.visibility = View.VISIBLE
                 val day = loginDate().toString()
                 databaseReferenceLoginDay.setValue(day)
