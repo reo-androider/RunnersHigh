@@ -36,7 +36,7 @@ data class Record2(
     val colorId: String,
     val revaluationMark: String,
     val memo: String
-)
+    )
 
 @Dao
 interface RecordDao {

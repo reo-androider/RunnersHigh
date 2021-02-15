@@ -185,6 +185,21 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <ImageView
+                        android:id="@+id/space_man"
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
+                        android:src="@drawable/ic_space_human"
+                        app:tint="@color/purple"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginStart="10dp"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -199,8 +214,8 @@
 
                     <ImageView
                         android:id="@+id/explain_distance_level"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:src="@drawable/ic_question"
                         app:tint="@color/black"
                         android:layout_marginTop="10dp"
@@ -274,11 +289,15 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
+                    
+                    <ImageView
+                        android:layout_width="27dp"
+                        android:layout_height="27dp"
 
                     <ImageView
                         android:id="@+id/explain_calorie_level"
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:src="@drawable/ic_question"
                         app:tint="@color/black"
                         android:layout_marginTop="10dp"
@@ -342,7 +361,7 @@
                         android:id="@+id/calorie_level_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/profile_distance_num_metaphor_1"
+                        android:text="@string/profile_calorie_metaphor_1"
                         android:textColor="@color/normal"
                         android:layout_gravity="center_horizontal"
                         android:layout_marginTop="170dp"
