@@ -11,13 +11,14 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.reo.running.runnershigh.DistanceUnit
+import com.reo.running.runnershigh.MainActivity
 import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.databinding.FragmentDistanceBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FragmentDistance : Fragment() {
+class FragmentGraph : Fragment() {
     private lateinit var binding: FragmentDistanceBinding
     private val runDatabase = MyApplication.db.recordDao2()
     private var entries:ArrayList<Entry> = ArrayList()
@@ -33,6 +34,8 @@ class FragmentDistance : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
+            (activity as MainActivity).binding.bottomNavigation.visibility =
+                View.VISIBLE
             lifecycleScope.launch(Dispatchers.IO) {
 
                 val read = runDatabase.getAll2()

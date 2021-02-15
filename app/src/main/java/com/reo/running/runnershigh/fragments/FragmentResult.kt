@@ -25,6 +25,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.reo.running.runnershigh.*
@@ -903,6 +904,9 @@ class FragmentResult : Fragment() {
 //                withContext(Dispatchers.Main) {
 //
 //                }
+                withContext(Dispatchers.Main) {
+                    findNavController().navigate(R.id.action_fragmentResult_to_navi_graph)
+                }
             }
         }
     }

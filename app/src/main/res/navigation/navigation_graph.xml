@@ -17,7 +17,7 @@
     </fragment>
 
     <fragment android:id="@+id/navi_graph"
-        android:name="com.reo.running.runnershigh.fragments.FragmentDistance"
+        android:name="com.reo.running.runnershigh.fragments.FragmentGraph"
         android:label="FragmentDistance"/>
 
     <fragment android:id="@+id/navi_setting"
@@ -32,6 +32,9 @@
         android:id="@+id/fragmentResult"
         android:name="com.reo.running.runnershigh.fragments.FragmentResult"
         android:label="FragmentResult" >
+        <action
+            android:id="@+id/action_fragmentResult_to_navi_graph"
+            app:destination="@id/navi_graph" />
     </fragment>
     <fragment
         android:id="@+id/fragmentProfileSetting"
