@@ -5,12 +5,14 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -24,8 +26,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentProfileBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -42,6 +47,9 @@ class FragmentProfile : Fragment() {
     private lateinit var googleSignInClient:GoogleSignInClient
     private val isSignIn:Boolean
         get() = auth.currentUser != null
+    private val runDB = MyApplication.db.recordDao2()
+    private var lastId = 0
+    private var i = 0 //カウント変数用
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -58,9 +66,14 @@ class FragmentProfile : Fragment() {
         binding.run {
             auth = FirebaseAuth.getInstance()
 
-
             val user = Firebase.auth.currentUser
             if (user != null) {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    val data = runDB.getAll2()
+                    lastId = (data.lastOrNull()?.id)?.minus(1) ?:
+                    Log.d("lastID","$lastId")
+                    for (i in 0..lastId) {}
+                }
                 Toast.makeText(requireContext(),"Loginされています",Toast.LENGTH_LONG).show()
                 databaseReferenceLogin.setValue(login)
                 databaseReferenceLogin.addValueEventListener(object : ValueEventListener {

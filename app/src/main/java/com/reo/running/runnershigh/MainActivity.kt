@@ -6,13 +6,13 @@ import android.view.MotionEvent
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.reo.running.runnershigh.databinding.ActivityMainBinding
-import com.reo.running.runnershigh.fragments.FragmentDistance
+import com.reo.running.runnershigh.fragments.FragmentGraph
 
 
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-    val fragment = FragmentDistance()
+    val fragment = FragmentGraph()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
