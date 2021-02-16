@@ -16,7 +16,7 @@
         android:id="@+id/fragmentGraph"
         android:name="com.reo.running.runnershigh.fragments.FragmentGraph"
         android:label="fragment_2"
-        tools:layout="@layout/fragment_distance" />
+        tools:layout="@layout/fragment_graph" />
 
     <fragment
         android:id="@+id/fragment3"

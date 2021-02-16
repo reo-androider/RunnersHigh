@@ -1,8 +1,6 @@
 package com.reo.running.runnershigh.fragments
 
-import android.app.job.JobInfo
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -13,13 +11,13 @@ import com.github.mikephil.charting.utils.ColorTemplate
 import com.reo.running.runnershigh.DistanceUnit
 import com.reo.running.runnershigh.MainActivity
 import com.reo.running.runnershigh.MyApplication
-import com.reo.running.runnershigh.databinding.FragmentDistanceBinding
+import com.reo.running.runnershigh.databinding.FragmentGraphBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class FragmentGraph : Fragment() {
-    private lateinit var binding: FragmentDistanceBinding
+    private lateinit var binding: FragmentGraphBinding
     private val runDatabase = MyApplication.db.recordDao2()
     private var entries:ArrayList<Entry> = ArrayList()
     private var lastId = 0
@@ -27,7 +25,7 @@ class FragmentGraph : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentDistanceBinding.inflate(layoutInflater,container,false)
+        binding = FragmentGraphBinding.inflate(layoutInflater,container,false)
         return binding.root
     }
 

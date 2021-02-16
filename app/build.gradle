@@ -89,6 +89,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-database-ktx:19.6.0'
+    implementation 'com.google.firebase:firebase-storage-ktx'
 
 
     // 時間差処理の為のCoroutines
@@ -143,7 +144,4 @@ dependencies {
 
     //ImageViewを丸くするやーつ(CircleImageView)
     implementation 'de.hdodenhof:circleimageview:2.1.0'
-
-
-
 }

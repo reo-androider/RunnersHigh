@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.DataSnapshot
@@ -16,14 +17,18 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
 
 class FragmentProfileSetting : Fragment() {
 
     private lateinit var binding:FragmentProfileSettingBinding
+    lateinit var storage:FirebaseStorage
     private var myUri = ""
-    private var uri:Uri? = null
+    private lateinit var uri: Uri
     private var input = false //カメラロールから写真を撮ったかどうかの確認
     private var firstName = ""
     private var familyName = ""
@@ -40,6 +45,7 @@ class FragmentProfileSetting : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
+            storage = Firebase.storage
             val databaseRefPhoto = Firebase.database.getReference("photo")
             databaseRefPhoto.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -141,13 +147,20 @@ class FragmentProfileSetting : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
-                input = true
-                uri = data.data
+                uri = data.data!!
                 myUri = uri.toString()
                 binding.profileImage.setImageURI(uri)
-            } else {
-                input = false
-            }
+                val storage = Firebase.storage
+                val storageRef = storage.reference
+                storageRef.putFile(uri)
+//                val profileRef = storageRef.child(uri.toString())
+//                profileRef.putFile(uri)
+//                val storage = FirebaseStorage.getInstance()
+//                val storageRef = storage.getReference()
+//                val ref = storageRef.child("image/hogehoge")
+//                val uploadTask = ref.putFile(uri)
+//                uploadTask.addOnSuccessListener { Log.d("upload","success")}.addOnFailureListener {  Log.d("upload","failure")}
+            } else {}
         }
     }
 }
