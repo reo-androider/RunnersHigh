@@ -30,7 +30,6 @@ class FragmentCalorie :Fragment() {
     private var lastId = 0
     private var totalCalorie = 0.0
 
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentCalorieBinding.inflate(layoutInflater,container,false)
@@ -42,7 +41,6 @@ class FragmentCalorie :Fragment() {
         binding.run {
             lifecycleScope.launch(Dispatchers.IO) {
                 totalCalorie.let {
-
 
                     val read = runDatabase.getAll2()
                     Log.d("ROOM","${read}")

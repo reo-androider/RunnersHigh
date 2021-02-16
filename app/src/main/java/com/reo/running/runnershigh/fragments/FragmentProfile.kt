@@ -53,6 +53,8 @@ class FragmentProfile : Fragment() {
     private var i:Int? = 0  //カウント変数用
     private var totalDistance = 0.0
     private var totalCalorie = 0
+    private var alienCount = 0
+    private var fatCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -73,6 +75,7 @@ class FragmentProfile : Fragment() {
             if (user != null) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val data = runDB.getAll2()
+                    Log.d("yahooo","$data")
                     lastId = data.last().id - 1
                     Log.d("lastID","$lastId")
                     if (lastId != null) {
@@ -82,26 +85,71 @@ class FragmentProfile : Fragment() {
                         }
                     }
                     withContext(Dispatchers.Main) {
-                        distanceLevel.text = "Lv.${totalDistance / 1000}"
+                        distanceLevel.text = "Lv.${totalDistance.toInt() / 1000}"
+                        alienCount = totalDistance.toInt() / 100000
+                        spaceManCount.text = "$alienCount"
+                        calorieLevel.text = "Lv.${totalCalorie / 100}"
+                        fatCount = totalCalorie / 7200
+                        calorie1kgCount.text = "$fatCount"
                         when{
                             totalDistance < 5 -> {
                                 distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_level0))
-                                distanceLevelText.text = "${R.string.profile_distance_num_metaphor_0}"
+                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_0)}"
                             }
-
                             totalDistance < 10 -> {
                                 distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_5km))
-                                distanceLevelText.text = "${R.string.profile_distance_num_metaphor_5}"
+                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_5)}"
                             }
-
+                            totalDistance > 80 && totalDistance > 100  -> {
+                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_mountain))
+                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_10)}"
+                            }
                             totalDistance < 100 -> {
                                 distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_plane))
-                                distanceLevelText.text = "${R.string.profile_distance_num_metaphor_50}"
+                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_50)}"
                             }
-
                             totalDistance > 100 -> {
                                 distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_space_human))
-                                distanceLevelText.text = "${R.string.profile_distance_num_metaphor_100}"
+                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_100)}"
+                            }
+                        }
+
+                        when {
+                            totalCalorie /100 < 1 -> {
+                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_level0))
+                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_1)}"
+                            }
+                            totalCalorie / 100 > 1 -> {
+                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_rice_ball))
+                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_2)}"
+                            }
+                            totalCalorie / 100 > 3 -> {
+                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_hamberger))
+                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_3)}"
+                            }
+                            totalCalorie / 100 > 4 -> {
+                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_cake))
+                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_4)}"
+                            }
+                            totalCalorie / 100 > 10 -> {
+                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_curry))
+                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_10)}"
+                            }
+                            totalCalorie / 100 > 2 -> {
+                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_ramen))
+                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_20)}"
+                            }
+                            totalCalorie / 100 > 2 -> {
+                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_pizza))
+                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_30)}"
+                            }
+                            totalCalorie / 100 > 2 -> {
+                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_rice300))
+                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_48)}"
+                            }
+                            totalCalorie / 100> 72 -> {
+                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_meat))
+                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_72)}"
                             }
                         }
                     }
@@ -112,8 +160,12 @@ class FragmentProfile : Fragment() {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val loginStatus = snapshot.value.toString()
                         loginImage.visibility = View.GONE
-                        logoutImage.visibility = View.VISIBLE
+//                        logoutImage.visibility = View.VISIBLE
                         loginText.visibility = View.VISIBLE
+                        spaceMan.visibility = View.VISIBLE
+                        spaceManCount.visibility = View.VISIBLE
+                        calorie1kgImage.visibility = View.VISIBLE
+                        calorie1kgCount.visibility = view.visibility
                         databaseReferenceLoginDay.addValueEventListener(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 val day = snapshot.value.toString()
@@ -126,11 +178,9 @@ class FragmentProfile : Fragment() {
 
                 calorieLock.visibility = View.GONE
                 distanceLock.visibility = View.GONE
-
                 distanceLevel.visibility = View.VISIBLE
                 distanceLevelText.visibility = View.VISIBLE
                 distanceLevelImage.visibility = View.VISIBLE
-
                 calorieLevel.visibility = View.VISIBLE
                 calorieLevelText.visibility = View.VISIBLE
                 calorieLevelImage.visibility = View.VISIBLE
@@ -149,7 +199,6 @@ class FragmentProfile : Fragment() {
 //                            profileImage.setImageURI(Uri.parse(fireStore.toString()))
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {}
             })
 
@@ -160,7 +209,6 @@ class FragmentProfile : Fragment() {
                     profileFirstName.text = "$fireStore"
                     profileFirstName.setTextColor(resources.getColor(R.color.normal2))
                 }
-
                 override fun onCancelled(error: DatabaseError) {}
             })
 
@@ -170,9 +218,7 @@ class FragmentProfile : Fragment() {
                     val fireStore = snapshot.value
                     profileFamilyName.text = "$fireStore"
                 }
-
                 override fun onCancelled(error: DatabaseError) {}
-
             })
             val databaseRefObjective = Firebase.database.getReference("objective")
             databaseRefObjective.addValueEventListener(object : ValueEventListener {
@@ -219,6 +265,24 @@ class FragmentProfile : Fragment() {
                             + "また、その総消費カロリーがどれくらい" + "\n" + "凄いかを比喩を用いてお教えします^_^"
                     + "\n\n" + "ログインするとお楽しみ頂けます")
                     .show()
+            }
+
+            spaceMan.setOnClickListener {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("宇宙人にあった回数  ${alienCount}回")
+                    .setMessage("※100km走るごとに会えるよ\n※?回目に会うと…")
+                    .show()
+            }
+
+            calorie1kgImage.setOnClickListener {
+                AlertDialog.Builder(requireContext())
+                    .setTitle("1kgの脂肪を消費した回数   ${fatCount}回")
+                    .setMessage("※7200kcal消費ごとにカウント\n※?回目に達すると…")
+                    .show()
+            }
+
+            folderButton.setOnClickListener {
+                findNavController().navigate(R.id.action_navi_setting_to_fragmentPhoto)
             }
         }
     }
