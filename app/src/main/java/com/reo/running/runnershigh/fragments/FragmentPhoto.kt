@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.reo.running.runnershigh.MyAdapter2
 import com.reo.running.runnershigh.MyApplication
+import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.Record2
 import com.reo.running.runnershigh.databinding.FragmentPhotoBinding
 import kotlinx.coroutines.Dispatchers
@@ -40,6 +42,10 @@ class FragmentPhoto : Fragment() {
                 withContext(Dispatchers.Main) {
                     mainRecyclerView.adapter = MyAdapter2(runData)
                     mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+                    returnButton.setOnClickListener {
+                        findNavController().navigate(R.id.action_fragmentPhoto_to_navi_setting)
+                    }
                 }
             }
         }
