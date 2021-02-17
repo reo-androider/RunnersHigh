@@ -952,7 +952,6 @@ class FragmentResult : Fragment() {
                     Bitmap.createBitmap(bitmap,0,0,bitmap.width,bitmap.height,this,true)
                 }.run {
                     binding.photoEmpty.visibility = View.VISIBLE
-                    binding.resultButton.visibility = View.GONE
                     Log.d("photo","$this")
                     binding.photoEmpty.setImageBitmap(this)
                     binding.cameraImage.visibility = View.GONE
