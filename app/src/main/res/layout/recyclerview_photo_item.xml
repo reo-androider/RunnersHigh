@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/runPhoto"
@@ -11,7 +12,8 @@
         android:src="@drawable/ic_folder"
         android:layout_marginStart="10dp"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/white"/>
 
     <TextView
         android:id="@+id/run_date"
@@ -19,9 +21,62 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:textSize="20sp"
+        android:textColor="@color/normal"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/runPhoto"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:text="hogehogefugafugafunga"/>
+        android:text="hogehogehoehogehoge" />
+    <TextView
+        android:id="@+id/timeData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/run_date"
+        app:layout_constraintStart_toEndOf="@id/runPhoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="hogehoeg"
+        android:textColor="@color/normal"/>
+    <TextView
+        android:id="@+id/distanceData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kmkmkmkkkk"
+        android:textColor="@color/normal"
+        app:layout_constraintTop_toBottomOf="@id/timeData"
+        app:layout_constraintStart_toEndOf="@id/runPhoto"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
+    <TextView
+        android:id="@+id/calorieData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/distanceData"
+        app:layout_constraintStart_toEndOf="@id/runPhoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="calcalcalcal"
+        android:textColor="@color/normal"/>
+    <ImageView
+        android:id="@+id/feed_back_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:src="@drawable/ic_perfect"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="gone"/>
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/calorieData"
+        app:layout_constraintStart_toEndOf="@id/runPhoto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <TextView
+            android:id="@+id/memo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="memo"
+            android:gravity="center_horizontal"
+            android:textColor="@color/normal"
+            android:elevation="100dp"/>
+    </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
