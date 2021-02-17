@@ -281,7 +281,7 @@ class FragmentProfile : Fragment() {
                     .show()
             }
 
-            folderButton.setOnClickListener {
+            folderImage.setOnClickListener {
                 findNavController().navigate(R.id.action_navi_setting_to_fragmentPhoto)
             }
         }
