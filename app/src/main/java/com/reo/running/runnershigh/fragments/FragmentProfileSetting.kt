@@ -22,6 +22,8 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
+import java.io.IOException
+import java.util.concurrent.Executor
 
 class FragmentProfileSetting : Fragment() {
 
@@ -145,6 +147,7 @@ class FragmentProfileSetting : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("checkRe","$requestCode")
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 uri = data.data!!
@@ -152,7 +155,12 @@ class FragmentProfileSetting : Fragment() {
                 binding.profileImage.setImageURI(uri)
                 val storage = Firebase.storage
                 val storageRef = storage.reference
+                val e:IOException
                 storageRef.putFile(uri)
+                        .addOnSuccessListener {Log.d("photo","success")}
+                        .addOnFailureListener {
+                            Log.d("photo","$it")
+                        }
 //                val profileRef = storageRef.child(uri.toString())
 //                profileRef.putFile(uri)
 //                val storage = FirebaseStorage.getInstance()
