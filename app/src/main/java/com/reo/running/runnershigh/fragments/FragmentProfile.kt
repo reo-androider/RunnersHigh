@@ -154,12 +154,13 @@ class FragmentProfile : Fragment() {
                         }
                     }
                 }
-                Toast.makeText(requireContext(),"Loginされています",Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(),"Loginされています",Toast.LENGTH_SHORT).show()
                 databaseReferenceLogin.setValue(login)
                 databaseReferenceLogin.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val loginStatus = snapshot.value.toString()
                         loginImage.visibility = View.GONE
+//                      必要なので残しておく（ログアウト処理を実装するために）
 //                        logoutImage.visibility = View.VISIBLE
                         loginText.visibility = View.VISIBLE
                         spaceMan.visibility = View.VISIBLE
