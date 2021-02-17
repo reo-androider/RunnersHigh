@@ -19,7 +19,7 @@ import kotlinx.coroutines.withContext
 class FragmentPhoto : Fragment() {
     private lateinit var binding:FragmentPhotoBinding
     private val readDao = MyApplication.db.recordDao2()
-    val photo = listOf<Record2>()
+    val runData = mutableListOf<Record2>()
     private var i = 0
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPhotoBinding.inflate(layoutInflater,container,false)
@@ -30,14 +30,18 @@ class FragmentPhoto : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
             lifecycleScope.launch(Dispatchers.IO) {
-//                val db = readDao.getAll2
-
+                val db = readDao.getAll2()
+                val lastId = db.last().id - 1
+                for (i in lastId downTo 0 ) {
+                    val record2 = Record2(db[i].id,db[i].bitmap,db[i].time,db[i].distance,db[i].calorie,db[i].runData,db[i].colorId,db[i].revaluationMark,db[i].memo)
+                    //配列が完成
+                    runData.add(record2)
+                }
                 withContext(Dispatchers.Main) {
-
+                    mainRecyclerView.adapter = MyAdapter2(runData)
+                    mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                 }
             }
-//            mainRecyclerView.adapter = MyAdapter2(photo)
-            mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         }
     }
 }
