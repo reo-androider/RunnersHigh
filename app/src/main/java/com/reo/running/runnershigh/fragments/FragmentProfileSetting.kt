@@ -13,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,8 +23,13 @@ import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
+import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import okhttp3.Dispatcher
 import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.Executor
@@ -41,6 +47,9 @@ class FragmentProfileSetting : Fragment() {
     private var weight = ""
     private val db = Firebase.database
     private val dbPhoto = Firebase.database.getReference("profile")
+    private val runDB = MyApplication.db.recordDao2()
+    private var i = 0
+    private var lastId: Int = 0
     companion object {
         val READ_REQUEST_CODE = 2
     }
@@ -139,6 +148,33 @@ class FragmentProfileSetting : Fragment() {
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 intent.setType("image/*")
                 startActivityForResult(intent,READ_REQUEST_CODE)
+            }
+
+            deleteText.setOnClickListener {
+                AlertDialog.Builder(requireContext())
+                        .setMessage("データを削除しますか？")
+                        .setCancelable(false)
+                        .setPositiveButton("はい") {_,_, ->
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                delay(800)
+                                AlertDialog.Builder(requireContext())
+                                        .setMessage("後悔しましたか？")
+                                        .setCancelable(false)
+                                        .setPositiveButton("はい") {_,_->}
+                                        .setNegativeButton("いいえ") {_,_->
+                                            lifecycleScope.launch(Dispatchers.IO) {
+                                                val allData = runDB.getAll2()
+                                                lastId = allData.lastOrNull()?.id!! - 1
+                                                for (i in 0..lastId) {
+                                                    runDB.deleteRecord2(allData[i])
+                                                }
+                                            }
+                                        }
+                                        .show()
+                            }
+                        }
+                        .setNegativeButton("いいえ") {_,_, ->}
+                        .show()
             }
         }
     }
