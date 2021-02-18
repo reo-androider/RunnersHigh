@@ -19,14 +19,11 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         val navController = findNavController(R.id.nav_host_fragment)
         setupWithNavController(binding.bottomNavigation,navController)
-
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
-
         return super.onTouchEvent(event)
     }
 }

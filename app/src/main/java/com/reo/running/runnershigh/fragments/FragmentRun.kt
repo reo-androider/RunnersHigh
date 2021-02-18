@@ -64,6 +64,7 @@ class FragmentRun : Fragment() {
     private var photo:Bitmap? = null
     private var takePhoto = false
     private var  countStart = false //アニメーションが何度も再生されないように
+    private var gpsOff = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,7 +90,7 @@ class FragmentRun : Fragment() {
                     if (myWeight.toString() != "") weight = myWeight.toString().toDouble()
                 }
 
-                override fun onCancelled(error: DatabaseError) { TODO("Not yet implemented") } })
+                override fun onCancelled(error: DatabaseError) {} })
 
             GlobalScope.launch(Dispatchers.Main) {
                 val waveAnimation = TranslateAnimation(

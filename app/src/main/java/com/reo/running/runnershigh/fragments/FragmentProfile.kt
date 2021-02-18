@@ -3,7 +3,7 @@ package com.reo.running.runnershigh.fragments
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -17,9 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -35,24 +32,17 @@ import com.reo.running.runnershigh.databinding.FragmentProfileBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
 class FragmentProfile : Fragment() {
     private lateinit var binding: FragmentProfileBinding
-    companion object {
-        private const val RC_SIGN_IN = 123
-    }
     private var login = ""
     private val databaseReferenceLogin = Firebase.database.getReference("Login")
     private val databaseReferenceLoginDay = Firebase.database.getReference("LoginDay")
     private val databaseReferencePhoto = Firebase.database.getReference("profile")
     private lateinit var auth:FirebaseAuth
-//    private lateinit var googleSignInClient:GoogleSignInClient
-//    private val isSignIn:Boolean
-//        get() = auth.currentUser != null
     private val runDB = MyApplication.db.recordDao2()
     private var lastId:Int = 0
     private var i:Int? = 0  //カウント変数用
@@ -60,6 +50,10 @@ class FragmentProfile : Fragment() {
     private var totalCalorie = 0
     private var alienCount = 0
     private var fatCount = 0
+    private val db = Firebase.database
+    companion object {
+        private const val RC_SIGN_IN = 123
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -76,29 +70,16 @@ class FragmentProfile : Fragment() {
         binding.run {
                 databaseReferencePhoto.addValueEventListener(object:ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        Log.d("photo20","${snapshot.value}")
-                        Firebase.storage.reference.child(snapshot.value.toString()).downloadUrl
-                            .addOnFailureListener {
-                                Log.d("exception2020","${it.cause}")
-                            }
+                        Firebase.storage.reference.child(snapshot.value.toString()).getBytes(1024 * 1024)
                             .addOnSuccessListener {
-                                Log.d("uri","$it")
-                                val someFile = File(it.toString())
-                                profileImage.setImageURI(Uri.parse(it.toString()))
-                            }
-
+                                BitmapFactory.decodeByteArray(it,0,it.size).also {
+                                    profileImage.setImageBitmap(it)
+                                }
+                            }.addOnFailureListener { Log.d("debug","failure $it") }
                     }
-
                     override fun onCancelled(error: DatabaseError) {}
                 })
-//                val gsReference = this
-//                firebasePhoto.addValueEventListener(object : ValueEventListener {
-//                    override fun onDataChange(snapshot: DataSnapshot) {
-//                        Log.d("photo5","${snapshot.value}")
-////
-//                    }
-//                    override fun onCancelled(error: DatabaseError) {}
-//                })
+
             auth = FirebaseAuth.getInstance()
             val user = Firebase.auth.currentUser
             if (user != null) {
@@ -182,7 +163,6 @@ class FragmentProfile : Fragment() {
                     }
                 }
                 Toast.makeText(requireContext(),"Loginされています",Toast.LENGTH_SHORT).show()
-//                databaseReferenceLogin.setValue(login)
                 databaseReferenceLogin.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         loginImage.visibility = View.GONE
@@ -215,20 +195,8 @@ class FragmentProfile : Fragment() {
             } else {
                 Toast.makeText(requireContext(),"Loginされていません",Toast.LENGTH_LONG).show()
             }
-//
-//            val databaseRefPhoto = Firebase.database.getReference("photo")
-//            databaseRefPhoto.addValueEventListener(object : ValueEventListener {
-//                override fun onDataChange(snapshot: DataSnapshot) {
-//                    if (snapshot.value != null) {
-//                        val fireStore = snapshot.value
-//                        // TODO
-////                            profileImage.setImageURI(Uri.parse(fireStore.toString()))
-//                    }
-//                }
-//                override fun onCancelled(error: DatabaseError) {}
-//            })
 
-            val databaseRefFirstName = Firebase.database.getReference("firstName")
+            val databaseRefFirstName = db.getReference("firstName")
             databaseRefFirstName.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val fireStore = snapshot.value
@@ -238,7 +206,7 @@ class FragmentProfile : Fragment() {
                 override fun onCancelled(error: DatabaseError) {}
             })
 
-            val databaseRefFamily = Firebase.database.getReference("familyName")
+            val databaseRefFamily = db.getReference("familyName")
             databaseRefFamily.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val fireStore = snapshot.value
@@ -246,7 +214,7 @@ class FragmentProfile : Fragment() {
                 }
                 override fun onCancelled(error: DatabaseError) {}
             })
-            val databaseRefObjective = Firebase.database.getReference("objective")
+            val databaseRefObjective = db.getReference("objective")
             databaseRefObjective.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val fireStore = snapshot.value
