@@ -3,6 +3,7 @@ package com.reo.running.runnershigh.fragments
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -26,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentProfileBinding
@@ -45,9 +47,9 @@ class FragmentProfile : Fragment() {
     private val databaseReferenceLogin = Firebase.database.getReference("Login")
     private val databaseReferenceLoginDay = Firebase.database.getReference("LoginDay")
     private lateinit var auth:FirebaseAuth
-    private lateinit var googleSignInClient:GoogleSignInClient
-    private val isSignIn:Boolean
-        get() = auth.currentUser != null
+//    private lateinit var googleSignInClient:GoogleSignInClient
+//    private val isSignIn:Boolean
+//        get() = auth.currentUser != null
     private val runDB = MyApplication.db.recordDao2()
     private var lastId:Int = 0
     private var i:Int? = 0  //カウント変数用
@@ -69,15 +71,22 @@ class FragmentProfile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
+            Firebase.database.run {
+                val firebasePhoto = getReference("profile")
+                firebasePhoto.addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        Log.d("photo5","${snapshot.value}")
+//
+                    }
+                    override fun onCancelled(error: DatabaseError) {}
+                })
+            }
             auth = FirebaseAuth.getInstance()
-
             val user = Firebase.auth.currentUser
             if (user != null) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val data = runDB.getAll2()
-                    Log.d("yahooo","$data")
                     lastId = data.last().id - 1
-                    Log.d("lastID","$lastId")
                     if (lastId != null) {
                         for (i in 0..lastId) {
                             totalDistance += data[i].distance
@@ -155,10 +164,9 @@ class FragmentProfile : Fragment() {
                     }
                 }
                 Toast.makeText(requireContext(),"Loginされています",Toast.LENGTH_SHORT).show()
-                databaseReferenceLogin.setValue(login)
+//                databaseReferenceLogin.setValue(login)
                 databaseReferenceLogin.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        val loginStatus = snapshot.value.toString()
                         loginImage.visibility = View.GONE
 //                      必要なので残しておく（ログアウト処理を実装するために）
 //                        logoutImage.visibility = View.VISIBLE
@@ -189,19 +197,18 @@ class FragmentProfile : Fragment() {
             } else {
                 Toast.makeText(requireContext(),"Loginされていません",Toast.LENGTH_LONG).show()
             }
-
-
-            val databaseRefPhoto = Firebase.database.getReference("photo")
-            databaseRefPhoto.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.value != null) {
-                        val fireStore = snapshot.value
-                        // TODO
-//                            profileImage.setImageURI(Uri.parse(fireStore.toString()))
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {}
-            })
+//
+//            val databaseRefPhoto = Firebase.database.getReference("photo")
+//            databaseRefPhoto.addValueEventListener(object : ValueEventListener {
+//                override fun onDataChange(snapshot: DataSnapshot) {
+//                    if (snapshot.value != null) {
+//                        val fireStore = snapshot.value
+//                        // TODO
+////                            profileImage.setImageURI(Uri.parse(fireStore.toString()))
+//                    }
+//                }
+//                override fun onCancelled(error: DatabaseError) {}
+//            })
 
             val databaseRefFirstName = Firebase.database.getReference("firstName")
             databaseRefFirstName.addValueEventListener(object : ValueEventListener {
@@ -227,7 +234,6 @@ class FragmentProfile : Fragment() {
                     val fireStore = snapshot.value
                     objectiveText.text = "$fireStore"
                 }
-
                 override fun onCancelled(error: DatabaseError) {}
             })
 
