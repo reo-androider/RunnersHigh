@@ -15,12 +15,11 @@
         android:background="@color/teal_200"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/photoEmpty"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:contentDescription="@string/imageSet"
-        android:scaleType="fitXY"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,6 +45,7 @@
         android:src="@drawable/ic_return2"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:elevation="100dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
