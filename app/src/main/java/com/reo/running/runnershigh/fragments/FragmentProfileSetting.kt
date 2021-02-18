@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import android.net.http.HttpResponseCache
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.ktx.storage
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
+import okhttp3.Response
 import java.io.IOException
 import java.util.concurrent.Executor
 
@@ -48,18 +50,6 @@ class FragmentProfileSetting : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
             storage = Firebase.storage
-            val databaseRefPhoto = Firebase.database.getReference("photo")
-            databaseRefPhoto.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.value != null) {
-                        myUri = snapshot.value.toString()
-                        // TODO
-//                            profileImage.setImageURI(Uri.parse(fireStore.toString()))
-                    }
-                }
-                override fun onCancelled(error: DatabaseError) {
-                }
-            })
 
             val databaseRefFirstName = Firebase.database.getReference("firstName")
             databaseRefFirstName.addValueEventListener(object : ValueEventListener {
@@ -92,7 +82,6 @@ class FragmentProfileSetting : Fragment() {
             databaseReferenceWeight.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val weight = snapshot.value.toString()
-                    Log.d("Weight","$weight")
                     editWeight.setText(weight)
                 }
                 override fun onCancelled(error: DatabaseError) {}
@@ -114,16 +103,11 @@ class FragmentProfileSetting : Fragment() {
 
                         if (objective == "") objective = "未登録"
 
-                        val profileData =
-                            ProfileData(myUri, firstName, familyName, objective, weight)
-
-                        val databaseRefPhoto = Firebase.database.getReference("photo")
                         val databaseRefFirstName = Firebase.database.getReference("firstName")
                         val databaseRefFamily = Firebase.database.getReference("familyName")
                         val databaseRefObjective = Firebase.database.getReference("objective")
                         val databaseRefWeight = Firebase.database.getReference("weight")
 
-                        databaseRefPhoto.setValue(myUri)
                         databaseRefFirstName.setValue(firstName)
                         databaseRefFamily.setValue(familyName)
                         databaseRefObjective.setValue(objective)
@@ -147,28 +131,26 @@ class FragmentProfileSetting : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d("checkRe","$requestCode")
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 uri = data.data!!
-                myUri = uri.toString()
+//                myUri = uri.toString()
                 binding.profileImage.setImageURI(uri)
                 val storage = Firebase.storage
                 val storageRef = storage.reference
-                val e:IOException
-                storageRef.putFile(uri)
+                val profileRef = storageRef.child("profiles.jpg")
+
+                val databaseRefProfile = Firebase.database.getReference("profile")
+                databaseRefProfile.setValue("profiles.jpg")
+
+                profileRef.putFile(uri)
                         .addOnSuccessListener {Log.d("photo","success")}
                         .addOnFailureListener {
-                            Log.d("photo","$it")
+                            Log.d("photo1","$it")
+                            Log.d("photo2","${it.stackTrace}")
+                            Log.d("photo3","${it.cause}")
                         }
-//                val profileRef = storageRef.child(uri.toString())
-//                profileRef.putFile(uri)
-//                val storage = FirebaseStorage.getInstance()
-//                val storageRef = storage.getReference()
-//                val ref = storageRef.child("image/hogehoge")
-//                val uploadTask = ref.putFile(uri)
-//                uploadTask.addOnSuccessListener { Log.d("upload","success")}.addOnFailureListener {  Log.d("upload","failure")}
-            } else {}
+            }
         }
     }
 }
