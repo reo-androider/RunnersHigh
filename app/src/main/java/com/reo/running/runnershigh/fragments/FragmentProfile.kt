@@ -19,6 +19,7 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.firebase.FirebaseError
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -34,6 +35,7 @@ import com.reo.running.runnershigh.databinding.FragmentProfileBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -46,6 +48,7 @@ class FragmentProfile : Fragment() {
     private var login = ""
     private val databaseReferenceLogin = Firebase.database.getReference("Login")
     private val databaseReferenceLoginDay = Firebase.database.getReference("LoginDay")
+    private val databaseReferencePhoto = Firebase.database.getReference("profile")
     private lateinit var auth:FirebaseAuth
 //    private lateinit var googleSignInClient:GoogleSignInClient
 //    private val isSignIn:Boolean
@@ -71,16 +74,31 @@ class FragmentProfile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-            Firebase.database.run {
-                val firebasePhoto = getReference("profile")
-                firebasePhoto.addValueEventListener(object : ValueEventListener {
+                databaseReferencePhoto.addValueEventListener(object:ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        Log.d("photo5","${snapshot.value}")
-//
+                        Log.d("photo20","${snapshot.value}")
+                        Firebase.storage.reference.child(snapshot.value.toString()).downloadUrl
+                            .addOnFailureListener {
+                                Log.d("exception2020","${it.cause}")
+                            }
+                            .addOnSuccessListener {
+                                Log.d("uri","$it")
+                                val someFile = File(it.toString())
+                                profileImage.setImageURI(Uri.parse(it.toString()))
+                            }
+
                     }
+
                     override fun onCancelled(error: DatabaseError) {}
                 })
-            }
+//                val gsReference = this
+//                firebasePhoto.addValueEventListener(object : ValueEventListener {
+//                    override fun onDataChange(snapshot: DataSnapshot) {
+//                        Log.d("photo5","${snapshot.value}")
+////
+//                    }
+//                    override fun onCancelled(error: DatabaseError) {}
+//                })
             auth = FirebaseAuth.getInstance()
             val user = Firebase.auth.currentUser
             if (user != null) {
