@@ -3,6 +3,7 @@ package com.reo.running.runnershigh.fragments
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.net.http.HttpResponseCache
 import android.os.Bundle
@@ -39,6 +40,7 @@ class FragmentProfileSetting : Fragment() {
     private var objective = ""
     private var weight = ""
     private val db = Firebase.database
+    private val dbPhoto = Firebase.database.getReference("profile")
     companion object {
         val READ_REQUEST_CODE = 2
     }
@@ -50,8 +52,18 @@ class FragmentProfileSetting : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
+            dbPhoto.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Firebase.storage.reference.child(snapshot.value.toString()).getBytes(2048 * 2048)
+                            .addOnSuccessListener {
+                                BitmapFactory.decodeByteArray(it,0,it.size).also {
+                                    profileImage.setImageBitmap(it)
+                                }
+                            }
+                }
+                override fun onCancelled(error: DatabaseError) {}
+            })
             storage = Firebase.storage
-
             val databaseRefFirstName = Firebase.database.getReference("firstName")
             databaseRefFirstName.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
