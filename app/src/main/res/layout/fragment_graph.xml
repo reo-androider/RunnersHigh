@@ -12,9 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:titleTextColor="@color/normal2"
+        app:titleTextColor="@color/white"
         app:title="記録集"
-        android:background="@color/white"
+        android:background="@color/teal_200"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
@@ -31,10 +31,9 @@
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginBottom="30dp"
                 app:title="距離の記録"
-                app:titleTextColor="@color/green"
+                app:titleTextColor="@color/normal"
                 android:background="@color/white"/>
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/distance_graph"
@@ -43,17 +42,17 @@
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="70dp"
+                android:layout_marginTop="30dp"
 
                 app:title="消費カロリーの記録"
-                app:titleTextColor="@color/orange"
+                app:titleTextColor="@color/normal"
                 android:background="@color/white"/>
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/graph_calorie"
                 android:layout_width="match_parent"
                 android:layout_height="500dp"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="70dp"/>
+                android:layout_marginBottom="30dp"/>
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

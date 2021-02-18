@@ -38,6 +38,7 @@ class FragmentProfileSetting : Fragment() {
     private var familyName = ""
     private var objective = ""
     private var weight = ""
+    private val db = Firebase.database
     companion object {
         val READ_REQUEST_CODE = 2
     }
@@ -103,10 +104,10 @@ class FragmentProfileSetting : Fragment() {
 
                         if (objective == "") objective = "未登録"
 
-                        val databaseRefFirstName = Firebase.database.getReference("firstName")
-                        val databaseRefFamily = Firebase.database.getReference("familyName")
-                        val databaseRefObjective = Firebase.database.getReference("objective")
-                        val databaseRefWeight = Firebase.database.getReference("weight")
+                        val databaseRefFirstName = db.getReference("firstName")
+                        val databaseRefFamily = db.getReference("familyName")
+                        val databaseRefObjective = db.getReference("objective")
+                        val databaseRefWeight = db.getReference("weight")
 
                         databaseRefFirstName.setValue(firstName)
                         databaseRefFamily.setValue(familyName)
@@ -139,17 +140,9 @@ class FragmentProfileSetting : Fragment() {
                 val storage = Firebase.storage
                 val storageRef = storage.reference
                 val profileRef = storageRef.child("profiles.jpg")
-
                 val databaseRefProfile = Firebase.database.getReference("profile")
                 databaseRefProfile.setValue("profiles.jpg")
-
                 profileRef.putFile(uri)
-                        .addOnSuccessListener {Log.d("photo","success")}
-                        .addOnFailureListener {
-                            Log.d("photo1","$it")
-                            Log.d("photo2","${it.stackTrace}")
-                            Log.d("photo3","${it.cause}")
-                        }
             }
         }
     }

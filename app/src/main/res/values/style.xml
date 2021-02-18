@@ -2,10 +2,10 @@
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="windowNoTitle">true</item>
-    <item name="windowActionBar">false</item>
-    <item name="android:windowFullscreen">true</item>
-    <item name="android:windowContentOverlay">@null</item>
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="shape_to_circle" parent="">
@@ -13,7 +13,7 @@
     </style>
 
     <style name="EditTextColorControl">
-        <item name="colorControlNormal">@color/normal</item>
-        <item name="colorControlActivated">@color/normal</item>
+        <item name="colorControlNormal">@color/teal_200</item>
+        <item name="colorControlActivated">@color/teal_200</item>
     </style>
 </resources>

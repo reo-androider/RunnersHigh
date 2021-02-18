@@ -86,6 +86,7 @@ class FragmentGraph : Fragment() {
                         invalidate()
                         this.data = data
                         animateY(1)
+                        axisLeft.valueFormatter = DistanceUnit()
                     }
                 }
             }
@@ -139,6 +140,7 @@ class FragmentGraph : Fragment() {
                             invalidate()
                             this.data = data2
                             animateY(1)
+                            axisLeft.valueFormatter = CalorieUnit()
                         }
                     }
                 }
