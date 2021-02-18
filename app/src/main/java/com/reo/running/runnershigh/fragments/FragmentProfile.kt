@@ -70,7 +70,6 @@ class FragmentProfile : Fragment() {
         binding.run {
             databaseReferencePhoto.addValueEventListener(object:ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        Log.d("debug1","${snapshot.value.toString()}")
                         Firebase.storage.reference.child(snapshot.value.toString()).getBytes(2048 * 2048)
                             .addOnSuccessListener {
                                 BitmapFactory.decodeByteArray(it,0,it.size).also {
@@ -86,79 +85,81 @@ class FragmentProfile : Fragment() {
             if (user != null) {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val data = runDB.getAll2()
-                    lastId = data.last().id - 1
-                    if (lastId != null) {
-                        for (i in 0..lastId) {
-                            totalDistance += data[i].distance
-                            totalCalorie += data[i].calorie
-                        }
-                    }
-                    withContext(Dispatchers.Main) {
-                        distanceLevel.text = "Lv.${totalDistance.toInt() / 1000}"
-                        alienCount = totalDistance.toInt() / 100000
-                        spaceManCount.text = "$alienCount"
-                        calorieLevel.text = "Lv.${totalCalorie / 100}"
-                        fatCount = totalCalorie / 7200
-                        calorie1kgCount.text = "$fatCount"
-                        when{
-                            totalDistance < 5 -> {
-                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_level0))
-                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_0)}"
-                            }
-                            totalDistance < 10 -> {
-                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_5km))
-                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_5)}"
-                            }
-                            totalDistance > 80 && totalDistance > 100  -> {
-                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_mountain))
-                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_10)}"
-                            }
-                            totalDistance < 100 -> {
-                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_plane))
-                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_50)}"
-                            }
-                            totalDistance > 100 -> {
-                                distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_space_human))
-                                distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_100)}"
+                    if (data.isNotEmpty()) {
+                        lastId = data.last().id
+                        if (lastId != null) {
+                            for (i in 0..lastId - 1) {
+                                totalDistance += data[i].distance
+                                totalCalorie += data[i].calorie
                             }
                         }
+                        withContext(Dispatchers.Main) {
+                            distanceLevel.text = "Lv.${totalDistance.toInt() / 1000}"
+                            alienCount = totalDistance.toInt() / 100000
+                            spaceManCount.text = "$alienCount"
+                            calorieLevel.text = "Lv.${totalCalorie / 100}"
+                            fatCount = totalCalorie / 7200
+                            calorie1kgCount.text = "$fatCount"
+                            when {
+                                totalDistance < 5 -> {
+                                    distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_level0))
+                                    distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_0)}"
+                                }
+                                totalDistance < 10 -> {
+                                    distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_5km))
+                                    distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_5)}"
+                                }
+                                totalDistance > 80 && totalDistance > 100 -> {
+                                    distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_mountain))
+                                    distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_10)}"
+                                }
+                                totalDistance < 100 -> {
+                                    distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_plane))
+                                    distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_50)}"
+                                }
+                                totalDistance > 100 -> {
+                                    distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_space_human))
+                                    distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_100)}"
+                                }
+                            }
 
-                        when {
-                            totalCalorie /100 < 1 -> {
-                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_level0))
-                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_1)}"
-                            }
-                            totalCalorie / 100 > 1 -> {
-                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_rice_ball))
-                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_2)}"
-                            }
-                            totalCalorie / 100 > 3 -> {
-                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_hamberger))
-                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_3)}"
-                            }
-                            totalCalorie / 100 > 4 -> {
-                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_cake))
-                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_4)}"
-                            }
-                            totalCalorie / 100 > 10 -> {
-                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_curry))
-                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_10)}"
-                            }
-                            totalCalorie / 100 > 2 -> {
-                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_ramen))
-                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_20)}"
-                            }
-                            totalCalorie / 100 > 2 -> {
-                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_pizza))
-                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_30)}"
-                            }
-                            totalCalorie / 100 > 2 -> {
-                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_rice300))
-                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_48)}"
-                            }
-                            totalCalorie / 100> 72 -> {
-                                calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_meat))
-                                calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_72)}"
+                            when {
+                                totalCalorie / 100 < 1 -> {
+                                    calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_level0))
+                                    calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_1)}"
+                                }
+                                totalCalorie / 100 > 1 -> {
+                                    calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_rice_ball))
+                                    calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_2)}"
+                                }
+                                totalCalorie / 100 > 3 -> {
+                                    calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_hamberger))
+                                    calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_3)}"
+                                }
+                                totalCalorie / 100 > 4 -> {
+                                    calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_cake))
+                                    calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_4)}"
+                                }
+                                totalCalorie / 100 > 10 -> {
+                                    calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_curry))
+                                    calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_10)}"
+                                }
+                                totalCalorie / 100 > 2 -> {
+                                    calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_ramen))
+                                    calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_20)}"
+                                }
+                                totalCalorie / 100 > 2 -> {
+                                    calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_pizza))
+                                    calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_30)}"
+                                }
+                                totalCalorie / 100 > 2 -> {
+                                    calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_rice300))
+                                    calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_48)}"
+                                }
+                                totalCalorie / 100 > 72 -> {
+                                    calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_meat))
+                                    calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_72)}"
+                                }
                             }
                         }
                     }

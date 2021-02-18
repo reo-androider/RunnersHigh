@@ -53,6 +53,7 @@ class FragmentRun : Fragment() {
     var recordStop = true
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.recordDao()
+    private val readDao2 = MyApplication.db.recordDao2()
     var marker: Marker? = null
     private var runStart = false
     private lateinit var vibrator: Vibrator
@@ -80,6 +81,9 @@ class FragmentRun : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        lifecycleScope.launch(Dispatchers.IO) {
+            Log.d("debug","all of the data = ${readDao2.getAll2()}")
+        }
         binding.mapView.onCreate(savedInstanceState)
         binding.run {
             val databaseRefWeight = Firebase.database.getReference("weight")
