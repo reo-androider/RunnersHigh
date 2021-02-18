@@ -135,7 +135,6 @@ class FragmentProfileSetting : Fragment() {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 uri = data.data!!
-//                myUri = uri.toString()
                 binding.profileImage.setImageURI(uri)
                 val storage = Firebase.storage
                 val storageRef = storage.reference

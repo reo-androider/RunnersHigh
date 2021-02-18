@@ -68,14 +68,15 @@ class FragmentProfile : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-                databaseReferencePhoto.addValueEventListener(object:ValueEventListener {
+            databaseReferencePhoto.addValueEventListener(object:ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                        Firebase.storage.reference.child(snapshot.value.toString()).getBytes(1024 * 1024)
+                        Log.d("debug1","${snapshot.value.toString()}")
+                        Firebase.storage.reference.child(snapshot.value.toString()).getBytes(2048 * 2048)
                             .addOnSuccessListener {
                                 BitmapFactory.decodeByteArray(it,0,it.size).also {
                                     profileImage.setImageBitmap(it)
                                 }
-                            }.addOnFailureListener { Log.d("debug","failure $it") }
+                            }.addOnFailureListener { Log.d("debug","failure ${it.cause}") }
                     }
                     override fun onCancelled(error: DatabaseError) {}
                 })
