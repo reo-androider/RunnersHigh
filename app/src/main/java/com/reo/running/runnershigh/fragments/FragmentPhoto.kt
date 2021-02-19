@@ -33,18 +33,20 @@ class FragmentPhoto : Fragment() {
         binding.run {
             lifecycleScope.launch(Dispatchers.IO) {
                 val db = readDao.getAll2()
-                val lastId = db.last().id - 1
-                for (i in lastId downTo 0 ) {
-                    val record2 = Record2(db[i].id,db[i].bitmap,db[i].time,db[i].distance,db[i].calorie,db[i].runData,db[i].colorId,db[i].revaluationMark,db[i].memo)
-                    //配列が完成
-                    runData.add(record2)
-                }
-                withContext(Dispatchers.Main) {
-                    mainRecyclerView.adapter = MyAdapter2(runData)
-                    mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                if (db.isNotEmpty()) {
+                    val lastId = db.last().id - 1
+                    for (i in lastId downTo 0) {
+                        val record2 = Record2(db[i].id, db[i].bitmap, db[i].time, db[i].distance, db[i].calorie, db[i].runData, db[i].colorId, db[i].revaluationMark, db[i].memo)
+                        //配列が完成
+                        runData.add(record2)
+                    }
+                    withContext(Dispatchers.Main) {
+                        mainRecyclerView.adapter = MyAdapter2(runData)
+                        mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
-                    returnButton.setOnClickListener {
-                        findNavController().navigate(R.id.action_fragmentPhoto_to_navi_setting)
+                        returnButton.setOnClickListener {
+                            findNavController().navigate(R.id.action_fragmentPhoto_to_navi_setting)
+                        }
                     }
                 }
             }
