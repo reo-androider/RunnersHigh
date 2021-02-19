@@ -43,11 +43,10 @@ class FragmentPhoto : Fragment() {
                     withContext(Dispatchers.Main) {
                         mainRecyclerView.adapter = MyAdapter2(runData)
                         mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-
-                        returnButton.setOnClickListener {
-                            findNavController().navigate(R.id.action_fragmentPhoto_to_navi_setting)
-                        }
                     }
+                }
+                returnButton.setOnClickListener {
+                    findNavController().navigate(R.id.action_fragmentPhoto_to_navi_setting)
                 }
             }
         }
