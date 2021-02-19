@@ -73,6 +73,6 @@ interface RecordDao2 {
     suspend fun updateRecord2(record: Record2)
 
     @Delete
-    suspend fun deleteRecord2(record: Record2)
+    suspend fun deleteRecord2(recordList: List<Record2>)
 
 }

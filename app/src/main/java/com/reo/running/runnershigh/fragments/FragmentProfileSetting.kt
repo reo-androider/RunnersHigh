@@ -29,6 +29,7 @@ import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class FragmentProfileSetting : Fragment() {
 
@@ -42,8 +43,6 @@ class FragmentProfileSetting : Fragment() {
     private val db = Firebase.database
     private val dbPhoto = Firebase.database.getReference("profile")
     private val runDB = MyApplication.db.recordDao2()
-    private var i = 0
-    private var lastId: Int = 0
     companion object {
         val READ_REQUEST_CODE = 2
     }
@@ -59,11 +58,12 @@ class FragmentProfileSetting : Fragment() {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     Firebase.storage.reference.child(snapshot.value.toString()).getBytes(2048 * 2048)
                             .addOnSuccessListener {
-                                BitmapFactory.decodeByteArray(it,0,it.size).also {
+                                BitmapFactory.decodeByteArray(it, 0, it.size).also {
                                     profileImage.setImageBitmap(it)
                                 }
                             }
                 }
+
                 override fun onCancelled(error: DatabaseError) {}
             })
             storage = Firebase.storage
@@ -73,6 +73,7 @@ class FragmentProfileSetting : Fragment() {
                     val fireStore = snapshot.value.toString()
                     editFirstName.setText(fireStore)
                 }
+
                 override fun onCancelled(error: DatabaseError) {}
             })
 
@@ -82,6 +83,7 @@ class FragmentProfileSetting : Fragment() {
                     val fireStore = snapshot.value.toString()
                     editFamilyName.setText(fireStore)
                 }
+
                 override fun onCancelled(error: DatabaseError) {}
             })
 
@@ -91,6 +93,7 @@ class FragmentProfileSetting : Fragment() {
                     val fireStore = snapshot.value.toString()
                     editObjective.setText(fireStore)
                 }
+
                 override fun onCancelled(error: DatabaseError) {}
             })
 
@@ -100,81 +103,96 @@ class FragmentProfileSetting : Fragment() {
                     val weight = snapshot.value.toString()
                     editWeight.setText(weight)
                 }
+
                 override fun onCancelled(error: DatabaseError) {}
             })
 
-                profileBack.setOnClickListener {
+            profileBack.setOnClickListener {
                 AlertDialog.Builder(requireContext())
-                    .setIcon(R.drawable.ic_running)
-                    .setTitle("記録を保存しますか？")
-                    .setPositiveButton("Yes") { _, _ ->
-                        firstName = editFirstName.text.toString()
-                        familyName = editFamilyName.text.toString()
-                        objective = editObjective.text.toString()
-                        weight = editWeight.text.toString()
-                        if (firstName == "" && familyName == "") {
-                            familyName = "あなたの"
-                            firstName = "名前"
+                        .setIcon(R.drawable.ic_running)
+                        .setTitle("記録を保存しますか？")
+                        .setPositiveButton("Yes") { _, _ ->
+                            firstName = editFirstName.text.toString()
+                            familyName = editFamilyName.text.toString()
+                            objective = editObjective.text.toString()
+                            weight = editWeight.text.toString()
+                            if (firstName == "" && familyName == "") {
+                                familyName = "あなたの"
+                                firstName = "名前"
+                            }
+
+                            if (objective == "") objective = "未登録"
+
+                            val databaseRefFirstName = db.getReference("firstName")
+                            val databaseRefFamily = db.getReference("familyName")
+                            val databaseRefObjective = db.getReference("objective")
+                            val databaseRefWeight = db.getReference("weight")
+
+                            databaseRefFirstName.setValue(firstName)
+                            databaseRefFamily.setValue(familyName)
+                            databaseRefObjective.setValue(objective)
+                            databaseRefWeight.setValue(weight)
+
+                            findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
                         }
-
-                        if (objective == "") objective = "未登録"
-
-                        val databaseRefFirstName = db.getReference("firstName")
-                        val databaseRefFamily = db.getReference("familyName")
-                        val databaseRefObjective = db.getReference("objective")
-                        val databaseRefWeight = db.getReference("weight")
-
-                        databaseRefFirstName.setValue(firstName)
-                        databaseRefFamily.setValue(familyName)
-                        databaseRefObjective.setValue(objective)
-                        databaseRefWeight.setValue(weight)
-
-                        findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
-                    }
-                    .setNegativeButton("No") { _, _ ->
-                        findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
-                    }
-                    .show()
+                        .setNegativeButton("No") { _, _ ->
+                            findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
+                        }
+                        .show()
             }
 
             profileImage.setOnClickListener {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 intent.setType("image/*")
-                startActivityForResult(intent,READ_REQUEST_CODE)
+                startActivityForResult(intent, READ_REQUEST_CODE)
             }
 
             deleteText.setOnClickListener {
-                AlertDialog.Builder(requireContext())
-                        .setMessage("データを削除しますか？")
-                        .setCancelable(false)
-                        .setPositiveButton("はい") {_,_, ->
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                delay(800)
-                                AlertDialog.Builder(requireContext())
-                                        .setMessage("後悔しましたか？")
-                                        .setCancelable(false)
-                                        .setPositiveButton("はい") {_,_->}
-                                        .setNegativeButton("いいえ") {_,_->
-                                            lifecycleScope.launch(Dispatchers.IO) {
-                                                val allData = runDB.getAll2()
-                                                if (allData.isNotEmpty()) {
-                                                    lastId = allData.last().id
-                                                    for (i in 0..lastId) {
-                                                        runDB.deleteRecord2(allData[i])
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        .show()
-                            }
+                lifecycleScope.launch(Dispatchers.IO) {
+                    if (runDB.getAll2().isEmpty()) {
+                        withContext(Dispatchers.Main) {
+                            AlertDialog.Builder(requireContext())
+                                    .setMessage("データがありません")
+                                    .setPositiveButton("閉じる") { _, _, -> }
+                                    .show()
                         }
-                        .setNegativeButton("いいえ") {_,_, ->}
-                        .show()
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            AlertDialog.Builder(requireContext())
+                                    .setMessage("データを削除しますか？")
+                                    .setCancelable(false)
+                                    .setPositiveButton("はい") { _, _, ->
+                                        lifecycleScope.launch {
+                                            delay(1000)
+                                            AlertDialog.Builder(requireContext())
+                                                    .setMessage("もしかして、後悔しました？")
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("はい") { _, _ ->
+                                                        Toast.makeText(requireContext(),"データは残しておきましたよ！",Toast.LENGTH_SHORT).show()
+                                                    }
+                                                    .setNegativeButton("いいえ") { _, _ ->
+                                                        lifecycleScope.launch(Dispatchers.IO) {
+                                                            //TODO
+                                                            Log.d("debug","before = ${runDB.getAll2()}")
+                                                            runDB.deleteRecord2(runDB.getAll2())
+                                                            Log.d("debug","after = ${runDB.getAll2()}")
+                                                            withContext(Dispatchers.Main){
+                                                                Toast.makeText(requireContext(),"データを削除しました",Toast.LENGTH_SHORT).show()
+                                                            }
+                                                        }
+                                                    }
+                                                    .show()
+                                        }
+                                    }
+                                    .setNegativeButton("いいえ") { _, _ -> }
+                                    .show()
+                        }
+                    }
+                }
             }
         }
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
