@@ -42,6 +42,7 @@ class FragmentGraph : Fragment() {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 val read = runDatabase.getAll2()
+                Log.d("debug","graphFragment = $read")
                 if (read.isNotEmpty()) {
                     val xValue = mutableListOf<String>()
                     lastId = read.last().id - 1
