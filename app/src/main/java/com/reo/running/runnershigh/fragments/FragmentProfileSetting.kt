@@ -175,7 +175,8 @@ class FragmentProfileSetting : Fragment() {
                                                         lifecycleScope.launch(Dispatchers.IO) {
                                                             //TODO
                                                             Log.d("debug","before = ${runDB.getAll2()}")
-                                                            runDB.deleteRecord2(runDB.getAll2())
+                                                            runDB.deleteAll()
+//                                                            runDB.insertRecord2(runDB.getAll2())
                                                             Log.d("debug","after = ${runDB.getAll2()}")
                                                             withContext(Dispatchers.Main){
                                                                 Toast.makeText(requireContext(),"データを削除しました",Toast.LENGTH_SHORT).show()

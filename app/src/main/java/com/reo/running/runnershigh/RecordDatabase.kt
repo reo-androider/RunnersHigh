@@ -70,9 +70,12 @@ interface RecordDao2 {
     suspend fun insertRecord2(record: Record2)
 
     @Update
-    suspend fun updateRecord2(record: Record2)
+    suspend fun updateRecord2(recordList: List<Record2>)
 
     @Delete
     suspend fun deleteRecord2(recordList: List<Record2>)
+
+    @Query("delete From record2")
+    suspend fun deleteAll()
 
 }
