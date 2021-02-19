@@ -29,18 +29,12 @@ import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.Dispatcher
-import okhttp3.Response
-import java.io.IOException
-import java.util.concurrent.Executor
 
 class FragmentProfileSetting : Fragment() {
 
     private lateinit var binding:FragmentProfileSettingBinding
     lateinit var storage:FirebaseStorage
-    private var myUri = ""
     private lateinit var uri: Uri
-    private var input = false //カメラロールから写真を撮ったかどうかの確認
     private var firstName = ""
     private var familyName = ""
     private var objective = ""
@@ -110,7 +104,7 @@ class FragmentProfileSetting : Fragment() {
             })
 
                 profileBack.setOnClickListener {
-                val alertDialog = AlertDialog.Builder(requireContext())
+                AlertDialog.Builder(requireContext())
                     .setIcon(R.drawable.ic_running)
                     .setTitle("記録を保存しますか？")
                     .setPositiveButton("Yes") { _, _ ->
@@ -164,9 +158,11 @@ class FragmentProfileSetting : Fragment() {
                                         .setNegativeButton("いいえ") {_,_->
                                             lifecycleScope.launch(Dispatchers.IO) {
                                                 val allData = runDB.getAll2()
-                                                lastId = allData.lastOrNull()?.id!! - 1
-                                                for (i in 0..lastId) {
-                                                    runDB.deleteRecord2(allData[i])
+                                                if (allData.isNotEmpty()) {
+                                                    lastId = allData.last().id
+                                                    for (i in 0..lastId) {
+                                                        runDB.deleteRecord2(allData[i])
+                                                    }
                                                 }
                                             }
                                         }
