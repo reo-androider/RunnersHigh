@@ -49,7 +49,6 @@ class FragmentGraph : Fragment() {
                     }
                     val yValue = mutableListOf<Double>()
                     for (i in 0..lastId) {
-//                    yTimeValue.add((read[i].time.toInt()) + totalTime)
                         yValue.add((read[i].distance) + totalDistance)
                         totalDistance += read[i].distance
 
