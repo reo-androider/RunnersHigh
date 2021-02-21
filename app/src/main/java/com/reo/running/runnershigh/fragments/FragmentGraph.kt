@@ -104,20 +104,6 @@ class FragmentGraph : Fragment() {
 
                             val data2 = LineData(xValue2, dataset2)
                             dataset2.setColors(ColorTemplate.COLORFUL_COLORS)
-//
-//                        val leftAxis2 = graphCalorie.getAxisLeft().run {
-//                            axisMinValue = 0f
-//                            when {
-//                                it == 0.0 -> axisMaxValue = 100f
-//                                it > 100.0 -> axisMaxValue = 500f
-//                                it > 500.0 -> axisMaxValue = 1000f
-//                                it > 1000.0 -> axisMaxValue = 2000f
-//                                it > 2000.0 -> axisMaxValue = 5000f
-//                                it > 5000.0 -> axisMaxValue = 10000f
-//                                it > 10000.0 -> axisMaxValue = 10000000f
-//                            }
-//                            valueFormatter = CalorieUnit()
-//                        }
                             graphCalorie.getAxisRight().run {
                                 isEnabled = false
                                 setDrawLabels(false)
