@@ -39,7 +39,6 @@ class FragmentGraph : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
             (activity as MainActivity).binding.bottomNavigation.visibility = View.VISIBLE
-
             lifecycleScope.launch(Dispatchers.IO) {
                 val read = runDatabase.getAll2()
                 if (read.isNotEmpty()) {
@@ -63,21 +62,6 @@ class FragmentGraph : Fragment() {
                         val timeData = LineData(xValue, dataset)
                         val data = LineData(xValue, dataset)
                         dataset.setColors(ColorTemplate.COLORFUL_COLORS)
-//                    val leftAxis = distanceGraph.getAxisLeft().run {
-//                        axisMinValue = 0f
-//                        when {
-//                            totalDistance == 0.0 -> axisMaxValue = 1000f
-//                            totalDistance > 1000.0 -> axisMaxValue = 3000f
-//                            totalDistance > 3000.0 -> axisMaxValue = 6000f
-//                            totalDistance > 6000.0 -> axisMaxValue = 12000f
-//                            totalDistance > 12000.0 -> axisMaxValue = 24000f
-//                            totalDistance > 24000.0 -> axisMaxValue = 48000f
-//                            totalDistance > 48000.0 -> axisMaxValue = 96000f
-//                            totalDistance > 96000.0 -> axisMaxValue = 200000f
-//                        }
-//                        valueFormatter = DistanceUnit()
-//                    }
-//
                         distanceGraph.getAxisRight().run {
                             isEnabled = false
                             setDrawLabels(false)
