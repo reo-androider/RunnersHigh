@@ -56,12 +56,13 @@ class FragmentProfileSetting : Fragment() {
         binding.run {
             dbPhoto.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Firebase.storage.reference.child(snapshot.value.toString()).getBytes(2048 * 2048)
-                            .addOnSuccessListener {
-                                BitmapFactory.decodeByteArray(it, 0, it.size).also {
-                                    profileImage.setImageBitmap(it)
-                                }
+                    Firebase.storage.reference.child(snapshot.value.toString())
+                        .getBytes(2048 * 2048)
+                        .addOnSuccessListener {
+                            BitmapFactory.decodeByteArray(it, 0, it.size).also {
+                                profileImage.setImageBitmap(it)
                             }
+                        }
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
@@ -107,39 +108,39 @@ class FragmentProfileSetting : Fragment() {
                 override fun onCancelled(error: DatabaseError) {}
             })
 
-            profileBack.setOnClickListener {
-                AlertDialog.Builder(requireContext())
-                        .setIcon(R.drawable.ic_running)
-                        .setTitle("記録を保存しますか？")
-                        .setPositiveButton("Yes") { _, _ ->
-                            firstName = editFirstName.text.toString()
-                            familyName = editFamilyName.text.toString()
-                            objective = editObjective.text.toString()
-                            weight = editWeight.text.toString()
-                            if (firstName == "" && familyName == "") {
-                                familyName = "あなたの"
-                                firstName = "名前"
-                            }
-
-                            if (objective == "") objective = "未登録"
-
-                            val databaseRefFirstName = db.getReference("firstName")
-                            val databaseRefFamily = db.getReference("familyName")
-                            val databaseRefObjective = db.getReference("objective")
-                            val databaseRefWeight = db.getReference("weight")
-
-                            databaseRefFirstName.setValue(firstName)
-                            databaseRefFamily.setValue(familyName)
-                            databaseRefObjective.setValue(objective)
-                            databaseRefWeight.setValue(weight)
-
-                            findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
-                        }
-                        .setNegativeButton("No") { _, _ ->
-                            findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
-                        }
-                        .show()
-            }
+//              削除機能実装保留
+//            profileBack.setOnClickListener {
+//                AlertDialog.Builder(requireContext())
+//                        .setIcon(R.drawable.ic_running)
+//                        .setTitle("記録を保存しますか？")
+//                        .setPositiveButton("Yes") { _, _ ->
+//                            firstName = editFirstName.text.toString()
+//                            familyName = editFamilyName.text.toString()
+//                            objective = editObjective.text.toString()
+//                            weight = editWeight.text.toString()
+//                            if (firstName == "" && familyName == "") {
+//                                familyName = "あなたの"
+//                                firstName = "名前"
+//                            }
+//
+//                            if (objective == "") objective = "未登録"
+//
+//                            val databaseRefFirstName = db.getReference("firstName")
+//                            val databaseRefFamily = db.getReference("familyName")
+//                            val databaseRefObjective = db.getReference("objective")
+//                            val databaseRefWeight = db.getReference("weight")
+//
+//                            databaseRefFirstName.setValue(firstName)
+//                            databaseRefFamily.setValue(familyName)
+//                            databaseRefObjective.setValue(objective)
+//                            databaseRefWeight.setValue(weight)
+//
+//                            findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
+//                        }
+//                        .setNegativeButton("No") { _, _ ->
+//                            findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
+//                        }
+//                        .show()
 
             profileImage.setOnClickListener {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
@@ -148,51 +149,60 @@ class FragmentProfileSetting : Fragment() {
                 startActivityForResult(intent, READ_REQUEST_CODE)
             }
 
-//            deleteText.setOnClickListener {
-//                lifecycleScope.launch(Dispatchers.IO) {
-//                    if (runDB.getAll2().isEmpty()) {
-//                        withContext(Dispatchers.Main) {
-//                            AlertDialog.Builder(requireContext())
-//                                    .setMessage("データがありません")
-//                                    .setPositiveButton("閉じる") { _, _, -> }
-//                                    .show()
-//                        }
-//                    } else {
-//                        withContext(Dispatchers.Main) {
-//                            AlertDialog.Builder(requireContext())
-//                                    .setMessage("データを削除しますか？")
-//                                    .setCancelable(false)
-//                                    .setPositiveButton("はい") { _, _, ->
-//                                        lifecycleScope.launch {
-//                                            delay(1000)
-//                                            AlertDialog.Builder(requireContext())
-//                                                    .setMessage("もしかして、後悔しました？")
-//                                                    .setCancelable(false)
-//                                                    .setPositiveButton("はい") { _, _ ->
-//                                                        Toast.makeText(requireContext(),"データは残しておきましたよ！",Toast.LENGTH_SHORT).show()
-//                                                    }
-//                                                    .setNegativeButton("いいえ") { _, _ ->
-//                                                        lifecycleScope.launch(Dispatchers.IO) {
-//                                                            //TODO
-//                                                            Log.d("debug","before = ${runDB.getAll2()}")
-//                                                            runDB.deleteRecord2(runDB.getAll2())
-//                                                            Log.d("debug","after = ${runDB.getAll2()}")
-//                                                            withContext(Dispatchers.Main){
-//                                                                Toast.makeText(requireContext(),"データを削除しました",Toast.LENGTH_SHORT).show()
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                    .show()
-//                                        }
-//                                    }
-//                                    .setNegativeButton("いいえ") { _, _ -> }
-//                                    .show()
-//                        }
-//                    }
-//                }
-//            }
+            deleteText.setOnClickListener {
+                lifecycleScope.launch(Dispatchers.IO) {
+                    if (runDB.getAll2().isEmpty()) {
+                        withContext(Dispatchers.Main) {
+                            AlertDialog.Builder(requireContext())
+                                .setMessage("データがありません")
+                                .setPositiveButton("閉じる") { _, _, -> }
+                                .show()
+                        }
+                    } else {
+                        withContext(Dispatchers.Main) {
+                            AlertDialog.Builder(requireContext())
+                                .setMessage("データを削除しますか？")
+                                .setCancelable(false)
+                                .setPositiveButton("はい") { _, _, ->
+                                    lifecycleScope.launch {
+                                        delay(1000)
+                                        AlertDialog.Builder(requireContext())
+                                            .setMessage("もしかして、後悔しました？")
+                                            .setCancelable(false)
+                                            .setPositiveButton("はい") { _, _ ->
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    "データは残しておきましたよ！",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                            .setNegativeButton("いいえ") { _, _ ->
+                                                lifecycleScope.launch(Dispatchers.IO) {
+                                                    //TODO
+                                                    Log.d("debug", "before = ${runDB.getAll2()}")
+                                                    runDB.deleteRecord2(runDB.getAll2())
+                                                    Log.d("debug", "after = ${runDB.getAll2()}")
+                                                    withContext(Dispatchers.Main) {
+                                                        Toast.makeText(
+                                                            requireContext(),
+                                                            "データを削除しました",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                                }
+                                            }
+                                            .show()
+                                    }
+                                }
+                                .setNegativeButton("いいえ") { _, _ -> }
+                                .show()
+                        }
+                    }
+                }
+            }
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {

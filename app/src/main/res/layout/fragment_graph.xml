@@ -6,24 +6,19 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/wall_white">
-
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:titleTextColor="@color/white"
-        app:title="記録集"
-        android:background="@color/teal_200"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="計測履歴"
+        app:titleTextColor="@color/normal"
+        android:background="@color/white"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/tool_bar"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:background="@color/wall_white">
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -31,10 +26,13 @@
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
                 app:title="距離の記録"
                 app:titleTextColor="@color/normal"
                 android:background="@color/white"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:backgroundTint="@color/normal"/>
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/distance_graph"
                 android:layout_width="match_parent"
@@ -52,11 +50,6 @@
                 android:layout_height="500dp"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"/>
-            <Button
-                android:id="@+id/diet_information"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/diet_text" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

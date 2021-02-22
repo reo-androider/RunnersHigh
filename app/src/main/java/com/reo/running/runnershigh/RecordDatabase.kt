@@ -74,5 +74,4 @@ interface RecordDao2 {
 
     @Delete
     suspend fun deleteRecord2(recordList: List<Record2>)
-
 }
