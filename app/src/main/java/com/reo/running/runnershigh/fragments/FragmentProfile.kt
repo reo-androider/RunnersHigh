@@ -202,6 +202,8 @@ class FragmentProfile : Fragment() {
             databaseRefFirstName.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val fireStore = snapshot.value
+
+
                     profileFirstName.text = "$fireStore"
                     profileFirstName.setTextColor(resources.getColor(R.color.normal2))
                 }
