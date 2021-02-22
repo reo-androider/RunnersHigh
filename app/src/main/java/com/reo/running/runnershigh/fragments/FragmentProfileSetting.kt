@@ -137,6 +137,7 @@ class FragmentProfileSetting : Fragment() {
                     intent.setType("image/*")
                     startActivityForResult(intent, READ_REQUEST_CODE)
                 }
+            }
 
                 // TODO 削除機能は保留
 //            deleteText.setOnClickListener {
@@ -189,7 +190,6 @@ class FragmentProfileSetting : Fragment() {
 //                    }
 //                }
 //            }
-            }
         }
     }
 
