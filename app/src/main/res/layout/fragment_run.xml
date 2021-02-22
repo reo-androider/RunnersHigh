@@ -240,10 +240,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:backgroundTint="#f44336"/>
 
-
-
-
-
     <!--countDownNum-->
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/countNum3"
