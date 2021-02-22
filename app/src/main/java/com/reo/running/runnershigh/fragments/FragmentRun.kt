@@ -66,7 +66,6 @@ class FragmentRun : Fragment() {
     private var photo:Bitmap? = null
     private var takePhoto = false
     private var  countStart = false //アニメーションが何度も再生されないように
-    private var gpsOff = false
     companion object {
         const val REQUEST_PERMISSION = 1
     }
@@ -129,7 +128,6 @@ class FragmentRun : Fragment() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     super.onLocationResult(locationResult)
                     val lastLocation = locationResult?.lastLocation ?: return
-                    Log.d("checkLatLng", "${LatLng(lastLocation.latitude, lastLocation.longitude)}")
                     binding.mapView.getMapAsync {
                         context?.run {
                             if (ActivityCompat.checkSelfPermission(
@@ -153,7 +151,6 @@ class FragmentRun : Fragment() {
                         )
 
                         if (recordStop == true) {
-
                             stdLocation?.let {
                                 Location.distanceBetween(
                                     it.latitude,
@@ -162,18 +159,9 @@ class FragmentRun : Fragment() {
                                     lastLocation.longitude,
                                     results
                                 )
-
-                                // GPS Adjustment
-                                if (results[0] < 5) {
-                                    totalDistance += results[0]
-                                }
-
-                                Log.d("results", "${results[0]}")
                             }
 
-                            Log.d("stdLocation", "$stdLocation")
-                            Log.d("totalDistance", "$totalDistance")
-
+                            totalDistance += results[0]
                             stdLocation = lastLocation
 
                             kmAmount = kmConvert(totalDistance)
@@ -190,9 +178,7 @@ class FragmentRun : Fragment() {
                                     )
                                 )
                             )
-
                         } else {
-
                             marker?.remove()
                             marker = it.addMarker(
                                 MarkerOptions().position(
@@ -213,13 +199,8 @@ class FragmentRun : Fragment() {
                         }
 
                         if (gpsAdjust < 10) {
-
-                            Log.d("gpsCount", "$gpsAdjust")
-
                             totalDistance = 0.0
-
                         } else {
-
                             if (gpsAdjust == 10) {
 //                            binding.sleepBat.visibility = View.GONE
                                 binding.mapView.visibility = View.VISIBLE
@@ -229,20 +210,6 @@ class FragmentRun : Fragment() {
 
                                 binding.startText.visibility = View.VISIBLE
                                 binding.centerCircle.visibility = View.VISIBLE
-//
-//                            binding.S.visibility = View.GONE
-//                            binding.e.visibility = View.GONE
-//                            binding.a.visibility = View.GONE
-//                            binding.r.visibility = View.GONE
-//                            binding.c.visibility = View.GONE
-//                            binding.h.visibility = View.GONE
-//                            binding.F.visibility = View.GONE
-//                            binding.o.visibility = View.GONE
-//                            binding.r2.visibility = View.GONE
-//                            binding.G.visibility = View.GONE
-//                            binding.P.visibility = View.GONE
-//                            binding.S2.visibility = View.GONE
-//                            binding.sleepBat.visibility = View.GONE
 
                                 val alphaAnimation = AlphaAnimation(0f, 1f)
                                 alphaAnimation.duration = 500
@@ -267,14 +234,10 @@ class FragmentRun : Fragment() {
                         it.uiSettings.isCompassEnabled = true
 
                         gpsAdjust++
-
-                        Log.d("gsp", "$gpsAdjust")
-
                     }
                 }
             }
 
-            // 位置情報を更新
             context?.run {
                 if (ActivityCompat.checkSelfPermission(
                         this,
@@ -394,13 +357,8 @@ class FragmentRun : Fragment() {
                                         }
                                     }
 
-
-                                    // TODO 赤字になる
-//                            lockImage.visibility = View.GONE
-
                                     restartButton.setOnClickListener {
-                                        vibrator =
-                                            getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                        vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                                         vibrationEffect = VibrationEffect.createOneShot(800, 255)
                                         vibrator.vibrate(vibrationEffect)
                                         stopWatch.base = SystemClock.elapsedRealtime() - stopTime
@@ -672,7 +630,6 @@ class FragmentRun : Fragment() {
                                                             takePhoto
                                                         )
                                                         recordDao.insertRecord(record)
-                                                        Log.d("room", "${recordDao.getAll()}")
                                                         withContext(Dispatchers.Main) {
                                                             findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                                                         }
@@ -723,7 +680,6 @@ class FragmentRun : Fragment() {
             0f,
             400f,
             Animation.RELATIVE_TO_SELF,
-            // 0に近づけると右に移動される
             0.255f,
             Animation.RELATIVE_TO_SELF,
             0.55f
@@ -776,15 +732,12 @@ class FragmentRun : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d("photo_camera", "$data")
-        Log.d("photo_camera", "$image_uri")
         if (resultCode == Activity.RESULT_OK) {
                 (data?.extras?.get("data") as? Bitmap?).let {
                     binding.cameraSet.setImageBitmap(it)
                     binding.cameraSet.rotation = 90f
                     photo = it
                     takePhoto = true
-                    Log.d("photo","$photo")
                 }
         }
     }

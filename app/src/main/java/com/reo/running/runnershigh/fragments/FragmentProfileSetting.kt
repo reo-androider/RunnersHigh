@@ -148,49 +148,49 @@ class FragmentProfileSetting : Fragment() {
                 startActivityForResult(intent, READ_REQUEST_CODE)
             }
 
-            deleteText.setOnClickListener {
-                lifecycleScope.launch(Dispatchers.IO) {
-                    if (runDB.getAll2().isEmpty()) {
-                        withContext(Dispatchers.Main) {
-                            AlertDialog.Builder(requireContext())
-                                    .setMessage("データがありません")
-                                    .setPositiveButton("閉じる") { _, _, -> }
-                                    .show()
-                        }
-                    } else {
-                        withContext(Dispatchers.Main) {
-                            AlertDialog.Builder(requireContext())
-                                    .setMessage("データを削除しますか？")
-                                    .setCancelable(false)
-                                    .setPositiveButton("はい") { _, _, ->
-                                        lifecycleScope.launch {
-                                            delay(1000)
-                                            AlertDialog.Builder(requireContext())
-                                                    .setMessage("もしかして、後悔しました？")
-                                                    .setCancelable(false)
-                                                    .setPositiveButton("はい") { _, _ ->
-                                                        Toast.makeText(requireContext(),"データは残しておきましたよ！",Toast.LENGTH_SHORT).show()
-                                                    }
-                                                    .setNegativeButton("いいえ") { _, _ ->
-                                                        lifecycleScope.launch(Dispatchers.IO) {
-                                                            //TODO
-                                                            Log.d("debug","before = ${runDB.getAll2()}")
-                                                            runDB.deleteRecord2(runDB.getAll2())
-                                                            Log.d("debug","after = ${runDB.getAll2()}")
-                                                            withContext(Dispatchers.Main){
-                                                                Toast.makeText(requireContext(),"データを削除しました",Toast.LENGTH_SHORT).show()
-                                                            }
-                                                        }
-                                                    }
-                                                    .show()
-                                        }
-                                    }
-                                    .setNegativeButton("いいえ") { _, _ -> }
-                                    .show()
-                        }
-                    }
-                }
-            }
+//            deleteText.setOnClickListener {
+//                lifecycleScope.launch(Dispatchers.IO) {
+//                    if (runDB.getAll2().isEmpty()) {
+//                        withContext(Dispatchers.Main) {
+//                            AlertDialog.Builder(requireContext())
+//                                    .setMessage("データがありません")
+//                                    .setPositiveButton("閉じる") { _, _, -> }
+//                                    .show()
+//                        }
+//                    } else {
+//                        withContext(Dispatchers.Main) {
+//                            AlertDialog.Builder(requireContext())
+//                                    .setMessage("データを削除しますか？")
+//                                    .setCancelable(false)
+//                                    .setPositiveButton("はい") { _, _, ->
+//                                        lifecycleScope.launch {
+//                                            delay(1000)
+//                                            AlertDialog.Builder(requireContext())
+//                                                    .setMessage("もしかして、後悔しました？")
+//                                                    .setCancelable(false)
+//                                                    .setPositiveButton("はい") { _, _ ->
+//                                                        Toast.makeText(requireContext(),"データは残しておきましたよ！",Toast.LENGTH_SHORT).show()
+//                                                    }
+//                                                    .setNegativeButton("いいえ") { _, _ ->
+//                                                        lifecycleScope.launch(Dispatchers.IO) {
+//                                                            //TODO
+//                                                            Log.d("debug","before = ${runDB.getAll2()}")
+//                                                            runDB.deleteRecord2(runDB.getAll2())
+//                                                            Log.d("debug","after = ${runDB.getAll2()}")
+//                                                            withContext(Dispatchers.Main){
+//                                                                Toast.makeText(requireContext(),"データを削除しました",Toast.LENGTH_SHORT).show()
+//                                                            }
+//                                                        }
+//                                                    }
+//                                                    .show()
+//                                        }
+//                                    }
+//                                    .setNegativeButton("いいえ") { _, _ -> }
+//                                    .show()
+//                        }
+//                    }
+//                }
+//            }
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
