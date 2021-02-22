@@ -89,7 +89,6 @@ class FragmentRun : Fragment() {
             override fun onLocationResult(locationResult: LocationResult?) {
                 super.onLocationResult(locationResult)
                 val lastLocation = locationResult?.lastLocation ?: return
-                Log.d("checkLatLng", "${LatLng(lastLocation.latitude, lastLocation.longitude)}")
                 binding.mapView.getMapAsync {
                     context?.run {
                         if (ActivityCompat.checkSelfPermission(
@@ -127,12 +126,7 @@ class FragmentRun : Fragment() {
                             if (results[0] < 5) {
                                 totalDistance += results[0]
                             }
-
-                            Log.d("results", "${results[0]}")
                         }
-
-                        Log.d("stdLocation", "$stdLocation")
-                        Log.d("totalDistance", "$totalDistance")
 
                         stdLocation = lastLocation
 
@@ -172,9 +166,6 @@ class FragmentRun : Fragment() {
                     }
 
                     if (gpsAdjust < 10) {
-
-                        Log.d("gpsCount", "$gpsAdjust")
-
                         totalDistance = 0.0
 
                     } else {
@@ -273,7 +264,6 @@ class FragmentRun : Fragment() {
                         GlobalScope.launch {
                             withContext(Dispatchers.IO) {
                                 delay(1000)
-                                Log.d("withContext", "withContext")
                                 listOf(
                                     countNum3,
                                     countNum2,
@@ -589,9 +579,6 @@ class FragmentRun : Fragment() {
 
                                         finishImage.clearAnimation()
                                         finishButton.clearAnimation()
-
-                                        Log.d("test", stopWatch.text.toString())
-
                                         val builder = AlertDialog.Builder(requireContext())
                                         builder
                                             .setCancelable(false)
@@ -674,7 +661,6 @@ class FragmentRun : Fragment() {
     }
 
     private fun openCamera() {
-        // TODO
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
@@ -704,15 +690,12 @@ class FragmentRun : Fragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d("photo_camera", "$data")
-        Log.d("photo_camera", "$image_uri")
         if (resultCode == Activity.RESULT_OK) {
                 (data?.extras?.get("data") as? Bitmap?).let {
                     binding.cameraSet.setImageBitmap(it)
                     binding.cameraSet.rotation = 90f
                     photo = it
                     takePhoto = true
-                    Log.d("photo","$photo")
                 }
         }
     }

@@ -6,11 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
-
-<<<<<<< HEAD:app/src/main/res/layout/fragment_1.xml
-=======
-
->>>>>>> feature/profileSetting:app/src/main/res/layout/fragment_run.xml
     <!-- timer -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/timer_screen"
@@ -333,7 +328,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
     <ImageView
         android:id="@+id/lockImage"
         android:layout_width="40dp"
@@ -357,7 +351,4 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"
         android:contentDescription="@string/lock" />
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
