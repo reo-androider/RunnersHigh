@@ -142,4 +142,9 @@ dependencies {
     //OkHttp
     implementation 'com.squareup.okhttp:okhttp:2.7.5'
 
+    //Retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+
+    //Fuel
+    implementation 'com.github.kittinunf.fuel:fuel:1.12.0'
 }

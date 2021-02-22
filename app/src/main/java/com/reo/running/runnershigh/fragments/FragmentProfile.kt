@@ -44,6 +44,7 @@ class FragmentProfile : Fragment() {
     private val databaseReferencePhoto = Firebase.database.getReference("profile")
     private lateinit var auth:FirebaseAuth
     private val runDB = MyApplication.db.recordDao2()
+    private var firstId:Int = 0
     private var lastId:Int = 0
     private var i:Int? = 0  //カウント変数用
     private var totalDistance = 0.0
@@ -86,9 +87,10 @@ class FragmentProfile : Fragment() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val data = runDB.getAll2()
                     if (data.isNotEmpty()) {
+                        firstId = data.first().id
                         lastId = data.last().id
                         if (lastId != null) {
-                            for (i in 0..lastId - 1) {
+                            for (i in firstId..lastId - 1) {
                                 totalDistance += data[i].distance
                                 totalCalorie += data[i].calorie
                             }

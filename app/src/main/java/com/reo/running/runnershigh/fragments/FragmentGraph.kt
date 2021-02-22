@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import com.github.kittinunf.fuel.httpGet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -16,20 +17,22 @@ import com.reo.running.runnershigh.databinding.FragmentGraphBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.*
 
 class FragmentGraph : Fragment() {
     private lateinit var binding: FragmentGraphBinding
-    private var entriesTime: ArrayList<Entry> = ArrayList()
     private var entries: ArrayList<Entry> = ArrayList()
-    private var entries2:ArrayList<Entry> = ArrayList()
+    private var entries2: ArrayList<Entry> = ArrayList()
+    private var firstId = 0
     private var lastId = 0
     private var totalDistance = 0.0
     private var totalCalorie = 0.0
-    private var totalTime = 0
     private val runDatabase = MyApplication.db.recordDao2()
-
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentGraphBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -42,8 +45,8 @@ class FragmentGraph : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 val read = runDatabase.getAll2()
                 if (read.isNotEmpty()) {
-                    val xValue = mutableListOf<String>()
                     lastId = read.last().id - 1
+                    val xValue = mutableListOf<String>()
                     for (i in 0..lastId) {
                         xValue.add(read[i].runData)
                     }
@@ -54,11 +57,10 @@ class FragmentGraph : Fragment() {
 
                     }
                     withContext(Dispatchers.Main) {
-                        for (i in 0..lastId) {
+                        for (i in firstId..lastId) {
                             entries.add(i, Entry(mConverter(yValue[i]), i))
                         }
                         val dataset = LineDataSet(entries, "")
-                        val timeData = LineData(xValue, dataset)
                         val data = LineData(xValue, dataset)
                         dataset.setColors(ColorTemplate.COLORFUL_COLORS)
                         distanceGraph.getAxisRight().run {
@@ -80,16 +82,14 @@ class FragmentGraph : Fragment() {
                 totalCalorie.let {
                     val read = runDatabase.getAll2()
                     if (read.isNotEmpty()) {
-                        Log.d("ROOM", "${read}")
-
-                        val xValue2 = mutableListOf<String>()
                         lastId = read.last().id - 1
+                        val xValue2 = mutableListOf<String>()
                         for (i in 0..lastId) {
                             xValue2.add(read[i].runData)
                         }
 
                         val yValue2 = mutableListOf<Double>()
-                        for (i in 0..lastId) {
+                        for (i in firstId..lastId) {
                             yValue2.add((read[i].calorie) + totalCalorie)
                             Log.d("ROOM", "${yValue2[i]}")
                             totalCalorie += read[i].calorie
