@@ -404,18 +404,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/memoDisplay" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/memo"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:textSize="15sp"-->
-<!--        android:textColor="@color/normal"-->
-<!--        android:textColorHint="@color/normal"-->
-<!--        android:layout_marginBottom="145dp"-->
-<!--        android:layout_marginStart="10dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@id/memoImage"/>-->
-
 <!--fab-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/resultButton"
