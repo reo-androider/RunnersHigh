@@ -12,7 +12,6 @@ import com.reo.running.runnershigh.fragments.FragmentGraph
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
-    val fragment = FragmentGraph()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
