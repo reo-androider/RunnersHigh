@@ -702,11 +702,11 @@ class ResultFragment : Fragment() {
                     R.drawable.ic_return2
                 )
 
-                val adapter = MyAdapter(courseList,position)
+                val adapter = PaintsAdapter(courseList,position)
                 binding.mainRecyclerView.adapter = adapter
                 binding.mainRecyclerView.layoutManager =  LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
                 adapter.setOnItemClickListener(
-                    object: MyAdapter.OnCourseListener {
+                    object: PaintsAdapter.OnCourseListener {
                         override fun onItemClick(list: List<Int>,position: Int) {
                             when(courseList[position]) {
                                 R.drawable.ic_black -> {
