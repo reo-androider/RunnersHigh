@@ -22,7 +22,7 @@ import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
 
-class FragmentProfileSetting : Fragment() {
+class ProfileSettingFragment : Fragment() {
 
     private lateinit var binding:FragmentProfileSettingBinding
     lateinit var storage:FirebaseStorage

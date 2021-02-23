@@ -32,7 +32,7 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
 import kotlinx.coroutines.*
 
-class FragmentResult : Fragment() {
+class ResultFragment : Fragment() {
 
     private lateinit var binding: FragmentResultBinding
     private val readDao = MyApplication.db.recordDao()

@@ -36,7 +36,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 
-class FragmentProfile : Fragment() {
+class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private var login = ""
     private val databaseReferenceLogin = Firebase.database.getReference("Login")

@@ -2,11 +2,9 @@ package com.reo.running.runnershigh
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MotionEvent
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.reo.running.runnershigh.databinding.ActivityMainBinding
-import com.reo.running.runnershigh.fragments.FragmentGraph
 
 
 class MainActivity : AppCompatActivity() {
