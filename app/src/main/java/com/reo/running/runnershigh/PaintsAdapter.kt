@@ -4,16 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(val list: List<Int>,var index: Int) : RecyclerView.Adapter<MyViewHolder>() {
+class PaintsAdapter(val list: List<Int>, var index: Int) : RecyclerView.Adapter<paintsViewHolder>() {
 
     private lateinit var listener: OnCourseListener
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): paintsViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_recyclerview,parent,false)
-        return MyViewHolder(itemView)
+        return paintsViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: paintsViewHolder, position: Int) {
         holder.course.setImageResource(list[position])
 
         holder.itemView.setOnClickListener {
