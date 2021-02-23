@@ -36,23 +36,23 @@ class PhotoListAdapter(val list: List<Record2>) : RecyclerView.Adapter<PhotoList
 
             runFeedBack.run {
                 when (list[position].revaluationMark) {
-                    "perfect" -> {
+                    FeedBack.PERFECT.revaluationMark -> {
                         setImageResource(R.drawable.ic_perfect)
                         visibility = View.VISIBLE
                     }
-                    "good" -> {
+                    FeedBack.GOOD.revaluationMark -> {
                         setImageResource(R.drawable.ic_good)
                         visibility = View.VISIBLE
                     }
-                    "soso" -> {
+                    FeedBack.SOSO.revaluationMark -> {
                         setImageResource(R.drawable.ic_soso)
                         visibility = View.VISIBLE
                     }
-                    "bad" -> {
+                    FeedBack.BAD.revaluationMark -> {
                         setImageResource(R.drawable.ic_bad)
                         visibility = View.VISIBLE
                     }
-                    "tooBad" -> {
+                    FeedBack.TOOBAD.revaluationMark -> {
                         setImageResource(R.drawable.ic_sick)
                         visibility = View.VISIBLE
                     }
@@ -61,5 +61,13 @@ class PhotoListAdapter(val list: List<Record2>) : RecyclerView.Adapter<PhotoList
         }
     }
     override fun getItemCount(): Int = list.size
+}
+
+enum class FeedBack(val revaluationMark:String) {
+    PERFECT("perfect"),
+    GOOD("good"),
+    SOSO("soso"),
+    BAD("bad"),
+    TOOBAD("tooBad")
 }
 
