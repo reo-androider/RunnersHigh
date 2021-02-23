@@ -1,25 +1,51 @@
 package com.reo.running.runnershigh
 
+import android.annotation.TargetApi
+import android.content.Context
+import android.os.Build
+import android.graphics.drawable.VectorDrawable
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.util.Base64
-import androidx.room.TypeConverter
-import java.io.ByteArrayOutputStream
+import android.graphics.Canvas
+import androidx.vectordrawable.graphics.drawable.VectorDrawableCompat
+import androidx.annotation.DrawableRes
+import androidx.core.content.ContextCompat
+import android.graphics.drawable.BitmapDrawable
+import java.lang.IllegalArgumentException
 
-class BitmapConverter {
-    @TypeConverter
-    fun toEncodedString(bitmap: Bitmap?): String =
-        bitmap?.let { b->
-            val bos = ByteArrayOutputStream().also {
-                if (!b.compress(Bitmap.CompressFormat.PNG,50,it)) return ""
-            }
-            Base64.encodeToString(bos.toByteArray(),Base64.DEFAULT)
-        } ?:""
+object BitmapConverter {
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun getBitmap(vectorDrawable: VectorDrawable): Bitmap {
+        val bitmap = Bitmap.createBitmap(
+            vectorDrawable.intrinsicWidth,
+            vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
+        vectorDrawable.draw(canvas)
+        return bitmap
+    }
 
-    @TypeConverter
-    fun String.toBitmap(): Bitmap? {
-        return Base64.decode(this,Base64.DEFAULT).let {
-            BitmapFactory.decodeByteArray(it,0,it.size)
+    private fun getBitmap(vectorDrawable: VectorDrawableCompat): Bitmap {
+        val bitmap = Bitmap.createBitmap(
+            vectorDrawable.intrinsicWidth,
+            vectorDrawable.intrinsicHeight, Bitmap.Config.ARGB_8888
+        )
+        val canvas = Canvas(bitmap)
+        vectorDrawable.setBounds(0, 0, canvas.width, canvas.height)
+        vectorDrawable.draw(canvas)
+        return bitmap
+    }
+
+    fun getBitmap(context: Context?, @DrawableRes drawableResId: Int): Bitmap {
+        val drawable = ContextCompat.getDrawable(context!!, drawableResId)
+        return if (drawable is BitmapDrawable) {
+            drawable.bitmap
+        } else if (drawable is VectorDrawableCompat) {
+            getBitmap(drawable)
+        } else if (drawable is VectorDrawable) {
+            getBitmap(drawable)
+        } else {
+            throw IllegalArgumentException("Unsupported drawable type")
         }
     }
 }

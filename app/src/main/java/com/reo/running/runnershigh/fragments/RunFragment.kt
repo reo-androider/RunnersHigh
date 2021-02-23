@@ -189,7 +189,7 @@ class RunFragment : Fragment() {
                                 )
                                     .icon(
                                         BitmapDescriptorFactory.fromBitmap(
-                                            Resource.getBitmap(
+                                            BitmapConverter.getBitmap(
                                                 context,
                                                 R.drawable.in_trace
                                             )
