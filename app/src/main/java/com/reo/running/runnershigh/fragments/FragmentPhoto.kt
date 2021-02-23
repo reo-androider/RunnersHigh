@@ -1,6 +1,5 @@
 package com.reo.running.runnershigh.fragments
 
-import android.graphics.Bitmap
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.reo.running.runnershigh.MyAdapter2
+import com.reo.running.runnershigh.PhotoListAdapter
 import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.Record2
@@ -51,7 +50,7 @@ class FragmentPhoto : Fragment() {
                         runData.add(record2)
                     }
                     withContext(Dispatchers.Main) {
-                        mainRecyclerView.adapter = MyAdapter2(runData)
+                        mainRecyclerView.adapter = PhotoListAdapter(runData)
                         mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                         returnButton.setOnClickListener {
                             findNavController().navigate(R.id.action_fragmentPhoto_to_navi_setting)

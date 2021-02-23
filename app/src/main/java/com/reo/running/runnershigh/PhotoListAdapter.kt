@@ -1,19 +1,18 @@
 package com.reo.running.runnershigh
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter2(val list: List<Record2>) : RecyclerView.Adapter<MyViewHolder2>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder2 {
+class PhotoListAdapter(val list: List<Record2>) : RecyclerView.Adapter<PhotoListViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoListViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_photo_item,parent,false)
-        return MyViewHolder2(itemView)
+        return PhotoListViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: MyViewHolder2, position: Int) {
+    override fun onBindViewHolder(holder: PhotoListViewHolder, position: Int) {
         holder.run {
             runPhoto.run {
                 setImageBitmap(list[position].bitmap)
