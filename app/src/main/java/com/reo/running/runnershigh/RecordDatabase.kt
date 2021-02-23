@@ -6,7 +6,7 @@ import androidx.room.*
 @Database(entities = arrayOf(
     Record::class,
     Record2::class) ,version = 1)
-@TypeConverters(BitmapConverter::class)
+@TypeConverters(BitmapForRoom::class)
 abstract class RecordDatabase : RoomDatabase() {
     abstract fun recordDao(): RecordDao
     abstract fun recordDao2(): RecordDao2
