@@ -67,19 +67,18 @@ class ResultFragment : Fragment() {
                 val record = readDao.getAll()
 
                 withContext(Dispatchers.Main) {
-                    binding.totalTime.text = record.lastOrNull()?.time
-                    binding.totalDistance.text = "${record.lastOrNull()?.distance}km"
-                    binding.totalCalorie.text = "${record.lastOrNull()?.calorie}kcal"
-                    binding.today.text = record.lastOrNull()?.runDate
-                    binding.photoEmpty.setImageBitmap(record.lastOrNull()?.bitmap)
-
+                    totalTime.text = record.lastOrNull()?.time
+                    totalDistance.text = "${record.lastOrNull()?.distance}km"
+                    totalCalorie.text = "${record.lastOrNull()?.calorie}kcal"
+                    today.text = record.lastOrNull()?.runDate
+                    photoEmpty.setImageBitmap(record.lastOrNull()?.bitmap)
 
                     if (record.lastOrNull()?.takenPhoto == true) {
-                        binding.cameraImage.visibility = View.GONE
+                        cameraImage.visibility = View.GONE
                     }
 
-                    binding.cameraImage.setOnClickListener {
-                        binding.photoReturn.visibility = View.GONE
+                    cameraImage.setOnClickListener {
+                        photoReturn.visibility = View.GONE
                         if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
                                 == PackageManager.PERMISSION_DENIED ||
                                 ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -96,14 +95,14 @@ class ResultFragment : Fragment() {
                         }
                     }
 
-                    binding.perfectImage.alpha = 0.6F
-                    binding.goodImage.alpha = 0.6F
-                    binding.sosoImage.alpha = 0.6F
-                    binding.badImage.alpha = 0.6F
-                    binding.tooBadImage.alpha = 0.6F
-                    binding.memo.movementMethod = ScrollingMovementMethod()
+                    perfectImage.alpha = 0.6F
+                    goodImage.alpha = 0.6F
+                    sosoImage.alpha = 0.6F
+                    badImage.alpha = 0.6F
+                    tooBadImage.alpha = 0.6F
+                    memo.movementMethod = ScrollingMovementMethod()
 
-                    binding.perfectImage.setOnClickListener {
+                    perfectImage.setOnClickListener {
                         if (!select) {
                             select = true
                             selectMark = "perfect"
@@ -121,22 +120,22 @@ class ResultFragment : Fragment() {
                                     it.fillAfter = true
                                 }
 
-                                binding.perfectImage.alpha = 1F
-                                binding.perfectImage.setColorFilter(Color.parseColor("#4CAF50"))
+                                perfectImage.alpha = 1F
+                                perfectImage.setColorFilter(Color.parseColor("#4CAF50"))
                                 delay(100)
-                                binding.goodImage.startAnimation(scaleAnimation)
-                                binding.sosoImage.startAnimation(scaleAnimation)
-                                binding.badImage.startAnimation(scaleAnimation)
-                                binding.tooBadImage.startAnimation(scaleAnimation)
+                                goodImage.startAnimation(scaleAnimation)
+                                sosoImage.startAnimation(scaleAnimation)
+                                badImage.startAnimation(scaleAnimation)
+                                tooBadImage.startAnimation(scaleAnimation)
                                 delay(500)
-                                binding.goodImage.clearAnimation()
-                                binding.sosoImage.clearAnimation()
-                                binding.badImage.clearAnimation()
-                                binding.tooBadImage.clearAnimation()
-                                binding.goodImage.visibility = View.GONE
-                                binding.sosoImage.visibility = View.GONE
-                                binding.badImage.visibility = View.GONE
-                                binding.tooBadImage.visibility = View.GONE
+                                goodImage.clearAnimation()
+                                sosoImage.clearAnimation()
+                                badImage.clearAnimation()
+                                tooBadImage.clearAnimation()
+                                goodImage.visibility = View.GONE
+                                sosoImage.visibility = View.GONE
+                                badImage.visibility = View.GONE
+                                tooBadImage.visibility = View.GONE
                                 delay(100)
                                 val translateAnimation = TranslateAnimation(
                                         500f,
@@ -150,8 +149,8 @@ class ResultFragment : Fragment() {
                                         1f,
                                 )
                                 alphaAnimation.duration = 500
-                                binding.score100.visibility = View.VISIBLE
-                                binding.score100.startAnimation(translateAnimation)
+                                score100.visibility = View.VISIBLE
+                                score100.startAnimation(translateAnimation)
                                 val rotateAnimation = RotateAnimation(
                                         -90f,
                                         0f,
@@ -159,13 +158,13 @@ class ResultFragment : Fragment() {
                                         1f
                                 )
                                 rotateAnimation.duration = 500
-                                binding.cancel.visibility = View.VISIBLE
-                                binding.cancel.startAnimation(rotateAnimation)
+                                cancel.visibility = View.VISIBLE
+                                cancel.startAnimation(rotateAnimation)
                             }
                         }
                     }
 
-                    binding.goodImage.setOnClickListener {
+                    goodImage.setOnClickListener {
                         if (!select) {
                             select = true
                             selectMark = "good"
@@ -194,23 +193,23 @@ class ResultFragment : Fragment() {
                                     it.fillAfter = true
                                 }
 
-                                binding.goodImage.alpha = 1F
-                                binding.goodImage.setColorFilter(Color.parseColor("#CDDC39"))
-                                binding.perfectImage.startAnimation(scaleAnimation)
-                                binding.sosoImage.startAnimation(scaleAnimation)
-                                binding.badImage.startAnimation(scaleAnimation)
-                                binding.tooBadImage.startAnimation(scaleAnimation)
+                                goodImage.alpha = 1F
+                                goodImage.setColorFilter(Color.parseColor("#CDDC39"))
+                                perfectImage.startAnimation(scaleAnimation)
+                                sosoImage.startAnimation(scaleAnimation)
+                                badImage.startAnimation(scaleAnimation)
+                                tooBadImage.startAnimation(scaleAnimation)
                                 delay(500)
-                                binding.perfectImage.clearAnimation()
-                                binding.sosoImage.clearAnimation()
-                                binding.badImage.clearAnimation()
-                                binding.tooBadImage.clearAnimation()
-                                binding.perfectImage.visibility = View.GONE
-                                binding.sosoImage.visibility = View.GONE
-                                binding.badImage.visibility = View.GONE
-                                binding.tooBadImage.visibility = View.GONE
+                                perfectImage.clearAnimation()
+                                sosoImage.clearAnimation()
+                                badImage.clearAnimation()
+                                tooBadImage.clearAnimation()
+                                perfectImage.visibility = View.GONE
+                                sosoImage.visibility = View.GONE
+                                badImage.visibility = View.GONE
+                                tooBadImage.visibility = View.GONE
                                 delay(500)
-                                binding.goodImage.startAnimation(translateAnimation2)
+                                goodImage.startAnimation(translateAnimation2)
                                 delay(100)
                                 val translateAnimation = TranslateAnimation(
                                         500f,
@@ -219,8 +218,8 @@ class ResultFragment : Fragment() {
                                         1f,
                                 )
                                 translateAnimation.duration = 500
-                                binding.score80.visibility = View.VISIBLE
-                                binding.score80.startAnimation(translateAnimation)
+                                score80.visibility = View.VISIBLE
+                                score80.startAnimation(translateAnimation)
                                 val rotateAnimation = RotateAnimation(
                                         -90f,
                                         0f,
@@ -228,16 +227,13 @@ class ResultFragment : Fragment() {
                                         1f
                                 )
                                 rotateAnimation.duration = 500
-                                binding.cancel.visibility = View.VISIBLE
-                                binding.cancel.startAnimation(rotateAnimation)
+                                cancel.visibility = View.VISIBLE
+                                cancel.startAnimation(rotateAnimation)
                             }
                         }
                     }
 
-
-
-
-                    binding.sosoImage.setOnClickListener {
+                    sosoImage.setOnClickListener {
                         if (!select) {
                             select = true
                             selectMark = "soso"
@@ -265,29 +261,29 @@ class ResultFragment : Fragment() {
                                     it.fillAfter = true
                                 }
 
-                                binding.sosoImage.alpha = 1F
-                                binding.sosoImage.setColorFilter(Color.parseColor("#FFC107"))
+                                sosoImage.alpha = 1F
+                                sosoImage.setColorFilter(Color.parseColor("#FFC107"))
 
-                                binding.perfectImage.startAnimation(scaleAnimation)
-                                binding.goodImage.startAnimation(scaleAnimation)
-                                binding.badImage.startAnimation(scaleAnimation)
-                                binding.tooBadImage.startAnimation(scaleAnimation)
-
-                                delay(500)
-
-                                binding.perfectImage.clearAnimation()
-                                binding.goodImage.clearAnimation()
-                                binding.badImage.clearAnimation()
-                                binding.tooBadImage.clearAnimation()
-
-                                binding.perfectImage.visibility = View.GONE
-                                binding.goodImage.visibility = View.GONE
-                                binding.badImage.visibility = View.GONE
-                                binding.tooBadImage.visibility = View.GONE
+                                perfectImage.startAnimation(scaleAnimation)
+                                goodImage.startAnimation(scaleAnimation)
+                                badImage.startAnimation(scaleAnimation)
+                                tooBadImage.startAnimation(scaleAnimation)
 
                                 delay(500)
 
-                                binding.sosoImage.startAnimation(translateAnimation2)
+                                perfectImage.clearAnimation()
+                                goodImage.clearAnimation()
+                                badImage.clearAnimation()
+                                tooBadImage.clearAnimation()
+
+                                perfectImage.visibility = View.GONE
+                                goodImage.visibility = View.GONE
+                                badImage.visibility = View.GONE
+                                tooBadImage.visibility = View.GONE
+
+                                delay(500)
+
+                                sosoImage.startAnimation(translateAnimation2)
 
                                 delay(100)
 
@@ -298,8 +294,8 @@ class ResultFragment : Fragment() {
                                         1f,
                                 )
                                 translateAnimation.duration = 500
-                                binding.score60.visibility = View.VISIBLE
-                                binding.score60.startAnimation(translateAnimation)
+                                score60.visibility = View.VISIBLE
+                                score60.startAnimation(translateAnimation)
                                 val rotateAnimation = RotateAnimation(
                                         -90f,
                                         0f,
@@ -307,8 +303,8 @@ class ResultFragment : Fragment() {
                                         1f
                                 )
                                 rotateAnimation.duration = 500
-                                binding.cancel.visibility = View.VISIBLE
-                                binding.cancel.startAnimation(rotateAnimation)
+                                cancel.visibility = View.VISIBLE
+                                cancel.startAnimation(rotateAnimation)
                             }
                         }
                     }
@@ -343,29 +339,29 @@ class ResultFragment : Fragment() {
                                 it.fillAfter = true
                             }
 
-                            binding.badImage.alpha = 1F
-                            binding.badImage.setColorFilter(Color.parseColor("#FF9800"))
+                            badImage.alpha = 1F
+                            badImage.setColorFilter(Color.parseColor("#FF9800"))
 
-                            binding.perfectImage.startAnimation(scaleAnimation)
-                            binding.goodImage.startAnimation(scaleAnimation)
-                            binding.sosoImage.startAnimation(scaleAnimation)
-                            binding.tooBadImage.startAnimation(scaleAnimation)
-
-                            delay(500)
-
-                            binding.perfectImage.clearAnimation()
-                            binding.goodImage.clearAnimation()
-                            binding.sosoImage.clearAnimation()
-                            binding.tooBadImage.clearAnimation()
-
-                            binding.perfectImage.visibility = View.GONE
-                            binding.goodImage.visibility = View.GONE
-                            binding.sosoImage.visibility = View.GONE
-                            binding.tooBadImage.visibility = View.GONE
+                            perfectImage.startAnimation(scaleAnimation)
+                            goodImage.startAnimation(scaleAnimation)
+                            sosoImage.startAnimation(scaleAnimation)
+                            tooBadImage.startAnimation(scaleAnimation)
 
                             delay(500)
 
-                            binding.badImage.startAnimation(translateAnimation2)
+                            perfectImage.clearAnimation()
+                            goodImage.clearAnimation()
+                            sosoImage.clearAnimation()
+                            tooBadImage.clearAnimation()
+
+                            perfectImage.visibility = View.GONE
+                            goodImage.visibility = View.GONE
+                            sosoImage.visibility = View.GONE
+                            tooBadImage.visibility = View.GONE
+
+                            delay(500)
+
+                            badImage.startAnimation(translateAnimation2)
 
                             delay(100)
 
@@ -376,8 +372,8 @@ class ResultFragment : Fragment() {
                                     1f,
                             )
                             translateAnimation.duration = 500
-                            binding.score40.visibility = View.VISIBLE
-                            binding.score40.startAnimation(translateAnimation)
+                            score40.visibility = View.VISIBLE
+                            score40.startAnimation(translateAnimation)
                             val rotateAnimation = RotateAnimation(
                                     -90f,
                                     0f,
@@ -385,18 +381,14 @@ class ResultFragment : Fragment() {
                                     1f
                             )
                             rotateAnimation.duration = 500
-                            binding.cancel.visibility = View.VISIBLE
-                            binding.cancel.startAnimation(rotateAnimation)
+                            cancel.visibility = View.VISIBLE
+                            cancel.startAnimation(rotateAnimation)
                         }
                     }
                 }
             }
 
-
-
-
-
-            binding.tooBadImage.setOnClickListener {
+            tooBadImage.setOnClickListener {
                 if (!select) {
                     select = true
                     selectMark = "tooBad"
@@ -424,29 +416,29 @@ class ResultFragment : Fragment() {
                             it.fillAfter = true
                         }
 
-                        binding.tooBadImage.alpha = 1F
-                        binding.tooBadImage.setColorFilter(Color.parseColor("#f44336"))
+                        tooBadImage.alpha = 1F
+                        tooBadImage.setColorFilter(Color.parseColor("#f44336"))
 
-                        binding.perfectImage.startAnimation(scaleAnimation)
-                        binding.goodImage.startAnimation(scaleAnimation)
-                        binding.sosoImage.startAnimation(scaleAnimation)
-                        binding.badImage.startAnimation(scaleAnimation)
-
-                        delay(500)
-
-                        binding.perfectImage.clearAnimation()
-                        binding.goodImage.clearAnimation()
-                        binding.sosoImage.clearAnimation()
-                        binding.badImage.clearAnimation()
-
-                        binding.perfectImage.visibility = View.GONE
-                        binding.goodImage.visibility = View.GONE
-                        binding.sosoImage.visibility = View.GONE
-                        binding.badImage.visibility = View.GONE
+                        perfectImage.startAnimation(scaleAnimation)
+                        goodImage.startAnimation(scaleAnimation)
+                        sosoImage.startAnimation(scaleAnimation)
+                        badImage.startAnimation(scaleAnimation)
 
                         delay(500)
 
-                        binding.tooBadImage.startAnimation(translateAnimation2)
+                        perfectImage.clearAnimation()
+                        goodImage.clearAnimation()
+                        sosoImage.clearAnimation()
+                        badImage.clearAnimation()
+
+                        perfectImage.visibility = View.GONE
+                        goodImage.visibility = View.GONE
+                        sosoImage.visibility = View.GONE
+                        badImage.visibility = View.GONE
+
+                        delay(500)
+
+                        tooBadImage.startAnimation(translateAnimation2)
 
                         delay(100)
 
@@ -457,8 +449,8 @@ class ResultFragment : Fragment() {
                                 1f,
                         )
                         translateAnimation.duration = 500
-                        binding.score20.visibility = View.VISIBLE
-                        binding.score20.startAnimation(translateAnimation)
+                        score20.visibility = View.VISIBLE
+                        score20.startAnimation(translateAnimation)
                         val rotateAnimation = RotateAnimation(
                                 -90f,
                                 0f,
@@ -466,13 +458,8 @@ class ResultFragment : Fragment() {
                                 1f
                         )
                         rotateAnimation.duration = 500
-                        binding.cancel.visibility = View.VISIBLE
-                        binding.cancel.startAnimation(rotateAnimation)
-//                            binding.feedBack.let {
-//                                it.setImageResource(R.drawable.ic_sick)
-//                                it.setColorFilter(Color.parseColor("#f44336"))
-//                                it.visibility = View.VISIBLE
-//                            }
+                        cancel.visibility = View.VISIBLE
+                        cancel.startAnimation(rotateAnimation)
                     }
                 }
             }
@@ -489,16 +476,16 @@ class ResultFragment : Fragment() {
                     )
                     rotateAnimation.duration = 100
                     rotateAnimation.fillAfter = true
-                    binding.cancel.startAnimation(rotateAnimation)
+                    cancel.startAnimation(rotateAnimation)
                     delay(100)
-                    binding.cancel.clearAnimation()
-                    binding.cancel.visibility = View.GONE
+                    cancel.clearAnimation()
+                    cancel.visibility = View.GONE
                     when (selectMark) {
 
                         "perfect" -> {
-                            binding.perfectImage.alpha = 0.6F
-                            binding.perfectImage.setColorFilter(Color.parseColor("#757575"))
-                            binding.score100.visibility = View.GONE
+                            perfectImage.alpha = 0.6F
+                            perfectImage.setColorFilter(Color.parseColor("#757575"))
+                            score100.visibility = View.GONE
                             val scaleAnimation = ScaleAnimation(
                                     0.3f,
                                     1f,
@@ -508,24 +495,23 @@ class ResultFragment : Fragment() {
                                     50f
                             )
                             scaleAnimation.duration = 100
-                            binding.goodImage.visibility = View.VISIBLE
-                            binding.goodImage.startAnimation(scaleAnimation)
+                            goodImage.visibility = View.VISIBLE
+                            goodImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.sosoImage.visibility = View.VISIBLE
-                            binding.sosoImage.startAnimation(scaleAnimation)
+                            sosoImage.visibility = View.VISIBLE
+                            sosoImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.badImage.visibility = View.VISIBLE
-                            binding.badImage.startAnimation(scaleAnimation)
+                            badImage.visibility = View.VISIBLE
+                            badImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.tooBadImage.visibility = View.VISIBLE
-                            binding.tooBadImage.startAnimation(scaleAnimation)
-//                                    binding.feedBack.visibility = View.INVISIBLE
+                            tooBadImage.visibility = View.VISIBLE
+                            tooBadImage.startAnimation(scaleAnimation)
                         }
 
                         "good" -> {
-                            binding.goodImage.alpha = 0.6F
-                            binding.goodImage.setColorFilter(Color.parseColor("#757575"))
-                            binding.score80.visibility = View.GONE
+                            goodImage.alpha = 0.6F
+                            goodImage.setColorFilter(Color.parseColor("#757575"))
+                            score80.visibility = View.GONE
                             val scaleAnimation = ScaleAnimation(
                                     0.3f,
                                     1f,
@@ -542,25 +528,24 @@ class ResultFragment : Fragment() {
                             )
                             translateAnimation.duration = 500
                             scaleAnimation.duration = 100
-                            binding.goodImage.startAnimation(translateAnimation)
-                            binding.perfectImage.visibility = View.VISIBLE
-                            binding.perfectImage.startAnimation(scaleAnimation)
+                            goodImage.startAnimation(translateAnimation)
+                            perfectImage.visibility = View.VISIBLE
+                            perfectImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.sosoImage.visibility = View.VISIBLE
-                            binding.sosoImage.startAnimation(scaleAnimation)
+                            sosoImage.visibility = View.VISIBLE
+                            sosoImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.badImage.visibility = View.VISIBLE
-                            binding.badImage.startAnimation(scaleAnimation)
+                            badImage.visibility = View.VISIBLE
+                            badImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.tooBadImage.visibility = View.VISIBLE
-                            binding.tooBadImage.startAnimation(scaleAnimation)
-//                                    binding.feedBack.visibility = View.INVISIBLE
+                            tooBadImage.visibility = View.VISIBLE
+                            tooBadImage.startAnimation(scaleAnimation)
                         }
 
                         "soso" -> {
-                            binding.sosoImage.alpha = 0.6F
-                            binding.sosoImage.setColorFilter(Color.parseColor("#757575"))
-                            binding.score60.visibility = View.GONE
+                            sosoImage.alpha = 0.6F
+                            sosoImage.setColorFilter(Color.parseColor("#757575"))
+                            score60.visibility = View.GONE
                             val scaleAnimation = ScaleAnimation(
                                     0.3f,
                                     1f,
@@ -577,25 +562,24 @@ class ResultFragment : Fragment() {
                             )
                             translateAnimation.duration = 500
                             scaleAnimation.duration = 100
-                            binding.sosoImage.startAnimation(translateAnimation)
-                            binding.perfectImage.visibility = View.VISIBLE
-                            binding.perfectImage.startAnimation(scaleAnimation)
+                            sosoImage.startAnimation(translateAnimation)
+                            perfectImage.visibility = View.VISIBLE
+                            perfectImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.goodImage.visibility = View.VISIBLE
-                            binding.goodImage.startAnimation(scaleAnimation)
+                            goodImage.visibility = View.VISIBLE
+                            goodImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.badImage.visibility = View.VISIBLE
-                            binding.badImage.startAnimation(scaleAnimation)
+                            badImage.visibility = View.VISIBLE
+                            badImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.tooBadImage.visibility = View.VISIBLE
-                            binding.tooBadImage.startAnimation(scaleAnimation)
-//                                    binding.feedBack.visibility = View.INVISIBLE
+                            tooBadImage.visibility = View.VISIBLE
+                            tooBadImage.startAnimation(scaleAnimation)
                         }
 
                         "bad" -> {
-                            binding.badImage.alpha = 0.6F
-                            binding.badImage.setColorFilter(Color.parseColor("#757575"))
-                            binding.score40.visibility = View.GONE
+                            badImage.alpha = 0.6F
+                            badImage.setColorFilter(Color.parseColor("#757575"))
+                            score40.visibility = View.GONE
                             val scaleAnimation = ScaleAnimation(
                                     0.3f,
                                     1f,
@@ -612,26 +596,25 @@ class ResultFragment : Fragment() {
                             )
                             translateAnimation.duration = 500
                             scaleAnimation.duration = 100
-                            binding.badImage.startAnimation(translateAnimation)
-                            binding.perfectImage.visibility = View.VISIBLE
-                            binding.perfectImage.startAnimation(scaleAnimation)
+                            badImage.startAnimation(translateAnimation)
+                            perfectImage.visibility = View.VISIBLE
+                            perfectImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.goodImage.visibility = View.VISIBLE
-                            binding.goodImage.startAnimation(scaleAnimation)
+                            goodImage.visibility = View.VISIBLE
+                            goodImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.sosoImage.visibility = View.VISIBLE
-                            binding.sosoImage.startAnimation(scaleAnimation)
+                            sosoImage.visibility = View.VISIBLE
+                            sosoImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.tooBadImage.visibility = View.VISIBLE
-                            binding.tooBadImage.startAnimation(scaleAnimation)
-//                                    binding.feedBack.visibility = View.INVISIBLE
+                            tooBadImage.visibility = View.VISIBLE
+                            tooBadImage.startAnimation(scaleAnimation)
                         }
 
 
                         "tooBad" -> {
-                            binding.tooBadImage.alpha = 0.6F
-                            binding.tooBadImage.setColorFilter(Color.parseColor("#757575"))
-                            binding.score20.visibility = View.GONE
+                            tooBadImage.alpha = 0.6F
+                            tooBadImage.setColorFilter(Color.parseColor("#757575"))
+                            score20.visibility = View.GONE
                             val scaleAnimation = ScaleAnimation(
                                     0.3f,
                                     1f,
@@ -648,18 +631,18 @@ class ResultFragment : Fragment() {
                             )
                             translateAnimation.duration = 500
                             scaleAnimation.duration = 100
-                            binding.tooBadImage.startAnimation(translateAnimation)
-                            binding.perfectImage.visibility = View.VISIBLE
-                            binding.perfectImage.startAnimation(scaleAnimation)
+                            tooBadImage.startAnimation(translateAnimation)
+                            perfectImage.visibility = View.VISIBLE
+                            perfectImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.goodImage.visibility = View.VISIBLE
-                            binding.goodImage.startAnimation(scaleAnimation)
+                            goodImage.visibility = View.VISIBLE
+                            goodImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.sosoImage.visibility = View.VISIBLE
+                            sosoImage.visibility = View.VISIBLE
                             binding.sosoImage.startAnimation(scaleAnimation)
                             delay(200)
-                            binding.badImage.visibility = View.VISIBLE
-                            binding.badImage.startAnimation(scaleAnimation)
+                            badImage.visibility = View.VISIBLE
+                            badImage.startAnimation(scaleAnimation)
                         }
                     }
                 }
@@ -679,120 +662,120 @@ class ResultFragment : Fragment() {
             )
 
             val adapter = PaintsAdapter(courseList, position)
-            binding.mainRecyclerView.adapter = adapter
-            binding.mainRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
+            mainRecyclerView.adapter = adapter
+            mainRecyclerView.layoutManager = LinearLayoutManager(context, RecyclerView.HORIZONTAL, false)
             adapter.setOnItemClickListener(
                     object : PaintsAdapter.OnCourseListener {
                         override fun onItemClick(list: List<Int>, position: Int) {
                             when (courseList[position]) {
                                 R.drawable.ic_black -> {
                                     selectColor = "#FF000000"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    today.setTextColor(Color.parseColor(selectColor))
+                                    photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_red -> {
                                     selectColor = "#f44336"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    today.setTextColor(Color.parseColor(selectColor))
+                                    photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_return2 -> {
                                     selectColor = "#FFFFFFFF"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
                                     binding.today.setTextColor(Color.parseColor(selectColor))
                                     binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_blue -> {
                                     selectColor = "#2196F3"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
                                     binding.today.setTextColor(Color.parseColor(selectColor))
                                     binding.photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_green -> {
                                     selectColor = "#4CAF50"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    today.setTextColor(Color.parseColor(selectColor))
+                                    photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_pink -> {
                                     selectColor = "#ff1493"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    today.setTextColor(Color.parseColor(selectColor))
+                                    photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_yellow -> {
                                     selectColor = "#FFFF00"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    today.setTextColor(Color.parseColor(selectColor))
+                                    photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_purple -> {
                                     selectColor = "#800080"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    today.setTextColor(Color.parseColor(selectColor))
+                                    photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_brown -> {
                                     selectColor = "#795548"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    today.setTextColor(Color.parseColor(selectColor))
+                                    photoText.setTextColor(Color.parseColor(selectColor))
                                 }
 
                                 R.drawable.ic_gray -> {
                                     selectColor = "#757575"
-                                    binding.totalTime.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    binding.totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
+                                    totalTime.setTextColor(Color.parseColor(selectColor))
+                                    totalDistance.setTextColor(Color.parseColor(selectColor))
+                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
+                                    today.setTextColor(Color.parseColor(selectColor))
+                                    photoText.setTextColor(Color.parseColor(selectColor))
                                 }
                             }
                         }
                     })
 
-            binding.photoCancel.setOnClickListener {
-                binding.photoCancel.visibility = View.GONE
-                binding.cameraImage.visibility = View.VISIBLE
-                binding.photoEmpty.visibility = View.GONE
-                binding.photoReturn.visibility = View.VISIBLE
+            photoCancel.setOnClickListener {
+                photoCancel.visibility = View.GONE
+                cameraImage.visibility = View.VISIBLE
+                photoEmpty.visibility = View.GONE
+                photoReturn.visibility = View.VISIBLE
             }
 
-            binding.photoReturn.setOnClickListener {
-                binding.photoReturn.visibility = View.GONE
-                binding.photoCancel.visibility = View.VISIBLE
-                binding.photoEmpty.visibility = View.VISIBLE
-                binding.cameraImage.visibility = View.GONE
+            photoReturn.setOnClickListener {
+                photoReturn.visibility = View.GONE
+                photoCancel.visibility = View.VISIBLE
+                photoEmpty.visibility = View.VISIBLE
+                cameraImage.visibility = View.GONE
             }
 
-            binding.edit.setOnClickListener {
+            edit.setOnClickListener {
                 val myEdit = EditText(requireContext())
                 myEdit.run {
                     isSingleLine = false
@@ -806,7 +789,7 @@ class ResultFragment : Fragment() {
                     setView(myEdit)
                     setPositiveButton("完了") { _, _ ->
                         draft = myEdit.text.toString()
-                        binding.memo.text = draft
+                        memo.text = draft
                     }
 
                     setNegativeButton("戻る") { _, _ ->
@@ -815,20 +798,20 @@ class ResultFragment : Fragment() {
                 }
             }
 
-            binding.delete.setOnClickListener {
+            delete.setOnClickListener {
                 val dialog = AlertDialog.Builder(requireContext())
                 dialog.setTitle("メモを削除しますか？")
                 dialog.setCancelable(false)
                 dialog.setPositiveButton("はい") { _, _ ->
                     draft = ""
-                    binding.memo.text = resources.getString(R.string.memo)
+                    memo.text = resources.getString(R.string.memo)
                 }
                 dialog.setNegativeButton("いいえ") { _, _ ->
                 }
                 dialog.show()
             }
 
-            binding.resultButton.setOnClickListener {
+            resultButton.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val record = readDao.getAll().lastOrNull()
                     val record2 = record?.time?.let { it1 ->
