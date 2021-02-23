@@ -465,7 +465,7 @@ class ResultFragment : Fragment() {
             }
 
 
-            binding.cancel.setOnClickListener {
+            cancel.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.Main) {
                     select = false
                     val rotateAnimation = RotateAnimation(
@@ -791,7 +791,6 @@ class ResultFragment : Fragment() {
                         draft = myEdit.text.toString()
                         memo.text = draft
                     }
-
                     setNegativeButton("戻る") { _, _ ->
                     }
                     show()
@@ -800,15 +799,16 @@ class ResultFragment : Fragment() {
 
             delete.setOnClickListener {
                 val dialog = AlertDialog.Builder(requireContext())
-                dialog.setTitle("メモを削除しますか？")
-                dialog.setCancelable(false)
-                dialog.setPositiveButton("はい") { _, _ ->
-                    draft = ""
-                    memo.text = resources.getString(R.string.memo)
+                dialog.run {
+                    setTitle("メモを削除しますか？")
+                    setCancelable(false)
+                    setPositiveButton("はい") { _, _ ->
+                        draft = ""
+                        memo.text = resources.getString(R.string.memo)
+                    }
+                    setNegativeButton("いいえ") {_,_ ->}
+                    show()
                 }
-                dialog.setNegativeButton("いいえ") { _, _ ->
-                }
-                dialog.show()
             }
 
             resultButton.setOnClickListener {

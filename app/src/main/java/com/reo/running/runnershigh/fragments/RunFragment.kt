@@ -101,17 +101,6 @@ class RunFragment : Fragment() {
                     override fun onCancelled(error: DatabaseError) {}
                 })
 
-                GlobalScope.launch(Dispatchers.Main) {
-                    val waveAnimation = TranslateAnimation(
-                            1f,
-                            1f,
-                            1f,
-                            -100f
-                    )
-                    waveAnimation.let {
-                        it.duration = 100
-                    }
-                }
                 context?.run {
                     fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
                 }
@@ -127,25 +116,10 @@ class RunFragment : Fragment() {
                         super.onLocationResult(locationResult)
                         val lastLocation = locationResult?.lastLocation ?: return
                         binding.mapView.getMapAsync {
-                            context?.run {
-                                if (ActivityCompat.checkSelfPermission(
-                                                this,
-                                                Manifest.permission.ACCESS_FINE_LOCATION
-                                        ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                                this,
-                                                Manifest.permission.ACCESS_COARSE_LOCATION
-                                        ) != PackageManager.PERMISSION_GRANTED
-                                ) {
-                                    it.isMyLocationEnabled = true
-                                }
-                            }
+//                            今後必要なので残しておく
+//                            it.isMyLocationEnabled = true
                             it.moveCamera(
-                                    CameraUpdateFactory.newLatLngZoom(
-                                            LatLng(
-                                                    lastLocation.latitude,
-                                                    lastLocation.longitude
-                                            ), zoomValue
-                                    )
+                                    CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue)
                             )
 
                             if (recordStop == true) {
@@ -227,16 +201,6 @@ class RunFragment : Fragment() {
                 }
 
                 context?.run {
-                    if (ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.ACCESS_FINE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                                    this,
-                                    Manifest.permission.ACCESS_COARSE_LOCATION
-                            ) != PackageManager.PERMISSION_GRANTED
-                    ) {
-                        return
-                    }
                     fusedLocationClient.requestLocationUpdates(
                             locationRequest,
                             locationCallback,
@@ -282,7 +246,6 @@ class RunFragment : Fragment() {
                                 GlobalScope.launch {
                                     withContext(Dispatchers.IO) {
                                         delay(1000)
-                                        Log.d("withContext", "withContext")
                                         listOf(
                                                 countNum3,
                                                 countNum2,
