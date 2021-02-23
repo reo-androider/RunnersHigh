@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class FragmentPhoto : Fragment() {
+class PhotoFragment : Fragment() {
     private lateinit var binding:FragmentPhotoBinding
     private val readDao = MyApplication.db.recordDao2()
     val runData = mutableListOf<Record2>()

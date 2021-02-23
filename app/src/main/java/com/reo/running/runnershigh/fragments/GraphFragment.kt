@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.*
 
-class FragmentGraph : Fragment() {
+class GraphFragment : Fragment() {
     private lateinit var binding: FragmentGraphBinding
     private var entries: ArrayList<Entry> = ArrayList()
     private var entries2: ArrayList<Entry> = ArrayList()

@@ -39,7 +39,7 @@ import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import kotlin.math.ceil
 
-class FragmentRun : Fragment() {
+class RunFragment : Fragment() {
 
     private lateinit var binding: FragmentRunBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
