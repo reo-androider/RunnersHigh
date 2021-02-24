@@ -20,20 +20,11 @@ class PhotoListAdapter(val list: List<Record2>) : RecyclerView.Adapter<PhotoList
                     setBackgroundColor(Color.parseColor(list[position].colorId))
                 }
             }
-            runDate.run {
-                setText(list[position].runData)
-            }
-            runTime.run {
-                setText(list[position].time)
-            }
-            runDistance.run {
-                text = "${list[position].distance}km"
-            }
-            runCalorie.run {
-                text = "${list[position].calorie}kcal"
-            }
+            runDate.setText(list[position].runData)
+            runTime.setText(list[position].time)
+            runDistance.text = "${list[position].distance}km"
+            runCalorie.text = "${list[position].calorie}kcal"
             runMemo.text = "${list[position].memo}"
-
             runFeedBack.run {
                 when (list[position].revaluationMark) {
                     FeedBack.PERFECT.revaluationMark -> {

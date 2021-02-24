@@ -321,6 +321,7 @@ class ProfileFragment : Fragment() {
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
+
                 FirebaseDatabase.getInstance().setPersistenceEnabled(true)
                 binding.loginText.visibility = View.VISIBLE
                 val day = loginDate().toString()

@@ -784,15 +784,14 @@ class ResultFragment : Fragment() {
                 }
                 val dialog = AlertDialog.Builder(requireContext())
                 dialog.run {
-                    setTitle("メモ欄")
-                    setCancelable(false)
+                    setTitle("メモ欄").setCancelable(true)
                     setView(myEdit)
                     setPositiveButton("完了") { _, _ ->
                         draft = myEdit.text.toString()
                         memo.text = draft
                     }
-                    setNegativeButton("戻る") { _, _ ->
-                    }
+//                    setNegativeButton("戻る") { _, _ ->
+//                    }
                     show()
                 }
             }
@@ -800,13 +799,11 @@ class ResultFragment : Fragment() {
             delete.setOnClickListener {
                 val dialog = AlertDialog.Builder(requireContext())
                 dialog.run {
-                    setTitle("メモを削除しますか？")
-                    setCancelable(false)
+                    setTitle("メモを削除しますか？").setCancelable(true)
                     setPositiveButton("はい") { _, _ ->
                         draft = ""
                         memo.text = resources.getString(R.string.memo)
                     }
-                    setNegativeButton("いいえ") {_,_ ->}
                     show()
                 }
             }
