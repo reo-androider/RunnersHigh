@@ -115,7 +115,7 @@ class RunFragment : Fragment() {
                     override fun onLocationResult(locationResult: LocationResult?) {
                         super.onLocationResult(locationResult)
                         val lastLocation = locationResult?.lastLocation ?: return
-                        binding.mapView.getMapAsync {
+                        mapView.getMapAsync {
 //                            今後必要なので残しておく
 //                            it.isMyLocationEnabled = true
                             it.moveCamera(
