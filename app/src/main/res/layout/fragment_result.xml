@@ -45,7 +45,6 @@
         android:src="@drawable/ic_return2"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
-        android:elevation="100dp"
         android:visibility="gone"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -86,7 +85,6 @@
         android:layout_marginStart="10dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/weather" />
-
 
     <TextView
         android:id="@+id/totalDistance"
@@ -136,14 +134,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/white"/>
-
-<!--feed back-->
-<!--    <com.andexert.library.RippleView-->
-<!--        android:id="@+id/rippleView"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="100dp"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/backRound">-->
-
 
     <ImageView
         android:id="@+id/perfectImage"
@@ -308,53 +298,6 @@
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/backRound"
         app:layout_constraintStart_toStartOf="parent"/>
-
-<!--weather-->
-<!--    <ImageView-->
-<!--        android:id="@+id/sunny"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:src="@drawable/ic_sunny"-->
-<!--        android:layout_marginTop="330dp"-->
-<!--        android:layout_marginStart="80dp"-->
-<!--        android:contentDescription="@string/weatherSet"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/cloud"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:src="@drawable/ic_cloud"-->
-<!--        android:layout_marginTop="330dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:contentDescription="@string/weatherSet"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@id/sunny"/>-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/rainy"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:src="@drawable/ic_rainy"-->
-<!--        android:layout_marginTop="330dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:contentDescription="@string/weatherSet"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@id/cloud"/>-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/snow"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:src="@drawable/ic_snow"-->
-<!--        android:layout_marginTop="330dp"-->
-<!--        android:layout_marginStart="20dp"-->
-<!--        android:contentDescription="@string/weatherSet"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@id/rainy" />-->
-
-<!--color-->
 
 <!--memo-->
     <ImageView
