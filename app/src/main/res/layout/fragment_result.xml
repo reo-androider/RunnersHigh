@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:elevation="-10dp"
         android:background="@color/teal_200"
-        android:layout_marginBottom="495dp"/>
+        android:layout_marginBottom="490dp"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/photoEmpty"
@@ -113,86 +113,79 @@
 
     <ImageView
         android:id="@+id/cameraImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_gravity="center"
         android:src="@drawable/ic_camera"
         android:contentDescription="@string/result_camera"
         android:layout_marginTop="60dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="100dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="550dp"
         app:tint="@color/white"/>
 
     <ImageView
         android:id="@+id/perfectImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_perfect"
         android:layout_marginTop="110dp"
         android:layout_marginStart="30dp"
+        android:layout_marginEnd="310dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintEnd_toStartOf="@id/goodImage"
         android:contentDescription="@string/feedBack"
-        android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@id/backRound"
-        app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/normal2"
-        android:focusable="true" />
+        app:tint="@color/normal2" />
 
     <ImageView
         android:id="@+id/goodImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_good"
         android:layout_marginTop="110dp"
         android:layout_marginStart="100dp"
-        android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@id/backRound"
-        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginEnd="238dp"
+        android:layout_marginBottom="100dp"
+        app:layout_constraintStart_toEndOf="@id/perfectImage"
         android:contentDescription="@string/feedBack"
-        app:tint="@color/normal2"
-        android:focusable="true" />
+        app:tint="@color/normal2" />
 
     <ImageView
         android:id="@+id/sosoImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_soso"
         android:layout_marginTop="110dp"
         android:layout_marginStart="170dp"
+        android:layout_marginEnd="170dp"
+        android:layout_marginBottom="100dp"
         android:contentDescription="@string/feedBack"
-        android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@id/backRound"
-        app:layout_constraintStart_toStartOf="parent"
         app:tint="@color/normal2"
         android:focusable="true" />
 
     <ImageView
         android:id="@+id/badImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_bad"
         android:layout_marginTop="110dp"
         android:layout_marginStart="240dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginBottom="100dp"
         android:contentDescription="@string/feedBack"
-        android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@id/backRound"
-        app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/normal2"
-        android:focusable="true" />
+        app:tint="@color/normal2" />
 
     <ImageView
         android:id="@+id/tooBadImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_sick"
         android:layout_marginTop="110dp"
         android:layout_marginStart="310dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginBottom="100dp"
         android:contentDescription="@string/feedBack"
-        android:clickable="true"
-        app:layout_constraintTop_toBottomOf="@id/backRound"
-        app:layout_constraintStart_toStartOf="parent"
-        app:tint="@color/normal2"
-        android:focusable="true" />
+        app:tint="@color/normal2" />
 
     <ImageView
         android:id="@+id/cancel"

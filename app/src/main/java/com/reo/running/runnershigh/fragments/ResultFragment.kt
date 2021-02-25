@@ -102,364 +102,365 @@ class ResultFragment : Fragment() {
                     tooBadImage.alpha = 0.6F
                     memo.movementMethod = ScrollingMovementMethod()
 
-                    perfectImage.setOnClickListener {
-                        if (!select) {
-                            select = true
-                            selectMark = "perfect"
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                val scaleAnimation = ScaleAnimation(
-                                        1f,
-                                        0.3f,
-                                        1f,
-                                        0.3f,
-                                        50f,
-                                        50f
-                                )
-                                scaleAnimation.let {
-                                    it.duration = 500
-                                    it.fillAfter = true
-                                }
-
-                                perfectImage.alpha = 1F
-                                perfectImage.setColorFilter(Color.parseColor("#4CAF50"))
-                                delay(100)
-                                goodImage.startAnimation(scaleAnimation)
-                                sosoImage.startAnimation(scaleAnimation)
-                                badImage.startAnimation(scaleAnimation)
-                                tooBadImage.startAnimation(scaleAnimation)
-                                delay(500)
-                                goodImage.clearAnimation()
-                                sosoImage.clearAnimation()
-                                badImage.clearAnimation()
-                                tooBadImage.clearAnimation()
-                                goodImage.visibility = View.GONE
-                                sosoImage.visibility = View.GONE
-                                badImage.visibility = View.GONE
-                                tooBadImage.visibility = View.GONE
-                                delay(100)
-                                val translateAnimation = TranslateAnimation(
-                                        500f,
-                                        1f,
-                                        1f,
-                                        1f,
-                                )
-                                translateAnimation.duration = 500
-                                val alphaAnimation = AlphaAnimation(
-                                        0.3f,
-                                        1f,
-                                )
-                                alphaAnimation.duration = 500
-                                score100.visibility = View.VISIBLE
-                                score100.startAnimation(translateAnimation)
-                                val rotateAnimation = RotateAnimation(
-                                        -90f,
-                                        0f,
-                                        0.5f,
-                                        1f
-                                )
-                                rotateAnimation.duration = 500
-                                cancel.visibility = View.VISIBLE
-                                cancel.startAnimation(rotateAnimation)
-                            }
-                        }
-                    }
-
-                    goodImage.setOnClickListener {
-                        if (!select) {
-                            select = true
-                            selectMark = "good"
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                val scaleAnimation = ScaleAnimation(
-                                        1f,
-                                        0.3f,
-                                        1f,
-                                        0.3f,
-                                        50f,
-                                        50f
-                                )
-                                scaleAnimation.let {
-                                    it.duration = 500
-                                    it.fillAfter = true
-                                }
-                                val translateAnimation2 = TranslateAnimation(
-                                        1f,
-                                        -200f,
-                                        1f,
-                                        1f
-                                )
-
-                                translateAnimation2.let {
-                                    it.duration = 500
-                                    it.fillAfter = true
-                                }
-
-                                goodImage.alpha = 1F
-                                goodImage.setColorFilter(Color.parseColor("#CDDC39"))
-                                perfectImage.startAnimation(scaleAnimation)
-                                sosoImage.startAnimation(scaleAnimation)
-                                badImage.startAnimation(scaleAnimation)
-                                tooBadImage.startAnimation(scaleAnimation)
-                                delay(500)
-                                perfectImage.clearAnimation()
-                                sosoImage.clearAnimation()
-                                badImage.clearAnimation()
-                                tooBadImage.clearAnimation()
-                                perfectImage.visibility = View.GONE
-                                sosoImage.visibility = View.GONE
-                                badImage.visibility = View.GONE
-                                tooBadImage.visibility = View.GONE
-                                delay(500)
-                                goodImage.startAnimation(translateAnimation2)
-                                delay(100)
-                                val translateAnimation = TranslateAnimation(
-                                        500f,
-                                        1f,
-                                        1f,
-                                        1f,
-                                )
-                                translateAnimation.duration = 500
-                                score80.visibility = View.VISIBLE
-                                score80.startAnimation(translateAnimation)
-                                val rotateAnimation = RotateAnimation(
-                                        -90f,
-                                        0f,
-                                        0.5f,
-                                        1f
-                                )
-                                rotateAnimation.duration = 500
-                                cancel.visibility = View.VISIBLE
-                                cancel.startAnimation(rotateAnimation)
-                            }
-                        }
-                    }
-
-                    sosoImage.setOnClickListener {
-                        if (!select) {
-                            select = true
-                            selectMark = "soso"
-                            lifecycleScope.launch(Dispatchers.Main) {
-                                val scaleAnimation = ScaleAnimation(
-                                        1f,
-                                        0.3f,
-                                        1f,
-                                        0.3f,
-                                        50f,
-                                        50f
-                                )
-                                scaleAnimation.let {
-                                    it.duration = 500
-                                    it.fillAfter = true
-                                }
-                                val translateAnimation2 = TranslateAnimation(
-                                        1f,
-                                        -400f,
-                                        1f,
-                                        1f
-                                )
-                                translateAnimation2.let {
-                                    it.duration = 500
-                                    it.fillAfter = true
-                                }
-
-                                sosoImage.alpha = 1F
-                                sosoImage.setColorFilter(Color.parseColor("#FFC107"))
-
-                                perfectImage.startAnimation(scaleAnimation)
-                                goodImage.startAnimation(scaleAnimation)
-                                badImage.startAnimation(scaleAnimation)
-                                tooBadImage.startAnimation(scaleAnimation)
-
-                                delay(500)
-
-                                perfectImage.clearAnimation()
-                                goodImage.clearAnimation()
-                                badImage.clearAnimation()
-                                tooBadImage.clearAnimation()
-
-                                perfectImage.visibility = View.GONE
-                                goodImage.visibility = View.GONE
-                                badImage.visibility = View.GONE
-                                tooBadImage.visibility = View.GONE
-
-                                delay(500)
-
-                                sosoImage.startAnimation(translateAnimation2)
-
-                                delay(100)
-
-                                val translateAnimation = TranslateAnimation(
-                                        500f,
-                                        1f,
-                                        1f,
-                                        1f,
-                                )
-                                translateAnimation.duration = 500
-                                score60.visibility = View.VISIBLE
-                                score60.startAnimation(translateAnimation)
-                                val rotateAnimation = RotateAnimation(
-                                        -90f,
-                                        0f,
-                                        0.5f,
-                                        1f
-                                )
-                                rotateAnimation.duration = 500
-                                cancel.visibility = View.VISIBLE
-                                cancel.startAnimation(rotateAnimation)
-                            }
-                        }
-                    }
-                }
-
-
-                binding.badImage.setOnClickListener {
-                    if (!select) {
-                        select = true
-                        selectMark = "bad"
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            val scaleAnimation = ScaleAnimation(
-                                    1f,
-                                    0.3f,
-                                    1f,
-                                    0.3f,
-                                    50f,
-                                    50f
-                            )
-                            scaleAnimation.let {
-                                it.duration = 500
-                                it.fillAfter = true
-                            }
-                            val translateAnimation2 = TranslateAnimation(
-                                    1f,
-                                    -580f,
-                                    1f,
-                                    1f
-                            )
-                            translateAnimation2.let {
-                                it.duration = 500
-                                it.fillAfter = true
-                            }
-
-                            badImage.alpha = 1F
-                            badImage.setColorFilter(Color.parseColor("#FF9800"))
-
-                            perfectImage.startAnimation(scaleAnimation)
-                            goodImage.startAnimation(scaleAnimation)
-                            sosoImage.startAnimation(scaleAnimation)
-                            tooBadImage.startAnimation(scaleAnimation)
-
-                            delay(500)
-
-                            perfectImage.clearAnimation()
-                            goodImage.clearAnimation()
-                            sosoImage.clearAnimation()
-                            tooBadImage.clearAnimation()
-
-                            perfectImage.visibility = View.GONE
-                            goodImage.visibility = View.GONE
-                            sosoImage.visibility = View.GONE
-                            tooBadImage.visibility = View.GONE
-
-                            delay(500)
-
-                            badImage.startAnimation(translateAnimation2)
-
-                            delay(100)
-
-                            val translateAnimation = TranslateAnimation(
-                                    500f,
-                                    1f,
-                                    1f,
-                                    1f,
-                            )
-                            translateAnimation.duration = 500
-                            score40.visibility = View.VISIBLE
-                            score40.startAnimation(translateAnimation)
-                            val rotateAnimation = RotateAnimation(
-                                    -90f,
-                                    0f,
-                                    0.5f,
-                                    1f
-                            )
-                            rotateAnimation.duration = 500
-                            cancel.visibility = View.VISIBLE
-                            cancel.startAnimation(rotateAnimation)
-                        }
-                    }
-                }
-            }
-
-            tooBadImage.setOnClickListener {
-                if (!select) {
-                    select = true
-                    selectMark = "tooBad"
                     lifecycleScope.launch(Dispatchers.Main) {
-                        val scaleAnimation = ScaleAnimation(
-                                1f,
-                                0.3f,
-                                1f,
-                                0.3f,
-                                50f,
-                                50f
-                        )
-                        scaleAnimation.let {
-                            it.duration = 500
-                            it.fillAfter = true
+                        perfectImage.setOnClickListener {
+                            if (!select) {
+                                select = true
+                                selectMark = "perfect"
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    val scaleAnimation = ScaleAnimation(
+                                            1f,
+                                            0.3f,
+                                            1f,
+                                            0.3f,
+                                            50f,
+                                            50f
+                                    )
+                                    scaleAnimation.let {
+                                        it.duration = 500
+                                        it.fillAfter = true
+                                    }
+
+                                    perfectImage.alpha = 1F
+                                    perfectImage.setColorFilter(Color.parseColor("#4CAF50"))
+                                    delay(100)
+                                    goodImage.startAnimation(scaleAnimation)
+                                    sosoImage.startAnimation(scaleAnimation)
+                                    badImage.startAnimation(scaleAnimation)
+                                    tooBadImage.startAnimation(scaleAnimation)
+                                    delay(500)
+                                    goodImage.clearAnimation()
+                                    sosoImage.clearAnimation()
+                                    badImage.clearAnimation()
+                                    tooBadImage.clearAnimation()
+                                    goodImage.visibility = View.GONE
+                                    sosoImage.visibility = View.GONE
+                                    badImage.visibility = View.GONE
+                                    tooBadImage.visibility = View.GONE
+                                    delay(100)
+                                    val translateAnimation = TranslateAnimation(
+                                            500f,
+                                            1f,
+                                            1f,
+                                            1f,
+                                    )
+                                    translateAnimation.duration = 500
+                                    val alphaAnimation = AlphaAnimation(
+                                            0.3f,
+                                            1f,
+                                    )
+                                    alphaAnimation.duration = 500
+                                    score100.visibility = View.VISIBLE
+                                    score100.startAnimation(translateAnimation)
+                                    val rotateAnimation = RotateAnimation(
+                                            -90f,
+                                            0f,
+                                            0.5f,
+                                            1f
+                                    )
+                                    rotateAnimation.duration = 500
+                                    cancel.visibility = View.VISIBLE
+                                    cancel.startAnimation(rotateAnimation)
+                                }
+                            }
                         }
-                        val translateAnimation2 = TranslateAnimation(
-                                1f,
-                                -800f,
-                                1f,
-                                1f
-                        )
-                        translateAnimation2.let {
-                            it.duration = 500
-                            it.fillAfter = true
+
+                        goodImage.setOnClickListener {
+                            if (!select) {
+                                select = true
+                                selectMark = "good"
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    val scaleAnimation = ScaleAnimation(
+                                            1f,
+                                            0.3f,
+                                            1f,
+                                            0.3f,
+                                            50f,
+                                            50f
+                                    )
+                                    scaleAnimation.let {
+                                        it.duration = 500
+                                        it.fillAfter = true
+                                    }
+                                    val translateAnimation2 = TranslateAnimation(
+                                            1f,
+                                            -200f,
+                                            1f,
+                                            1f
+                                    )
+
+                                    translateAnimation2.let {
+                                        it.duration = 500
+                                        it.fillAfter = true
+                                    }
+
+                                    goodImage.alpha = 1F
+                                    goodImage.setColorFilter(Color.parseColor("#CDDC39"))
+                                    perfectImage.startAnimation(scaleAnimation)
+                                    sosoImage.startAnimation(scaleAnimation)
+                                    badImage.startAnimation(scaleAnimation)
+                                    tooBadImage.startAnimation(scaleAnimation)
+                                    delay(500)
+                                    perfectImage.clearAnimation()
+                                    sosoImage.clearAnimation()
+                                    badImage.clearAnimation()
+                                    tooBadImage.clearAnimation()
+                                    perfectImage.visibility = View.GONE
+                                    sosoImage.visibility = View.GONE
+                                    badImage.visibility = View.GONE
+                                    tooBadImage.visibility = View.GONE
+                                    delay(500)
+                                    goodImage.startAnimation(translateAnimation2)
+                                    delay(100)
+                                    val translateAnimation = TranslateAnimation(
+                                            500f,
+                                            1f,
+                                            1f,
+                                            1f,
+                                    )
+                                    translateAnimation.duration = 500
+                                    score80.visibility = View.VISIBLE
+                                    score80.startAnimation(translateAnimation)
+                                    val rotateAnimation = RotateAnimation(
+                                            -90f,
+                                            0f,
+                                            0.5f,
+                                            1f
+                                    )
+                                    rotateAnimation.duration = 500
+                                    cancel.visibility = View.VISIBLE
+                                    cancel.startAnimation(rotateAnimation)
+                                }
+                            }
                         }
 
-                        tooBadImage.alpha = 1F
-                        tooBadImage.setColorFilter(Color.parseColor("#f44336"))
+                        sosoImage.setOnClickListener {
+                            if (!select) {
+                                select = true
+                                selectMark = "soso"
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    val scaleAnimation = ScaleAnimation(
+                                            1f,
+                                            0.3f,
+                                            1f,
+                                            0.3f,
+                                            50f,
+                                            50f
+                                    )
+                                    scaleAnimation.let {
+                                        it.duration = 500
+                                        it.fillAfter = true
+                                    }
+                                    val translateAnimation2 = TranslateAnimation(
+                                            1f,
+                                            -400f,
+                                            1f,
+                                            1f
+                                    )
+                                    translateAnimation2.let {
+                                        it.duration = 500
+                                        it.fillAfter = true
+                                    }
 
-                        perfectImage.startAnimation(scaleAnimation)
-                        goodImage.startAnimation(scaleAnimation)
-                        sosoImage.startAnimation(scaleAnimation)
-                        badImage.startAnimation(scaleAnimation)
+                                    sosoImage.alpha = 1F
+                                    sosoImage.setColorFilter(Color.parseColor("#FFC107"))
 
-                        delay(500)
+                                    perfectImage.startAnimation(scaleAnimation)
+                                    goodImage.startAnimation(scaleAnimation)
+                                    badImage.startAnimation(scaleAnimation)
+                                    tooBadImage.startAnimation(scaleAnimation)
 
-                        perfectImage.clearAnimation()
-                        goodImage.clearAnimation()
-                        sosoImage.clearAnimation()
-                        badImage.clearAnimation()
+                                    delay(500)
 
-                        perfectImage.visibility = View.GONE
-                        goodImage.visibility = View.GONE
-                        sosoImage.visibility = View.GONE
-                        badImage.visibility = View.GONE
+                                    perfectImage.clearAnimation()
+                                    goodImage.clearAnimation()
+                                    badImage.clearAnimation()
+                                    tooBadImage.clearAnimation()
 
-                        delay(500)
+                                    perfectImage.visibility = View.GONE
+                                    goodImage.visibility = View.GONE
+                                    badImage.visibility = View.GONE
+                                    tooBadImage.visibility = View.GONE
 
-                        tooBadImage.startAnimation(translateAnimation2)
+                                    delay(500)
 
-                        delay(100)
+                                    sosoImage.startAnimation(translateAnimation2)
 
-                        val translateAnimation = TranslateAnimation(
-                                500f,
-                                1f,
-                                1f,
-                                1f,
-                        )
-                        translateAnimation.duration = 500
-                        score20.visibility = View.VISIBLE
-                        score20.startAnimation(translateAnimation)
-                        val rotateAnimation = RotateAnimation(
-                                -90f,
-                                0f,
-                                0.5f,
-                                1f
-                        )
-                        rotateAnimation.duration = 500
-                        cancel.visibility = View.VISIBLE
-                        cancel.startAnimation(rotateAnimation)
+                                    delay(100)
+
+                                    val translateAnimation = TranslateAnimation(
+                                            500f,
+                                            1f,
+                                            1f,
+                                            1f,
+                                    )
+                                    translateAnimation.duration = 500
+                                    score60.visibility = View.VISIBLE
+                                    score60.startAnimation(translateAnimation)
+                                    val rotateAnimation = RotateAnimation(
+                                            -90f,
+                                            0f,
+                                            0.5f,
+                                            1f
+                                    )
+                                    rotateAnimation.duration = 500
+                                    cancel.visibility = View.VISIBLE
+                                    cancel.startAnimation(rotateAnimation)
+                                }
+                            }
+                        }
+
+                        badImage.setOnClickListener {
+                            if (!select) {
+                                select = true
+                                selectMark = "bad"
+                                lifecycleScope.launch(Dispatchers.Main) {
+                                    val scaleAnimation = ScaleAnimation(
+                                            1f,
+                                            0.3f,
+                                            1f,
+                                            0.3f,
+                                            50f,
+                                            50f
+                                    )
+                                    scaleAnimation.let {
+                                        it.duration = 500
+                                        it.fillAfter = true
+                                    }
+                                    val translateAnimation2 = TranslateAnimation(
+                                            1f,
+                                            -580f,
+                                            1f,
+                                            1f
+                                    )
+                                    translateAnimation2.let {
+                                        it.duration = 500
+                                        it.fillAfter = true
+                                    }
+
+                                    badImage.alpha = 1F
+                                    badImage.setColorFilter(Color.parseColor("#FF9800"))
+
+                                    perfectImage.startAnimation(scaleAnimation)
+                                    goodImage.startAnimation(scaleAnimation)
+                                    sosoImage.startAnimation(scaleAnimation)
+                                    tooBadImage.startAnimation(scaleAnimation)
+
+                                    delay(500)
+
+                                    perfectImage.clearAnimation()
+                                    goodImage.clearAnimation()
+                                    sosoImage.clearAnimation()
+                                    tooBadImage.clearAnimation()
+
+                                    perfectImage.visibility = View.GONE
+                                    goodImage.visibility = View.GONE
+                                    sosoImage.visibility = View.GONE
+                                    tooBadImage.visibility = View.GONE
+
+                                    delay(500)
+
+                                    badImage.startAnimation(translateAnimation2)
+
+                                    delay(100)
+
+                                    val translateAnimation = TranslateAnimation(
+                                            500f,
+                                            1f,
+                                            1f,
+                                            1f,
+                                    )
+                                    translateAnimation.duration = 500
+                                    score40.visibility = View.VISIBLE
+                                    score40.startAnimation(translateAnimation)
+                                    val rotateAnimation = RotateAnimation(
+                                            -90f,
+                                            0f,
+                                            0.5f,
+                                            1f
+                                    )
+                                    rotateAnimation.duration = 500
+                                    cancel.visibility = View.VISIBLE
+                                    cancel.startAnimation(rotateAnimation)
+                                }
+                            }
+                        }
+                    }
+
+                    tooBadImage.setOnClickListener {
+                        if (!select) {
+                            select = true
+                            selectMark = "tooBad"
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                val scaleAnimation = ScaleAnimation(
+                                        1f,
+                                        0.3f,
+                                        1f,
+                                        0.3f,
+                                        50f,
+                                        50f
+                                )
+                                scaleAnimation.let {
+                                    it.duration = 500
+                                    it.fillAfter = true
+                                }
+                                val translateAnimation2 = TranslateAnimation(
+                                        1f,
+                                        -800f,
+                                        1f,
+                                        1f
+                                )
+                                translateAnimation2.let {
+                                    it.duration = 500
+                                    it.fillAfter = true
+                                }
+
+                                tooBadImage.alpha = 1F
+                                tooBadImage.setColorFilter(Color.parseColor("#f44336"))
+
+                                perfectImage.startAnimation(scaleAnimation)
+                                goodImage.startAnimation(scaleAnimation)
+                                sosoImage.startAnimation(scaleAnimation)
+                                badImage.startAnimation(scaleAnimation)
+
+                                delay(500)
+
+                                perfectImage.clearAnimation()
+                                goodImage.clearAnimation()
+                                sosoImage.clearAnimation()
+                                badImage.clearAnimation()
+
+                                perfectImage.visibility = View.GONE
+                                goodImage.visibility = View.GONE
+                                sosoImage.visibility = View.GONE
+                                badImage.visibility = View.GONE
+
+                                delay(500)
+
+                                tooBadImage.startAnimation(translateAnimation2)
+
+                                delay(100)
+
+                                val translateAnimation = TranslateAnimation(
+                                        500f,
+                                        1f,
+                                        1f,
+                                        1f,
+                                )
+                                translateAnimation.duration = 500
+                                score20.visibility = View.VISIBLE
+                                score20.startAnimation(translateAnimation)
+                                val rotateAnimation = RotateAnimation(
+                                        -90f,
+                                        0f,
+                                        0.5f,
+                                        1f
+                                )
+                                rotateAnimation.duration = 500
+                                cancel.visibility = View.VISIBLE
+                                cancel.startAnimation(rotateAnimation)
+                            }
+                        }
                     }
                 }
             }
@@ -481,7 +482,6 @@ class ResultFragment : Fragment() {
                     cancel.clearAnimation()
                     cancel.visibility = View.GONE
                     when (selectMark) {
-
                         "perfect" -> {
                             perfectImage.alpha = 0.6F
                             perfectImage.setColorFilter(Color.parseColor("#757575"))
