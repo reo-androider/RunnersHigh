@@ -113,15 +113,15 @@
 
     <ImageView
         android:id="@+id/cameraImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:src="@drawable/ic_camera"
         android:contentDescription="@string/result_camera"
-        android:layout_marginTop="60dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginBottom="500dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:tint="@color/white"/>
 
     <ImageView
@@ -187,14 +187,12 @@
 
     <ImageView
         android:id="@+id/cancel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_cancel"
-        android:layout_marginTop="305dp"
-        android:layout_marginStart="355dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="295dp"
         android:contentDescription="@string/fui_cancel"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"/>
 
 <!--color-->
