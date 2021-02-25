@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:elevation="-10dp"
         android:background="@color/teal_200"
-        android:layout_marginBottom="490dp"/>
+        android:layout_marginBottom="440dp"/>
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/photoEmpty"
@@ -121,7 +121,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginStart="100dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="550dp"
+        android:layout_marginBottom="500dp"
         app:tint="@color/white"/>
 
     <ImageView
@@ -129,10 +129,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ic_perfect"
-        android:layout_marginTop="110dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginEnd="310dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginTop="335dp"
+        android:layout_marginEnd="280dp"
         app:layout_constraintEnd_toStartOf="@id/goodImage"
         android:contentDescription="@string/feedBack"
         app:tint="@color/normal2" />
@@ -142,10 +140,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ic_good"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="305dp"
         android:layout_marginStart="100dp"
         android:layout_marginEnd="238dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="295dp"
         app:layout_constraintStart_toEndOf="@id/perfectImage"
         android:contentDescription="@string/feedBack"
         app:tint="@color/normal2" />
@@ -155,10 +153,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ic_soso"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="305dp"
         android:layout_marginStart="170dp"
         android:layout_marginEnd="170dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="295dp"
         android:contentDescription="@string/feedBack"
         app:tint="@color/normal2"
         android:focusable="true" />
@@ -168,10 +166,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ic_bad"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="305dp"
         android:layout_marginStart="240dp"
         android:layout_marginEnd="100dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="295dp"
         android:contentDescription="@string/feedBack"
         app:tint="@color/normal2" />
 
@@ -180,32 +178,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@drawable/ic_sick"
-        android:layout_marginTop="110dp"
+        android:layout_marginTop="305dp"
         android:layout_marginStart="310dp"
         android:layout_marginEnd="30dp"
-        android:layout_marginBottom="100dp"
+        android:layout_marginBottom="295dp"
         android:contentDescription="@string/feedBack"
         app:tint="@color/normal2" />
 
     <ImageView
         android:id="@+id/cancel"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:src="@drawable/ic_cancel"
-        android:layout_marginTop="122dp"
-        android:layout_marginEnd="20dp"
-        android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@id/backRound"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/fui_cancel" />
+        android:layout_marginTop="305dp"
+        android:layout_marginStart="355dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="295dp"
+        android:contentDescription="@string/fui_cancel"
+        android:visibility="gone"/>
 
 <!--color-->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/main_recycler_View"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        app:layout_constraintTop_toBottomOf="@id/backRound"
-        app:layout_constraintStart_toStartOf="parent"/>
+        android:layout_height="match_parent"
+        android:layout_marginTop="230dp"
+        android:layout_marginBottom="375dp"/>
 
     <!--feed back text-->
     <TextView
@@ -216,7 +214,7 @@
         android:textSize="15sp"
         android:textColor="@color/perfect"
         android:fontFamily="@font/alfa_slab_one"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="155dp"
         android:layout_marginStart="140dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/backRound"
@@ -231,7 +229,7 @@
         android:textColor="@color/good"
         android:textSize="15sp"
         android:fontFamily="@font/alfa_slab_one"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="155dp"
         android:layout_marginStart="140dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/backRound"
@@ -246,7 +244,7 @@
         android:textSize="15sp"
         android:textColor="@color/soso"
         android:fontFamily="@font/alfa_slab_one"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="155dp"
         android:layout_marginStart="140dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/backRound"
@@ -261,7 +259,7 @@
         android:textSize="15sp"
         android:textColor="@color/bad"
         android:fontFamily="@font/alfa_slab_one"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="155dp"
         android:layout_marginStart="140dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/backRound"
@@ -275,7 +273,7 @@
         android:textStyle="bold"
         android:textSize="15sp"
         android:textColor="@color/tooBad"
-        android:layout_marginTop="125dp"
+        android:layout_marginTop="155dp"
         android:layout_marginStart="140dp"
         android:visibility="gone"
         app:layout_constraintTop_toBottomOf="@id/backRound"
@@ -284,50 +282,44 @@
 <!--memo-->
     <ImageView
         android:id="@+id/edit"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="470dp"
         android:layout_marginStart="28dp"
-        android:layout_marginBottom="155dp"
+        android:layout_marginEnd="330dp"
+        android:layout_marginBottom="210dp"
         android:contentDescription="@string/result_memo"
-        android:src="@drawable/ic_edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:src="@drawable/ic_edit" />
+
+    <ImageView
+        android:id="@+id/delete"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/ic_delete"
+        android:layout_marginTop="470dp"
+        android:layout_marginStart="290dp"
+        android:layout_marginBottom="210dp"
+        android:contentDescription="@string/result_memo" />
 
     <ScrollView
         android:id="@+id/memoDisplay"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginBottom="82dp"
-        app:layout_constraintStart_toEndOf="@id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent">
 
             <TextView
                 android:id="@+id/memo"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginBottom="152dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="220dp"
                 android:text="@string/memo"
                 android:gravity="center"
                 android:scrollbars="vertical"
                 android:inputType="textMultiLine|textEmailSubject"
-                android:textColor="@color/normal2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/delete"
-                app:layout_constraintStart_toEndOf="@id/edit" />
-
+                android:textColor="@color/normal2" />
         </ScrollView>
-
-
-    <ImageView
-        android:id="@+id/delete"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:src="@drawable/ic_delete"
-        android:layout_marginStart="20dp"
-        android:layout_marginBottom="155dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@id/memoDisplay" />
 
 <!--fab-->
     <com.google.android.material.floatingactionbutton.FloatingActionButton
