@@ -19,9 +19,7 @@ import kotlinx.coroutines.withContext
 
 class PhotoFragment : Fragment() {
     private lateinit var binding:FragmentPhotoBinding
-    private val readDao = MyApplication.db.recordDao2()
-    val runData = mutableListOf<Record2>()
-    private var i = 0
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentPhotoBinding.inflate(layoutInflater,container,false)
         return  binding.root
@@ -31,23 +29,22 @@ class PhotoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
             lifecycleScope.launch(Dispatchers.IO) {
-                val db = readDao.getAll2()
-                if (db.isNotEmpty()) {
-                    val lastId = db.last().id - 1
+                val readDao = MyApplication.db.recordDao2()
+                val runData = readDao.getAll2()
+                if (runData.isNotEmpty()) {
+                    val lastId = runData.last().id - 1
                     for (i in lastId downTo 0) {
                         val record2 = Record2(
-                            db[i].id,
-                            db[i].bitmap,
-                            db[i].time,
-                            db[i].distance,
-                            db[i].calorie,
-                            db[i].runData,
-                            db[i].colorId,
-                            db[i].revaluationMark,
-                            db[i].memo
+                                runData[i].id,
+                                runData[i].bitmap,
+                                runData[i].time,
+                                runData[i].distance,
+                                runData[i].calorie,
+                                runData[i].runData,
+                                runData[i].colorId,
+                                runData[i].revaluationMark,
+                                runData[i].memo
                         )
-                        //配列が完成
-                        runData.add(record2)
                     }
                     withContext(Dispatchers.Main) {
                         mainRecyclerView.adapter = PhotoListAdapter(runData)

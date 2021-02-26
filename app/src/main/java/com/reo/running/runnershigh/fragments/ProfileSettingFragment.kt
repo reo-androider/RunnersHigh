@@ -34,7 +34,7 @@ class ProfileSettingFragment : Fragment() {
     private val db = Firebase.database
     private val dbPhoto = Firebase.database.getReference("profile")
     companion object {
-        val READ_REQUEST_CODE = 2
+        const val READ_REQUEST_CODE = 2
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentProfileSettingBinding.inflate(layoutInflater,container,false)
