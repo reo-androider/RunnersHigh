@@ -282,32 +282,36 @@
 <!--memo-->
     <ImageView
         android:id="@+id/edit"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="470dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginEnd="330dp"
-        android:layout_marginBottom="210dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:contentDescription="@string/result_memo"
+        android:layout_marginTop="120dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@id/main_recycler_View"
+        app:layout_constraintStart_toStartOf="parent"
         android:src="@drawable/ic_edit" />
 
     <ImageView
         android:id="@+id/delete"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_delete"
-        android:layout_marginTop="470dp"
-        android:layout_marginStart="290dp"
-        android:layout_marginBottom="210dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toBottomOf="@id/main_recycler_View"
+        app:layout_constraintEnd_toEndOf="parent"
         android:contentDescription="@string/result_memo" />
 
     <ScrollView
         android:id="@+id/memoDisplay"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_marginTop="125dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginEnd="56dp"
+        app:layout_constraintTop_toBottomOf="@id/main_recycler_View"
+        app:layout_constraintStart_toEndOf="@id/edit"
+        app:layout_constraintEnd_toStartOf="@id/delete">
 
             <TextView
                 android:id="@+id/memo"
@@ -331,19 +335,18 @@
         android:layout_marginEnd="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:contentDescription="@string/resutl_finish"
-        android:elevation="1000dp"/>
+        android:contentDescription="@string/resutl_finish" />
 
     <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_check"
-        android:elevation="10000dp"
+        android:elevation="100dp"
+        android:contentDescription="@string/resutl_finish"
         android:layout_marginBottom="43dp"
         android:layout_marginEnd="43dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:tint="@color/white"
-        android:contentDescription="@string/resutl_finish" />
+        app:tint="@color/white" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
