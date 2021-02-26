@@ -44,6 +44,8 @@ class ResultFragment : Fragment() {
     private var position = 0
     private var draft: String = ""
     private var selectColor = ""
+    private var viewWidth = 0f //アニメーション用
+    private var viewHeight = 0f
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -182,6 +184,7 @@ class ResultFragment : Fragment() {
                                         it.duration = 500
                                         it.fillAfter = true
                                     }
+
                                     val translateAnimation2 = TranslateAnimation(
                                             1f,
                                             -200f,
