@@ -155,28 +155,20 @@
 
     <!--    pauseButton  -->
 
-    <ImageView
-        android:id="@+id/pauseImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="120dp"
-        android:visibility="gone"
-        android:elevation="20dp"
-        android:src="@drawable/ic_stop"
-        android:contentDescription="@string/pause_description"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pauseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:fabCustomSize="100dp"
+        app:fabCustomSize="90dp"
         android:contentDescription="@string/start_description"
         android:elevation="100dp"
         android:visibility="gone"
+        android:src="@drawable/ic_stop"
+        app:maxImageSize="52dp"
+        android:tint="@color/white"
         android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -270,21 +270,21 @@ class RunFragment : Fragment() {
                                         stopWatch.start()
 
                                         mapView.visibility = View.VISIBLE
-                                        pauseImage.visibility = View.VISIBLE
+//                                        pauseImage.visibility = View.VISIBLE
                                         pauseButton.visibility = View.VISIBLE
                                         timerScreen.visibility = View.VISIBLE
                                         lockOff.visibility = View.VISIBLE
 
                                         lockOff.setOnClickListener {
                                             lockOff.visibility = View.GONE
-                                            pauseImage.visibility = View.GONE
+//                                            pauseImage.visibility = View.GONE
                                             pauseButton.visibility = View.GONE
                                             lockImage.visibility = View.VISIBLE
                                         }
 
                                         lockImage.setOnClickListener {
                                             lockImage.visibility = View.GONE
-                                            pauseImage.visibility = View.VISIBLE
+//                                            pauseImage.visibility = View.VISIBLE
                                             pauseButton.visibility = View.VISIBLE
                                             lockOff.visibility = View.VISIBLE
 
@@ -356,7 +356,7 @@ class RunFragment : Fragment() {
                                                 lockOff.visibility = View.VISIBLE
                                                 restartImage.clearAnimation()
                                                 restartButton.clearAnimation()
-                                                pauseImage.visibility = View.VISIBLE
+//                                                pauseImage.visibility = View.VISIBLE
                                                 pauseButton.visibility = View.VISIBLE
                                                 restartImage.visibility = View.GONE
                                                 restartButton.visibility = View.GONE
@@ -390,7 +390,7 @@ class RunFragment : Fragment() {
                                                     it.duration = 300
                                                 }
 
-                                                pauseImage.startAnimation(scalePauseImage)
+//                                                pauseImage.startAnimation(scalePauseImage)
                                                 pauseButton.startAnimation(scalePauseButton)
 
                                             }
@@ -433,12 +433,12 @@ class RunFragment : Fragment() {
                                                 scaleButton.duration = 300
                                                 scaleButton.fillAfter = true
 
-                                                pauseImage.startAnimation(scaleImage)
+//                                                pauseImage.startAnimation(scaleImage)
                                                 pauseButton.startAnimation(scaleButton)
                                                 delay(500)
-                                                pauseImage.clearAnimation()
+//                                                pauseImage.clearAnimation()
                                                 pauseButton.clearAnimation()
-                                                pauseImage.visibility = View.GONE
+//                                                pauseImage.visibility = View.GONE
                                                 pauseButton.visibility = View.INVISIBLE
                                                 val scaleRestartImage = ScaleAnimation(
                                                         0.6f,
