@@ -19,8 +19,8 @@
 
         <ImageView
             android:id="@+id/cameraImage"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:src="@drawable/ic_camera2"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
@@ -28,13 +28,12 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:contentDescription="@string/result_camera" />
         
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/cameraSet"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:scaleType="fitXY"
             app:layout_constraintTop_toBottomOf="@id/cameraImage"
             app:layout_constraintEnd_toEndOf="parent"
             android:contentDescription="@string/result_camera"/>
@@ -139,8 +138,9 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/centerCircle"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabCustomSize="100dp"
         android:layout_marginBottom="100dp"
         android:contentDescription="@string/start_description"
         android:elevation="100dp"
@@ -157,8 +157,8 @@
 
     <ImageView
         android:id="@+id/pauseImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="120dp"
         android:visibility="gone"
         android:elevation="20dp"
@@ -171,12 +171,13 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/pauseButton"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
-        android:layout_marginBottom="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabCustomSize="100dp"
         android:contentDescription="@string/start_description"
         android:elevation="100dp"
         android:visibility="gone"
+        android:layout_marginBottom="100dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -186,8 +187,8 @@
     <!-- restartButton   -->
     <ImageView
         android:id="@+id/restartImage"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_start"
         android:elevation="10dp"
         android:layout_marginBottom="120dp"
@@ -200,8 +201,9 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/restartButton"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabCustomSize="90dp"
         android:layout_marginBottom="100dp"
         android:layout_marginStart="35dp"
         android:contentDescription="@string/restart_descrption"
@@ -214,8 +216,8 @@
     <!-- finishButton   -->
     <ImageView
         android:id="@+id/finishImage"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:elevation="20dp"
         android:fontFamily="@font/orbitron"
         android:src="@drawable/ic_check"
@@ -229,8 +231,9 @@
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/finishButton"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabCustomSize="90dp"
         android:elevation="0dp"
         android:layout_marginBottom="100dp"
         android:layout_marginEnd="35dp"
@@ -239,10 +242,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:backgroundTint="#f44336"/>
-
-
-
-
 
     <!--countDownNum-->
     <com.google.android.material.textview.MaterialTextView
@@ -331,8 +330,8 @@
 
     <ImageView
         android:id="@+id/lockImage"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_lock"
         android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -343,8 +342,8 @@
 
     <ImageView
         android:id="@+id/lockOff"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_open"
         android:layout_marginBottom="30dp"
         app:layout_constraintBottom_toBottomOf="parent"

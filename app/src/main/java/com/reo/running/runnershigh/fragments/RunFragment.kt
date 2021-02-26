@@ -673,9 +673,10 @@ class RunFragment : Fragment() {
                 if (grantResults.isNotEmpty() && grantResults[0] ==
                     PackageManager.PERMISSION_DENIED
                 ) {
-                    openCamera()
-                } else {
                     Toast.makeText(context, "Permission dined", Toast.LENGTH_SHORT).show()
+
+                } else {
+                    openCamera()
                 }
             }
         }
