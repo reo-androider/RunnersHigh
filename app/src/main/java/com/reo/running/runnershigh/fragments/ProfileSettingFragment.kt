@@ -134,7 +134,6 @@ class ProfileSettingFragment : Fragment() {
                         .show()
 
                 profileImage.setOnClickListener {
-                    Log.d("debug","click!!")
                     val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                     intent.addCategory(Intent.CATEGORY_OPENABLE)
                     intent.setType("image/*")
@@ -196,6 +195,7 @@ class ProfileSettingFragment : Fragment() {
 //            }
         }
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
