@@ -247,10 +247,11 @@ class ProfileFragment : Fragment() {
                 })
             }
 
-            logoutImage.setOnClickListener {
-                AuthUI.getInstance()
-                    .delete(requireContext())
-            }
+//            必要なので残しておく
+//            logoutImage.setOnClickListener {
+//                AuthUI.getInstance()
+//                    .delete(requireContext())
+//            }
 
             explainDistanceLevel.setOnClickListener {
                 AlertDialog.Builder(requireContext())
@@ -328,7 +329,7 @@ class ProfileFragment : Fragment() {
                 databaseReferenceLoginDay.setValue(day)
                 binding.loginDay.text = day
                 binding.loginImage.visibility = View.GONE
-                binding.logoutImage.visibility = View.VISIBLE
+//                binding.logoutImage.visibility = View.VISIBLE 必要なので残しておく
                 login = "true"
                 databaseReferenceLogin.setValue(login)
                 val user = FirebaseAuth.getInstance().currentUser

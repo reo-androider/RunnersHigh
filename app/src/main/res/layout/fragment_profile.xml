@@ -19,8 +19,8 @@
 
     <ImageView
         android:id="@+id/settingImage"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_setting"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
@@ -97,8 +97,8 @@
 
                     <ImageView
                         android:id="@+id/login_image"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/ic_login"
                         app:tint="@color/black"
                         android:layout_marginTop="15dp"
@@ -107,18 +107,19 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
-                    <ImageView
-                        android:id="@+id/logout_image"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:src="@drawable/ic_logout"
-                        app:tint="@color/black"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
-                        android:contentDescription="@string/profile"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:visibility="gone"/>
+
+<!--                    <ImageView-->必要なので残しておく
+<!--                        android:id="@+id/logout_image"-->
+<!--                        android:layout_width="30dp"-->
+<!--                        android:layout_height="30dp"-->
+<!--                        android:src="@drawable/ic_logout"-->
+<!--                        app:tint="@color/black"-->
+<!--                        android:layout_marginTop="15dp"-->
+<!--                        android:layout_marginEnd="15dp"-->
+<!--                        android:contentDescription="@string/profile"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        android:visibility="gone"/>-->
 
                     <TextView
                         android:id="@+id/login_text"
@@ -187,8 +188,8 @@
 
                     <ImageView
                         android:id="@+id/space_man"
-                        android:layout_width="27dp"
-                        android:layout_height="27dp"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/ic_space_human"
                         app:tint="@color/purple"
                         android:layout_marginTop="10dp"
