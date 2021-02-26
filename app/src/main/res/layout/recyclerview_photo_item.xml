@@ -32,13 +32,13 @@
         app:layout_constraintTop_toBottomOf="@id/run_date"
         app:layout_constraintStart_toEndOf="@id/runPhoto"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="hogehoeg"
+        android:text="@string/hogehoeg"
         android:textColor="@color/normal"/>
     <TextView
         android:id="@+id/distanceData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="kmkmkmkkkk"
+        android:text="@string/kmkmkmkkkk"
         android:textColor="@color/normal"
         app:layout_constraintTop_toBottomOf="@id/timeData"
         app:layout_constraintStart_toEndOf="@id/runPhoto"
@@ -51,7 +51,7 @@
         app:layout_constraintTop_toBottomOf="@id/distanceData"
         app:layout_constraintStart_toEndOf="@id/runPhoto"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="calcalcalcal"
+        android:text="@string/calcalcalcal_draft"
         android:textColor="@color/normal"/>
     <ImageView
         android:id="@+id/feed_back_data"
@@ -62,7 +62,8 @@
         android:src="@drawable/ic_perfect"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone"/>
+        android:visibility="gone"
+        android:contentDescription="@string/feedBack" />
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -73,8 +74,8 @@
         <TextView
             android:id="@+id/memo"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="memo"
+            android:layout_height="wrap_content"
+            android:text="@string/memo_draft"
             android:gravity="center_horizontal"
             android:textColor="@color/normal"
             android:elevation="100dp"/>

@@ -22,9 +22,6 @@ import okhttp3.*
 
 class GraphFragment : Fragment() {
     private lateinit var binding: FragmentGraphBinding
-    private var entries: ArrayList<Entry> = ArrayList()
-    private var entries2: ArrayList<Entry> = ArrayList()
-    private var firstId = 0
     private var lastId = 0
     private var totalDistance = 0.0
     private var totalCalorie = 0.0
@@ -57,7 +54,8 @@ class GraphFragment : Fragment() {
                         totalDistance += read[i].distance
                     }
                     withContext(Dispatchers.Main) {
-                        for (i in firstId..lastId) {
+                        val entries: ArrayList<Entry> = ArrayList()
+                        for (i in 0..lastId) {
                             entries.add(i, Entry(mConverter(yValue[i]), i))
                         }
                         val dataset = LineDataSet(entries, "")
@@ -89,13 +87,14 @@ class GraphFragment : Fragment() {
                             xValue2.add(read[i].runData)
                         }
                         val yValue2 = mutableListOf<Double>()
-                        for (i in firstId..lastId) {
+                        for (i in 0..lastId) {
                             yValue2.add((read[i].calorie) + totalCalorie)
                             Log.d("ROOM", "${yValue2[i]}")
                             totalCalorie += read[i].calorie
                         }
 
                         withContext(Dispatchers.Main) {
+                            val entries2: ArrayList<Entry> = ArrayList()
                             for (i in 0..lastId) {
                                 entries2.add(i, Entry(yValue2[i].toFloat(), i))
                             }
