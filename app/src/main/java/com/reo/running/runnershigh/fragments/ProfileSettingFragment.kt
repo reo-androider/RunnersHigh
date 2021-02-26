@@ -54,12 +54,11 @@ class ProfileSettingFragment : Fragment() {
                             }
                         }
                 }
-
                 override fun onCancelled(error: DatabaseError) {}
             })
             storage = Firebase.storage
-            val databaseRefFirstName = Firebase.database.getReference("firstName")
-            databaseRefFirstName.addValueEventListener(object : ValueEventListener {
+            val databaseRefFirstNameOut = Firebase.database.getReference("firstName")
+            databaseRefFirstNameOut.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val fireStore = snapshot.value.toString()
                     editFirstName.setText(fireStore)
@@ -68,8 +67,8 @@ class ProfileSettingFragment : Fragment() {
                 override fun onCancelled(error: DatabaseError) {}
             })
 
-            val databaseRefFamily = Firebase.database.getReference("familyName")
-            databaseRefFamily.addValueEventListener(object : ValueEventListener {
+            val databaseRefFamilyOut = Firebase.database.getReference("familyName")
+            databaseRefFamilyOut.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val fireStore = snapshot.value.toString()
                     editFamilyName.setText(fireStore)
@@ -78,8 +77,8 @@ class ProfileSettingFragment : Fragment() {
                 override fun onCancelled(error: DatabaseError) {}
             })
 
-            val databaseRefObjective = Firebase.database.getReference("objective")
-            databaseRefObjective.addValueEventListener(object : ValueEventListener {
+            val databaseRefObjectiveOut = Firebase.database.getReference("objective")
+            databaseRefObjectiveOut.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val fireStore = snapshot.value.toString()
                     editObjective.setText(fireStore)
@@ -88,8 +87,8 @@ class ProfileSettingFragment : Fragment() {
                 override fun onCancelled(error: DatabaseError) {}
             })
 
-            val databaseReferenceWeight = Firebase.database.getReference("weight")
-            databaseReferenceWeight.addValueEventListener(object : ValueEventListener {
+            val databaseRefWeightOut = Firebase.database.getReference("weight")
+            databaseRefWeightOut.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val weight = snapshot.value.toString()
                     editWeight.setText(weight)
@@ -114,15 +113,15 @@ class ProfileSettingFragment : Fragment() {
 
                         if (objective == "") objective = "未登録"
 
-                        val databaseRefFirstName = db.getReference("firstName")
-                        val databaseRefFamily = db.getReference("familyName")
-                        val databaseRefObjective = db.getReference("objective")
-                        val databaseRefWeight = db.getReference("weight")
+                        val databaseRefFirstNameIn = db.getReference("firstName")
+                        val databaseRefFamilyIn = db.getReference("familyName")
+                        val databaseRefObjectiveIn = db.getReference("objective")
+                        val databaseRefWeightIn = db.getReference("weight")
 
-                        databaseRefFirstName.setValue(firstName)
-                        databaseRefFamily.setValue(familyName)
-                        databaseRefObjective.setValue(objective)
-                        databaseRefWeight.setValue(weight)
+                        databaseRefFirstNameIn.setValue(firstName)
+                        databaseRefFamilyIn.setValue(familyName)
+                        databaseRefObjectiveIn.setValue(objective)
+                        databaseRefWeightIn.setValue(weight)
 
                         findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
                     }
