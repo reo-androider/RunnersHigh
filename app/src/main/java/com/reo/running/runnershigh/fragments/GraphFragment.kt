@@ -3,6 +3,7 @@ package com.reo.running.runnershigh.fragments
 import android.graphics.Color
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
+import android.text.style.LineHeightSpan
 import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -54,13 +55,13 @@ class GraphFragment : Fragment() {
                     for (i in 0..lastId) {
                         yValue.add((read[i].distance) + totalDistance)
                         totalDistance += read[i].distance
-
                     }
                     withContext(Dispatchers.Main) {
                         for (i in firstId..lastId) {
                             entries.add(i, Entry(mConverter(yValue[i]), i))
                         }
                         val dataset = LineDataSet(entries, "")
+                        dataset.lineWidth = 300f
                         val data = LineData(xValue, dataset)
                         dataset.setColors(ColorTemplate.COLORFUL_COLORS)
                         distanceGraph.getAxisRight().run {
@@ -87,7 +88,6 @@ class GraphFragment : Fragment() {
                         for (i in 0..lastId) {
                             xValue2.add(read[i].runData)
                         }
-
                         val yValue2 = mutableListOf<Double>()
                         for (i in firstId..lastId) {
                             yValue2.add((read[i].calorie) + totalCalorie)
@@ -102,6 +102,7 @@ class GraphFragment : Fragment() {
                             val dataset2 = LineDataSet(entries2, "")
 
                             val data2 = LineData(xValue2, dataset2)
+                            dataset2.lineWidth = 300f
                             dataset2.setColors(ColorTemplate.COLORFUL_COLORS)
                             graphCalorie.getAxisRight().run {
                                 isEnabled = false
