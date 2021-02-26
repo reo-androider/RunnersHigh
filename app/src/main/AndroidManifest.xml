@@ -24,8 +24,8 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_running"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+        android:roundIcon="@drawable/ic_space_human"
+        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         android:screenOrientation="portrait">
 
         <uses-library
