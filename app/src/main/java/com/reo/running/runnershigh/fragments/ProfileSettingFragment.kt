@@ -38,6 +38,7 @@ class ProfileSettingFragment : Fragment() {
     companion object {
         const val READ_REQUEST_CODE = 2
     }
+    var deletePath = "" //写真更新の際削除する為
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentProfileSettingBinding.inflate(layoutInflater,container,false)
         return binding.root
@@ -48,7 +49,8 @@ class ProfileSettingFragment : Fragment() {
         binding.run {
             dbPhoto.addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Firebase.storage.reference.child(snapshot.value.toString())
+                    deletePath = snapshot.value.toString()
+                    Firebase.storage.reference.child(deletePath)
                         .getBytes(2048 * 2048)
                         .addOnSuccessListener {
                             BitmapFactory.decodeByteArray(it, 0, it.size).also {
@@ -213,6 +215,13 @@ class ProfileSettingFragment : Fragment() {
                 val storage = Firebase.storage
                 val storageRef = storage.reference
                 val uid = makeUid()
+                storageRef.child(deletePath).delete()
+                        .addOnSuccessListener {
+                            Log.d("debug","Success=$it")
+                        }
+                        .addOnFailureListener {
+                            Log.d("debug","Failure=$it")
+                        }
                 val profileRef = storageRef.child(":$uid/profiles.jpg")
                 val databaseRefProfile = Firebase.database.getReference("profile")
                 databaseRefProfile.setValue(":$uid/profiles.jpg")
