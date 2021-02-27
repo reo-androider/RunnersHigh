@@ -75,6 +75,7 @@ class ProfileFragment : Fragment() {
                             .addOnSuccessListener {
                                 BitmapFactory.decodeByteArray(it,0,it.size).also {
                                     profileImage.setImageBitmap(it)
+                                    profileImageDefault.visibility = View.GONE
                                 }
                             }.addOnFailureListener { Log.d("debug","failure ${it.cause}") }
                     }

@@ -52,8 +52,8 @@ class ProfileSettingFragment : Fragment() {
                         .getBytes(2048 * 2048)
                         .addOnSuccessListener {
                             BitmapFactory.decodeByteArray(it, 0, it.size).also {
-                                profileImage2.setImageBitmap(it)
-                                profileImage1.visibility = View.GONE
+                                profileImage.setImageBitmap(it)
+                                profileImageDefault.visibility = View.GONE
                             }
                         }
                 }
@@ -135,7 +135,7 @@ class ProfileSettingFragment : Fragment() {
                     .show()
             }
 
-            profileImage1.setOnClickListener {
+            profileImageDefault.setOnClickListener {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 intent.setType("image/*")
@@ -143,7 +143,7 @@ class ProfileSettingFragment : Fragment() {
             }
 
 
-            profileImage2.setOnClickListener {
+            profileImage.setOnClickListener {
                 val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
                 intent.addCategory(Intent.CATEGORY_OPENABLE)
                 intent.setType("image/*")
@@ -209,7 +209,7 @@ class ProfileSettingFragment : Fragment() {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 uri = data.data as Uri
-                binding.profileImage2.setImageURI(uri)
+                binding.profileImage.setImageURI(uri)
                 val storage = Firebase.storage
                 val storageRef = storage.reference
                 val uid = makeUid()
@@ -217,7 +217,7 @@ class ProfileSettingFragment : Fragment() {
                 val databaseRefProfile = Firebase.database.getReference("profile")
                 databaseRefProfile.setValue(":$uid/profiles.jpg")
                 profileRef.putFile(uri)
-                binding.profileImage1.visibility = View.GONE
+                binding.profileImageDefault.visibility = View.GONE
             }
         }
     }
