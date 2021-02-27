@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
 class PhotoListAdapter(val list: List<Record2>) : RecyclerView.Adapter<PhotoListViewHolder>() {
@@ -29,22 +30,27 @@ class PhotoListAdapter(val list: List<Record2>) : RecyclerView.Adapter<PhotoList
                 when (list[position].revaluationMark) {
                     FeedBack.PERFECT.revaluationMark -> {
                         setImageResource(R.drawable.ic_perfect)
+                        setColorFilter(ContextCompat.getColor(context,R.color.perfect))
                         visibility = View.VISIBLE
                     }
                     FeedBack.GOOD.revaluationMark -> {
                         setImageResource(R.drawable.ic_good)
+                        setColorFilter(ContextCompat.getColor(context,R.color.good))
                         visibility = View.VISIBLE
                     }
                     FeedBack.SOSO.revaluationMark -> {
                         setImageResource(R.drawable.ic_soso)
+                        setColorFilter(ContextCompat.getColor(context,R.color.soso))
                         visibility = View.VISIBLE
                     }
                     FeedBack.BAD.revaluationMark -> {
                         setImageResource(R.drawable.ic_bad)
+                        setColorFilter(ContextCompat.getColor(context,R.color.bad))
                         visibility = View.VISIBLE
                     }
                     FeedBack.TOOBAD.revaluationMark -> {
                         setImageResource(R.drawable.ic_sick)
+                        setColorFilter(ContextCompat.getColor(context,R.color.tooBad))
                         visibility = View.VISIBLE
                     }
                 }

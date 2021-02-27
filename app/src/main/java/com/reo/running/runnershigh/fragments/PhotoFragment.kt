@@ -1,6 +1,7 @@
 package com.reo.running.runnershigh.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.reo.running.runnershigh.PhotoListAdapter
-import com.reo.running.runnershigh.MyApplication
-import com.reo.running.runnershigh.R
-import com.reo.running.runnershigh.Record2
+import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentPhotoBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,6 +29,7 @@ class PhotoFragment : Fragment() {
             lifecycleScope.launch(Dispatchers.IO) {
                 val readDao = MyApplication.db.recordDao2()
                 val runData = readDao.getAll2()
+                var setData = listOf<Record2>()
                 if (runData.isNotEmpty()) {
                     val lastId = runData.last().id - 1
                     for (i in lastId downTo 0) {
@@ -45,9 +44,10 @@ class PhotoFragment : Fragment() {
                                 runData[i].revaluationMark,
                                 runData[i].memo
                         )
+                        setData += record2
                     }
                     withContext(Dispatchers.Main) {
-                        mainRecyclerView.adapter = PhotoListAdapter(runData)
+                        mainRecyclerView.adapter = PhotoListAdapter(setData)
                         mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
                         returnButton.setOnClickListener {
                             findNavController().navigate(R.id.action_fragmentPhoto_to_navi_setting)

@@ -215,6 +215,10 @@ class ProfileSettingFragment : Fragment() {
                 val storage = Firebase.storage
                 val storageRef = storage.reference
                 val uid = makeUid()
+                val profileRef = storageRef.child(":$uid/profiles.jpg")
+                val databaseRefProfile = Firebase.database.getReference("profile")
+                databaseRefProfile.setValue(":$uid/profiles.jpg")
+                profileRef.putFile(uri)
                 storageRef.child(deletePath).delete()
                         .addOnSuccessListener {
                             Log.d("debug","Success=$it")
@@ -222,10 +226,6 @@ class ProfileSettingFragment : Fragment() {
                         .addOnFailureListener {
                             Log.d("debug","Failure=$it")
                         }
-                val profileRef = storageRef.child(":$uid/profiles.jpg")
-                val databaseRefProfile = Firebase.database.getReference("profile")
-                databaseRefProfile.setValue(":$uid/profiles.jpg")
-                profileRef.putFile(uri)
                 binding.profileImageDefault.visibility = View.GONE
             }
         }
