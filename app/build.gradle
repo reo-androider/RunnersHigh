@@ -136,7 +136,7 @@ dependencies {
     //graph
     implementation 'com.github.PhilJay:MPAndroidChart:v2.1.6'
 
-    //ImageViewを丸くするやーつ(CircleImageView)
+    //CircleImageView
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     //OkHttp

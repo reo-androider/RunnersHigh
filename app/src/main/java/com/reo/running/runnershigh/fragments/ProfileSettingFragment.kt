@@ -52,7 +52,8 @@ class ProfileSettingFragment : Fragment() {
                         .getBytes(2048 * 2048)
                         .addOnSuccessListener {
                             BitmapFactory.decodeByteArray(it, 0, it.size).also {
-                                profileImage.setImageBitmap(it)
+                                profileImage2.setImageBitmap(it)
+                                profileImage1.visibility = View.GONE
                             }
                         }
                 }
@@ -101,46 +102,53 @@ class ProfileSettingFragment : Fragment() {
 
             profileBack.setOnClickListener {
                 AlertDialog.Builder(requireContext())
-                        .setCancelable(true)
-                        .setIcon(R.drawable.ic_running)
-                        .setTitle("記録を保存しますか？")
-                        .setPositiveButton("Yes") { _, _ ->
-                            firstName = editFirstName.text.toString()
-                            familyName = editFamilyName.text.toString()
-                            objective = editObjective.text.toString()
-                            weight = editWeight.text.toString()
-                            if (firstName == "" && familyName == "") {
-                                familyName = "あなたの"
-                                firstName = "名前"
-                            }
-
-                            if (objective == "") objective = "未登録"
-
-                            val databaseRefFirstNameIn = db.getReference("firstName")
-                            val databaseRefFamilyIn = db.getReference("familyName")
-                            val databaseRefObjectiveIn = db.getReference("objective")
-                            val databaseRefWeightIn = db.getReference("weight")
-
-                            databaseRefFirstNameIn.setValue(firstName)
-                            databaseRefFamilyIn.setValue(familyName)
-                            databaseRefObjectiveIn.setValue(objective)
-                            databaseRefWeightIn.setValue(weight)
-
-                            findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
+                    .setCancelable(true)
+                    .setIcon(R.drawable.ic_running)
+                    .setTitle("記録を保存しますか？")
+                    .setPositiveButton("Yes") { _, _ ->
+                        firstName = editFirstName.text.toString()
+                        familyName = editFamilyName.text.toString()
+                        objective = editObjective.text.toString()
+                        weight = editWeight.text.toString()
+                        if (firstName == "" && familyName == "") {
+                            familyName = "あなたの"
+                            firstName = "名前"
                         }
-                        .setNegativeButton("No") { _, _ ->
-                            findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
-                        }
-                        .show()
 
-                profileImage.setOnClickListener {
-                    val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                    intent.addCategory(Intent.CATEGORY_OPENABLE)
-                    intent.setType("image/*")
-                    startActivityForResult(intent, READ_REQUEST_CODE)
-                }
+                        if (objective == "") objective = "未登録"
+
+                        val databaseRefFirstNameIn = db.getReference("firstName")
+                        val databaseRefFamilyIn = db.getReference("familyName")
+                        val databaseRefObjectiveIn = db.getReference("objective")
+                        val databaseRefWeightIn = db.getReference("weight")
+
+                        databaseRefFirstNameIn.setValue(firstName)
+                        databaseRefFamilyIn.setValue(familyName)
+                        databaseRefObjectiveIn.setValue(objective)
+                        databaseRefWeightIn.setValue(weight)
+
+                        findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
+                    }
+                    .setNegativeButton("No") { _, _ ->
+                        findNavController().navigate(R.id.action_fragmentProfileSetting_to_navi_setting2)
+                    }
+                    .show()
             }
 
+            profileImage1.setOnClickListener {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.setType("image/*")
+                startActivityForResult(intent, READ_REQUEST_CODE)
+            }
+
+
+            profileImage2.setOnClickListener {
+                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+                intent.addCategory(Intent.CATEGORY_OPENABLE)
+                intent.setType("image/*")
+                startActivityForResult(intent, READ_REQUEST_CODE)
+            }
 
                 // TODO 削除機能は保留
 //            deleteText.setOnClickListener {
@@ -201,14 +209,15 @@ class ProfileSettingFragment : Fragment() {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 uri = data.data as Uri
-                binding.profileImage.setImageURI(uri)
+                binding.profileImage2.setImageURI(uri)
                 val storage = Firebase.storage
                 val storageRef = storage.reference
                 val uid = makeUid()
                 val profileRef = storageRef.child(":$uid/profiles.jpg")
                 val databaseRefProfile = Firebase.database.getReference("profile")
-                databaseRefProfile.setValue("profiles.jpg")
+                databaseRefProfile.setValue(":$uid/profiles.jpg")
                 profileRef.putFile(uri)
+                binding.profileImage1.visibility = View.GONE
             }
         }
     }

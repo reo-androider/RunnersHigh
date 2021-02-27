@@ -21,7 +21,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -159,7 +158,7 @@ class RunFragment : Fragment() {
                                                 lastLocation.longitude
                                         ))
                                                 .icon(BitmapDescriptorFactory
-                                                        .fromBitmap(BitmapConverter.getBitmap(context, R.drawable.in_trace)))
+                                                        .fromBitmap(BitmapConverter.getBitmap(context, R.drawable.ic_trace)))
                                 )
                             }
 
