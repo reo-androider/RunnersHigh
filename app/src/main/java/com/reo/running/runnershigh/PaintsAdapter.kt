@@ -9,7 +9,7 @@ class PaintsAdapter(val list: List<Int>, var index: Int) : RecyclerView.Adapter<
     private lateinit var listener: OnCourseListener
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): paintsViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_recyclerview,parent,false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.paints_item_recyclerview,parent,false)
         return paintsViewHolder(itemView)
     }
 

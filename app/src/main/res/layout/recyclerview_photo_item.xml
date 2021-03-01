@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white">
+    android:background="@color/white" >
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/runPhoto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/ic_folder"
-        android:layout_marginEnd="230dp"
-        android:background="@color/white"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:src="@drawable/ic_account"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/run_date"
@@ -19,7 +22,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         android:textColor="@color/normal"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="30dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/hogehogehoehogehoge" />
@@ -40,7 +43,7 @@
         android:textColor="@color/normal"
         app:layout_constraintTop_toBottomOf="@id/timeData"
         app:layout_constraintStart_toEndOf="@id/runPhoto"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/calorieData"
@@ -61,20 +64,24 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:visibility="gone"
         android:contentDescription="@string/feedBack" />
+
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/calorieData"
-        app:layout_constraintStart_toEndOf="@id/runPhoto"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@id/runPhoto"
+        app:layout_constraintTop_toBottomOf="@id/calorieData"
+        app:layout_constraintVertical_bias="0.0">
+
         <TextView
             android:id="@+id/memo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/memo_draft"
+            android:elevation="100dp"
             android:gravity="center_horizontal"
-            android:textColor="@color/normal"
-            android:elevation="100dp"/>
+            android:text="@string/memo_draft"
+            android:textColor="@color/normal" />
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
