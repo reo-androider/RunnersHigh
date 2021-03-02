@@ -323,17 +323,19 @@ class ProfileFragment : Fragment() {
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
             if (resultCode == Activity.RESULT_OK) {
-
-                FirebaseDatabase.getInstance().setPersistenceEnabled(true)
-                binding.loginText.visibility = View.VISIBLE
-                val day = loginDate().toString()
-                databaseReferenceLoginDay.setValue(day)
-                binding.loginDay.text = day
-                binding.loginImage.visibility = View.GONE
+                db.setPersistenceEnabled(true)
+                binding.run {
+                    loginText.visibility = View.VISIBLE
+                    val day = loginDate().toString()
+                    databaseReferenceLoginDay.setValue(day)
+                    loginDay.text = day
+                    loginImage.visibility = View.GONE
 //                binding.logoutImage.visibility = View.VISIBLE 必要なので残しておく
-                login = "true"
-                databaseReferenceLogin.setValue(login)
-                val user = FirebaseAuth.getInstance().currentUser
+                    login = "true"
+                    databaseReferenceLogin.setValue(login)
+                    val user = FirebaseAuth.getInstance().currentUser
+                }
+
             }
         }
     }
@@ -345,4 +347,10 @@ class ProfileFragment : Fragment() {
         val formatted = current.format(formatter)
         return formatted
     }
+
+    /*
+    resisterForA
+
+
+     */
 }

@@ -7,6 +7,6 @@
     android:alpha="0.6"
     android:autoMirrored="true">
   <path
-      android:fillColor="@android:color/white"
+      android:fillColor="@color/normal"
       android:pathData="M21,11H6.83l3.58,-3.59L9,6l-6,6 6,6 1.41,-1.41L6.83,13H21z"/>
 </vector>
