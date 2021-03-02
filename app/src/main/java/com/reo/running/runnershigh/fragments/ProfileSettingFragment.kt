@@ -54,8 +54,7 @@ class ProfileSettingFragment : Fragment() {
                         .getBytes(2048 * 2048)
                         .addOnSuccessListener {
                             BitmapFactory.decodeByteArray(it, 0, it.size).also {
-                                profileImage.setImageBitmap(it)
-                                profileImageDefault.visibility = View.GONE
+                                profileImageDefault.setImageBitmap(it)
                             }
                         }
                 }
@@ -144,14 +143,6 @@ class ProfileSettingFragment : Fragment() {
                 startActivityForResult(intent, READ_REQUEST_CODE)
             }
 
-
-            profileImage.setOnClickListener {
-                val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
-                intent.addCategory(Intent.CATEGORY_OPENABLE)
-                intent.setType("image/*")
-                startActivityForResult(intent, READ_REQUEST_CODE)
-            }
-
                 // TODO 削除機能は保留
 //            deleteText.setOnClickListener {
 //                lifecycleScope.launch(Dispatchers.IO) {
@@ -211,7 +202,7 @@ class ProfileSettingFragment : Fragment() {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             if (data != null) {
                 uri = data.data as Uri
-                binding.profileImage.setImageURI(uri)
+                binding.profileImageDefault.setImageURI(uri)
                 val storage = Firebase.storage
                 val storageRef = storage.reference
                 val uid = makeUid()
@@ -226,7 +217,6 @@ class ProfileSettingFragment : Fragment() {
                         .addOnFailureListener {
                             Log.d("debug","Failure=$it")
                         }
-                binding.profileImageDefault.visibility = View.GONE
             }
         }
     }

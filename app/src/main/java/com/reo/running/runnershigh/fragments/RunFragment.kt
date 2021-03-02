@@ -315,7 +315,6 @@ class RunFragment : Fragment() {
                                             stopWatch.start()
                                             recordStop = false
                                             finishButton.visibility = View.GONE
-                                            finishImage.visibility = View.GONE
 
                                             GlobalScope.launch(Dispatchers.Main) {
                                                 val scaleRestartImage = ScaleAnimation(
@@ -349,15 +348,14 @@ class RunFragment : Fragment() {
                                                     it.duration = 300
                                                     it.fillAfter = true
                                                 }
-                                                restartImage.startAnimation(scaleRestartImage)
                                                 restartButton.startAnimation(scaleRestartButton)
                                                 delay(600)
                                                 lockOff.visibility = View.VISIBLE
-                                                restartImage.clearAnimation()
+//                                                restartImage.clearAnimation()
                                                 restartButton.clearAnimation()
 //                                                pauseImage.visibility = View.VISIBLE
                                                 pauseButton.visibility = View.VISIBLE
-                                                restartImage.visibility = View.GONE
+//                                                restartImage.visibility = View.GONE
                                                 restartButton.visibility = View.GONE
                                                 val scalePauseImage = ScaleAnimation(
                                                         0.1f,
@@ -499,19 +497,19 @@ class RunFragment : Fragment() {
                                                     it.fillAfter = true
                                                 }
 
-                                                finishImage.visibility = View.VISIBLE
+//                                                finishImage.visibility = View.VISIBLE
                                                 finishButton.visibility = View.VISIBLE
-                                                restartImage.visibility = View.VISIBLE
+//                                                restartImage.visibility = View.VISIBLE
                                                 restartButton.visibility = View.VISIBLE
 
-                                                restartImage.startAnimation(scaleRestartImage)
+//                                                restartImage.startAnimation(scaleRestartImage)
                                                 restartButton.startAnimation(scaleRestartButton)
-                                                finishImage.startAnimation(scaleFinishImage)
+//                                                finishImage.startAnimation(scaleFinishImage)
                                                 finishButton.startAnimation(scaleFinishButton)
                                                 delay(300)
-                                                restartImage.clearAnimation()
+//                                                restartImage.clearAnimation()
                                                 restartButton.clearAnimation()
-                                                finishImage.clearAnimation()
+//                                                finishImage.clearAnimation()
                                                 finishButton.clearAnimation()
                                             }
                                         }
@@ -554,12 +552,12 @@ class RunFragment : Fragment() {
                                                     it.fillAfter = true
                                                 }
 
-                                                finishImage.startAnimation(scaleFinishImage)
+//                                                finishImage.startAnimation(scaleFinishImage)
                                                 finishButton.startAnimation(scaleFinishButton)
 
                                                 delay(500)
 
-                                                finishImage.clearAnimation()
+//                                                finishImage.clearAnimation()
                                                 finishButton.clearAnimation()
 
                                                 Log.d("test", stopWatch.text.toString())
