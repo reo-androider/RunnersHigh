@@ -21,7 +21,7 @@ class PhotoListViewModel (
     companion object {
         class Factory(
                 private val runResultDao: RunResultDao
-        ) : ViewModelProvider.NewInstanceFactory() {
+                ) : ViewModelProvider.NewInstanceFactory() {
             @Suppress("UNCHECKED_CAST")
             override fun <T : ViewModel?> create(modelClass: Class<T>) = PhotoListViewModel(
                     runResultDao
