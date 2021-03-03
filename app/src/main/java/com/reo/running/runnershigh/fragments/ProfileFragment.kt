@@ -35,6 +35,7 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.*
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
@@ -43,7 +44,7 @@ class ProfileFragment : Fragment() {
     private val databaseReferenceLoginDay = Firebase.database.getReference("LoginDay")
     private val databaseReferencePhoto = Firebase.database.getReference("profile")
     private lateinit var auth:FirebaseAuth
-    private val runDB = MyApplication.db.recordDao2()
+    private val runDB = MyApplication.db.runResultDao()
     private var firstId:Int = 0
     private var lastId:Int = 0
     private var i:Int? = 0  //カウント変数用
@@ -85,7 +86,7 @@ class ProfileFragment : Fragment() {
             val user = Firebase.auth.currentUser
             if (user != null) {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val data = runDB.getAll2()
+                    val data = runDB.getAll()
                     if (data.isNotEmpty()) {
                         firstId = data.first().id
                         lastId = data.last().id

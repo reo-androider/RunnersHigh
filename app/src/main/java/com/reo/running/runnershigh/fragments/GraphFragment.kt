@@ -25,7 +25,7 @@ class GraphFragment : Fragment() {
     private var lastId = 0
     private var totalDistance = 0.0
     private var totalCalorie = 0.0
-    private val runDatabase = MyApplication.db.recordDao2()
+    private val runDatabase = MyApplication.db.runResultDao()
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -41,7 +41,7 @@ class GraphFragment : Fragment() {
         binding.run {
             (activity as MainActivity).binding.bottomNavigation.visibility = View.VISIBLE
             lifecycleScope.launch(Dispatchers.IO) {
-                val read = runDatabase.getAll2()
+                val read = runDatabase.getAll()
                 if (read.isNotEmpty()) {
                     lastId = read.last().id - 1
                     val xValue = mutableListOf<String>()
@@ -79,7 +79,7 @@ class GraphFragment : Fragment() {
 
             lifecycleScope.launch(Dispatchers.IO) {
                 totalCalorie.let {
-                    val read = runDatabase.getAll2()
+                    val read = runDatabase.getAll()
                     if (read.isNotEmpty()) {
                         lastId = read.last().id - 1
                         val xValue2 = mutableListOf<String>()

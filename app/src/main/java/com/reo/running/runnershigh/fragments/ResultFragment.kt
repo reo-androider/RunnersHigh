@@ -35,8 +35,8 @@ import kotlinx.coroutines.*
 class ResultFragment : Fragment() {
 
     private lateinit var binding: FragmentResultBinding
-    private val readDao = MyApplication.db.recordDao()
-    private val runDB = MyApplication.db.recordDao2()
+    private val readDao = MyApplication.db.justRunDao()
+    private val runDB = MyApplication.db.runResultDao()
     private var select = false//二回押しても同じアニメーションが実行されない為
     private var selectMark = ""
     private var image_uri: Uri? = null
@@ -815,7 +815,7 @@ class ResultFragment : Fragment() {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val record = readDao.getAll().lastOrNull()
                     val record2 = record?.time?.let { it1 ->
-                        Record2(
+                        RunResult(
                                 0,
                                 record.bitmap,
                                 it1,
@@ -829,7 +829,7 @@ class ResultFragment : Fragment() {
                     }
 
                     if (record2 != null) {
-                        runDB.insertRecord2(record2)
+                        runDB.insertRecord(record2)
                     }
                     withContext(Dispatchers.Main) {
                         findNavController().navigate(R.id.action_fragmentResult_to_navi_graph)
