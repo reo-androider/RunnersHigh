@@ -74,8 +74,7 @@ class ProfileFragment : Fragment() {
                         Firebase.storage.reference.child(snapshot.value.toString()).getBytes(2048 * 2048)
                             .addOnSuccessListener {
                                 BitmapFactory.decodeByteArray(it,0,it.size).also {
-                                    profileImage.setImageBitmap(it)
-                                    profileImageDefault.visibility = View.GONE
+                                    profileImageDefault.setImageBitmap(it)
                                 }
                             }.addOnFailureListener { Log.d("debug","failure ${it.cause}") }
                     }
@@ -347,10 +346,4 @@ class ProfileFragment : Fragment() {
         val formatted = current.format(formatter)
         return formatted
     }
-
-    /*
-    resisterForA
-
-
-     */
 }

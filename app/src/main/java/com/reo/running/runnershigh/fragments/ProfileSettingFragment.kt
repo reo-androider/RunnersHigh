@@ -211,12 +211,6 @@ class ProfileSettingFragment : Fragment() {
                 databaseRefProfile.setValue(":$uid/profiles.jpg")
                 profileRef.putFile(uri)
                 storageRef.child(deletePath).delete()
-                        .addOnSuccessListener {
-                            Log.d("debug","Success=$it")
-                        }
-                        .addOnFailureListener {
-                            Log.d("debug","Failure=$it")
-                        }
             }
         }
     }
