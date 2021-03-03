@@ -22,10 +22,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_setting"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tool_bar"
+        app:layout_constraintEnd_toEndOf="@id/tool_bar"
+        app:layout_constraintBottom_toBottomOf="@id/tool_bar"
         android:contentDescription="@string/profile"
         app:tint="@color/black" />
 
@@ -54,44 +55,45 @@
 
 
                 <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/profile_constraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/profile__image_default"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
                         android:src="@drawable/ic_account"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toTopOf="@id/profile_constraintLayout"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/profile_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/ic_account"
-                        app:civ_border_width="84dp"
-                        app:civ_border_color="@color/white"
-                        android:elevation="-1dp"
-                        android:contentDescription="@string/profile"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/profileFamilyName"/>
+<!--                    <de.hdodenhof.circleimageview.CircleImageView-->
+<!--                        android:id="@+id/profile_image"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:src="@drawable/ic_account"-->
+<!--                        app:civ_border_width="84dp"-->
+<!--                        app:civ_border_color="@color/white"-->
+<!--                        android:elevation="-1dp"-->
+<!--                        android:contentDescription="@string/profile"-->
+<!--                        app:layout_constraintStart_toStartOf="parent"-->
+<!--                        app:layout_constraintEnd_toEndOf="parent"-->
+<!--                        app:layout_constraintTop_toTopOf="parent"-->
+<!--                        app:layout_constraintBottom_toTopOf="@id/profileFamilyName"/>-->
 
                     <TextView
                         android:id="@+id/profileFamilyName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/profile_name"
-                        android:textSize="30sp"
+                        android:textSize="32sp"
                         android:textColor="@color/normal2"
-                        android:layout_marginTop="100dp"
-                        android:layout_marginStart="100dp"
                         android:layout_gravity="center_horizontal"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/profile__image_default"
+                        app:layout_constraintStart_toStartOf="@id/profile__image_default"
                         app:layout_constraintEnd_toStartOf="@id/profileFirstName"/>
 
                     <TextView
@@ -99,12 +101,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/profile_name2"
-                        android:textSize="30sp"
+                        android:textSize="32sp"
                         android:textColor="@color/normal2"
-                        android:layout_marginTop="100dp"
-                        android:layout_marginStart="10dp"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toEndOf="@id/profileFamilyName" />
+                        app:layout_constraintTop_toTopOf="@id/profileFamilyName"
+                        app:layout_constraintStart_toEndOf="@id/profileFamilyName"
+                        app:layout_constraintEnd_toEndOf="@id/profile__image_default"/>
 
                     <ImageView
                         android:id="@+id/login_image"
@@ -112,10 +113,10 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_login"
                         app:tint="@color/black"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginEnd="15dp"
                         android:contentDescription="@string/profile"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        app:layout_constraintTop_toTopOf="@id/profile_constraintLayout"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
 
@@ -137,9 +138,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/login_day_text"
+                        android:textSize="16sp"
                         android:textColor="@color/normal"
-                        android:layout_marginTop="230dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="32dp"
+                        app:layout_constraintTop_toBottomOf="@id/objectiveText"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:visibility="gone"/>
@@ -149,10 +151,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="250dp"
                         android:text="@string/login_day"
+                        android:textSize="16sp"
                         android:textColor="@color/normal"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="52dp"
+                        android:paddingBottom="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/objectiveText"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -161,11 +165,11 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/objective"
-                        android:textSize="15sp"
+                        android:textSize="16sp"
                         android:textColor="@color/normal"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="155dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/profileFirstName"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -174,11 +178,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/objective_sample"
-                        android:textSize="15sp"
+                        android:textSize="16sp"
                         android:textColor="@color/normal"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="180dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/objective"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
 
@@ -189,7 +192,7 @@
             <androidx.cardview.widget.CardView
                 android:id="@+id/distance_level_cardView"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:backgroundTint="@color/white">
 
@@ -203,8 +206,8 @@
                         android:layout_height="wrap_content"
                         android:src="@drawable/ic_space_human"
                         app:tint="@color/purple"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="16dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         android:visibility="gone"/>
@@ -215,14 +218,15 @@
                         android:layout_height="wrap_content"
                         android:text="@string/profile_space_man_meet"
                         android:textColor="@color/normal"
-                        android:textSize="15sp"
-                        android:layout_marginStart="5dp"
-                        android:layout_marginTop="15dp"
+                        android:textSize="16sp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="20dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/space_man"
                         android:visibility="gone"/>
 
                     <TextView
+                        android:id="@+id/title_distance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/profile_distance_level"
@@ -236,15 +240,14 @@
 
                     <ImageView
                         android:id="@+id/explain_distance_level"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/ic_question"
                         app:tint="@color/black"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginStart="365dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
                         android:contentDescription="@string/profile"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
@@ -253,35 +256,34 @@
                         android:layout_height="wrap_content"
                         android:text="@string/profile_level_num"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="40dp"
+                        android:layout_marginTop="16dp"
                         android:textColor="@color/normal"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/title_distance"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/distance_lock"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/ic_lock"
-                        android:layout_marginTop="50dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:paddingBottom="16dp"
+                        android:layout_marginTop="32dp"
+                        app:layout_constraintTop_toBottomOf="@id/title_distance"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         android:contentDescription="@string/lock" />
 
                     <ImageView
                         android:id="@+id/distance_level_image"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="80dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/ic_level0"
                         app:tint="@color/teal_200"
                         android:contentDescription="@string/profile"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/distance_level"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:visibility="gone"/>
@@ -293,8 +295,9 @@
                         android:text="@string/profile_distance_num_metaphor_0"
                         android:textColor="@color/normal"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="170dp"
-                        app:layout_constraintTop_toTopOf="parent"
+                        android:paddingBottom="16dp"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/distance_level_image"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         android:visibility="gone"/>
@@ -304,7 +307,7 @@
             
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="wrap_content"
                 android:backgroundTint="@color/white"
                 android:layout_marginTop="10dp">
 
@@ -316,11 +319,11 @@
                         android:id="@+id/calorie_1kg_image"
                         android:layout_width="27dp"
                         android:layout_height="27dp"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginTop="10dp"
                         android:src="@drawable/ic_1kg"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         android:visibility="gone"/>
 
                     <TextView
@@ -330,26 +333,26 @@
                         android:text="@string/profile_space_man_meet"
                         android:textSize="15sp"
                         android:textColor="@color/normal"
-                        android:layout_marginTop="15dp"
-                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginStart="8dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toEndOf="@id/calorie_1kg_image"
                         android:visibility="gone"/>
 
                     <ImageView
                         android:id="@+id/explain_calorie_level"
-                        android:layout_width="25dp"
-                        android:layout_height="25dp"
-                        android:layout_marginStart="365dp"
-                        android:layout_marginTop="10dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:contentDescription="@string/profile"
                         android:src="@drawable/ic_question"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
                         app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:tint="@color/black" />
 
                     <TextView
+                        android:id="@+id/title_calorie_level"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
@@ -365,52 +368,51 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="40dp"
                         android:text="@string/profile_calorie_level_num"
                         android:textColor="@color/normal"
                         android:visibility="gone"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/title_calorie_level"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintStart_toStartOf="parent" />
 
                     <ImageView
                         android:id="@+id/calorie_level_image"
-                        android:layout_width="80dp"
-                        android:layout_height="80dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="80dp"
                         android:contentDescription="@string/profile"
                         android:src="@drawable/ic_level0"
                         android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/calorie_level"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
                         app:tint="@color/tooBad" />
 
                     <ImageView
                         android:id="@+id/calorie_lock"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:layout_marginTop="50dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:contentDescription="@string/lock"
                         android:src="@drawable/ic_lock"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="32dp"
+                        app:layout_constraintTop_toBottomOf="@id/title_calorie_level"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent" />
 
                     <TextView
                         android:id="@+id/calorie_level_text"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="170dp"
                         android:text="@string/profile_calorie_metaphor_1"
                         android:textColor="@color/normal"
                         android:visibility="gone"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:layout_marginTop="16dp"
+                        app:layout_constraintTop_toBottomOf="@id/calorie_level_image"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintEnd_toEndOf="parent"/>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
@@ -418,28 +420,29 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="12dp"
                 android:backgroundTint="@color/white">
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp">
                     <TextView
                         android:id="@+id/folderText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/profile_record_run"
                         android:textColor="@color/normal"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="16dp"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
                     <ImageView
                         android:id="@+id/folder_image"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:src="@drawable/ic_folder"
                         android:background="@color/teal_200"
-                        android:layout_marginTop="10dp"
+                        android:layout_marginTop="16dp"
                         app:layout_constraintTop_toBottomOf="@id/folderText"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"/>
