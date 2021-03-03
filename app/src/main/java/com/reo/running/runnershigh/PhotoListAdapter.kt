@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 
-class PhotoListAdapter(val list: List<Record2>) : RecyclerView.Adapter<PhotoListViewHolder>() {
+class PhotoListAdapter(val list: List<RunResult>) : RecyclerView.Adapter<PhotoListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoListViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_photo_item,parent,false)
         return PhotoListViewHolder(itemView)

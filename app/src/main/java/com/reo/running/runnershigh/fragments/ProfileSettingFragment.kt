@@ -208,6 +208,7 @@ class ProfileSettingFragment : Fragment() {
                 val uid = makeUid()
                 val profileRef = storageRef.child(":$uid/profiles.jpg")
                 val databaseRefProfile = Firebase.database.getReference("profile")
+                val databaseRefUid = Firebase.database.getReference(uid)
                 databaseRefProfile.setValue(":$uid/profiles.jpg")
                 profileRef.putFile(uri)
                 storageRef.child(deletePath).delete()
@@ -215,7 +216,7 @@ class ProfileSettingFragment : Fragment() {
         }
     }
 
-    fun makeUid(): String {
+    private fun makeUid(): String {
         return UUID.randomUUID().toString()
     }
 }

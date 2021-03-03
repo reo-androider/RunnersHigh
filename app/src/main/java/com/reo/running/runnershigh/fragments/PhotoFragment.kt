@@ -27,13 +27,13 @@ class PhotoFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
             lifecycleScope.launch(Dispatchers.IO) {
-                val readDao = MyApplication.db.recordDao2()
-                val runData = readDao.getAll2()
-                var setData = listOf<Record2>()
+                val readDao = MyApplication.db.runResultDao()
+                val runData = readDao.getAll()
+                var setData = listOf<RunResult>()
                 if (runData.isNotEmpty()) {
                     val lastId = runData.last().id - 1
                     for (i in lastId downTo 0) {
-                        val record2 = Record2(
+                        val record2 = RunResult(
                                 runData[i].id,
                                 runData[i].bitmap,
                                 runData[i].time,
@@ -47,8 +47,10 @@ class PhotoFragment : Fragment() {
                         setData += record2
                     }
                     withContext(Dispatchers.Main) {
-                        mainRecyclerView.adapter = PhotoListAdapter(setData)
-                        mainRecyclerView.layoutManager = LinearLayoutManager(requireContext())
+                        mainRecyclerView.run {
+                            adapter = PhotoListAdapter(setData)
+                            layoutManager = LinearLayoutManager(requireContext())
+                        }
                         returnButton.setOnClickListener {
                             findNavController().navigate(R.id.action_fragmentPhoto_to_navi_setting)
                         }

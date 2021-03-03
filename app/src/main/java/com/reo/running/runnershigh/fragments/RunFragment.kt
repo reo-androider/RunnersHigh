@@ -53,8 +53,8 @@ class RunFragment : Fragment() {
     var calorieAmount: Int = 0
     var recordStop = true
     private var stopTime: Long = 0L
-    private val recordDao = MyApplication.db.recordDao()
-    private val readDao2 = MyApplication.db.recordDao2()
+    private val recordDao = MyApplication.db.justRunDao()
+    private val readDao2 = MyApplication.db.justRunDao()
     var marker: Marker? = null
     private var runStart = false
     private lateinit var vibrator: Vibrator
@@ -568,7 +568,7 @@ class RunFragment : Fragment() {
                                                         .setMessage("ランニングを終了しますか？")
                                                         .setPositiveButton("YES") { _, _ ->
                                                             lifecycleScope.launch(Dispatchers.IO) {
-                                                                val record = Record(
+                                                                val record = JustRunData(
                                                                         0,
                                                                         stopWatch.text.toString(),
                                                                         kmAmount,
@@ -690,4 +690,3 @@ class RunFragment : Fragment() {
         }
     }
 }
-
