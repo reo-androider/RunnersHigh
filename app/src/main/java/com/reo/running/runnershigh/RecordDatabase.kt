@@ -41,7 +41,7 @@ data class RunResult(
 @Dao
 interface JustRunDataDao {
     @Query("Select * From justrundata")
-    fun getAll(): List<JustRunData>
+    suspend fun getAll(): List<JustRunData>
 
     @Query("select * From justrundata Where id = :id")
     suspend fun getRecord(id: Int): JustRunData
@@ -61,7 +61,7 @@ interface JustRunDataDao {
 @Dao
 interface RunResultDao {
     @Query("Select * From runresult")
-    fun getAll(): List<RunResult>
+    suspend fun getAll(): List<RunResult>
 
     @Query("select * From runresult Where id = :id")
     suspend fun getRecord(id: Int): RunResult
