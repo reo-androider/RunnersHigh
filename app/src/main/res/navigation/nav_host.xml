@@ -8,29 +8,25 @@
 
     <fragment
         android:id="@+id/fragment1"
-        android:name="com.reo.running.runnershigh.fragments.FragmentRun"
+        android:name="com.reo.running.runnershigh.fragments.RunFragment"
         android:label="fragment_1"
         tools:layout="@layout/fragment_run"/>
 
     <fragment
         android:id="@+id/fragmentGraph"
-        android:name="com.reo.running.runnershigh.fragments.FragmentDistance"
+        android:name="com.reo.running.runnershigh.fragments.GraphFragment"
         android:label="fragment_2"
-        tools:layout="@layout/fragment_distance" />
+        tools:layout="@layout/fragment_graph" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/fragment2"-->
-<!--        android:name="com.reo.running.runnershigh.fragments.FragmentDistance"-->
-<!--        android:label="fragment_2"-->
-<!--        tools:layout="@layout/fragment_distance" />-->
-<!--    <fragment-->
-<!--        android:id="@+id/fragment3"-->
-<!--        android:name="com.reo.running.runnershigh.fragments.FragmentCalorie"-->
-<!--        android:label="fragment_3"-->
-<!--        tools:layout="@layout/fragment_profile" />-->
     <fragment
         android:id="@+id/fragment3"
-        android:name="com.reo.running.runnershigh.fragments.FragmentProfile"
+        android:name="com.reo.running.runnershigh.fragments.ProfileFragment"
         android:label="fragment_3"
         tools:layout="@layout/fragment_profile" />
+
+    <fragment
+        android:id="@+id/fragment_setting"
+        android:name="com.reo.running.runnershigh.fragments.ProfileSettingFragment"
+        tools:layout="@layout/fragment_profile_setting"/>
+
 </navigation>

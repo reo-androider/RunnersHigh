@@ -8,7 +8,7 @@ import io.realm.RealmConfiguration
 class MyApplication: Application() {
 
     companion object {
-        lateinit var db: RecordDatabase
+        lateinit var db: RunRecordDatabase
     }
 
     override fun onCreate() {
@@ -16,7 +16,7 @@ class MyApplication: Application() {
 
         db = Room.databaseBuilder(
             this,
-            RecordDatabase::class.java,
+            RunRecordDatabase::class.java,
             "database-name"
         ).build()
 

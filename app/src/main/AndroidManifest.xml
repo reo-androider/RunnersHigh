@@ -22,12 +22,11 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_running"
+        android:icon="@drawable/ic_app"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:theme="@style/Theme.MaterialComponents.DayNight.NoActionBar"
+        android:roundIcon="@drawable/ic_app"
+        android:theme="@style/Theme.MaterialComponents.Light.NoActionBar"
         android:screenOrientation="portrait">
-        <activity android:name=".LoginActivity"></activity>
 
         <uses-library
             android:name="com.google.android.gms.maps"

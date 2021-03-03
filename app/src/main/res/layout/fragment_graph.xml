@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/screen"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/wall_white">
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/title_tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="計測履歴"
+        app:titleTextColor="@color/normal"
+        android:background="@color/white"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@id/title_tool_bar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="@color/wall_white"
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="距離の記録"
+                app:titleTextColor="@color/normal"
+                android:background="@color/white"/>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/distance_graph"
+                android:layout_width="match_parent"
+                android:layout_height="520dp"
+                android:layout_weight="12"/>
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:title="消費カロリーの記録"
+                app:titleTextColor="@color/normal"
+                android:background="@color/white" />
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/graph_calorie"
+                android:layout_width="match_parent"
+                android:layout_height="520dp"
+                android:layout_weight="12" />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

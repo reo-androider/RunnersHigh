@@ -81,24 +81,56 @@
 
     <string name="color">color</string>
 
-    <string name="memo">気づき・メモ</string>
+    <string name="memo">メモ欄</string>
 
     <string name="heigh_title">走行距離の記録</string>
     <string name="calorie_title">消費カロリーの記録</string>
 
-    <string name="profile_name">あなたの名前</string>
+    <string name="profile_name">ユーザー</string>
+    <string name="profile_name2">太郎</string>
+    <string name="login_day_text">ログイン日</string>
     <string name="login_day">非ログイン</string>
 
     <string name="profile_distance_level">距離レベル</string>
-    <string name="profile_distance_metaphor">縦にすると酸素が地上の大体半分になるくらいな距離</string>
-    <string name="profile_level_num">(例)Lv.6</string>
+    <string name="profile_level_num">Lv.0</string>
+    <string name="profile_distance_num_metaphor_0">ここから積み上げていくぞー！</string>
+    <string name="profile_distance_num_metaphor_5">縦にすると酸素が地上の大体半分になるくらいな距離</string>
+    <string name="profile_distance_num_metaphor_10">縦にするとエベレスト越えちゃうくらいな距離</string>
+    <string name="profile_distance_num_metaphor_50">縦にすると成層圏突入</string>
+    <string name="profile_distance_num_metaphor_100">縦にすると宇宙突入するくらいな距離</string>
+    <string name="profile_space_man_meet">0</string>
 
     <string name="profile_calorie_level">消費カロリーレベル</string>
-    <string name="profile_calorie_level_num">(例)Lv.6</string>
-    <string name="profile_calorie_metaphor">ビックマックとコーラSサイズな消費カロリー</string>
+    <string name="profile_calorie_level_num">Lv.0</string>
+    <string name="profile_calorie_metaphor_1">ここから積み上げるぞー</string>
+    <string name="profile_calorie_metaphor_2">おにぎり一個分</string>
+    <string name="profile_calorie_metaphor_3">ビックマック並</string>
+    <string name="profile_calorie_metaphor_4">ショートケーキ並</string>
+    <string name="profile_calorie_metaphor_10">カツカレー並</string>
+    <string name="profile_calorie_metaphor_20">某ましましラーメン並</string>
+    <string name="profile_calorie_metaphor_30">シーフードピザL</string>
+    <string name="profile_calorie_metaphor_48">おにぎり300個分</string>
+    <string name="profile_calorie_metaphor_72">脂肪1キロ分を消費！！！！</string>
+
+
 
     <string name="profile">profile</string>
+    <string name="profile_photo">写真を変更</string>
+    <string name="profile_family_name">姓</string>
+    <string name="profile_first_name">名</string>
+    <string name="profile_weight">体重(kg)</string>
+    <string name="weight_num">60kg</string>
+    <string name="profile_marker">マーカー</string>
+    <string name="profile_delete">データを削除する</string>
+    <string name="profile_marker_image">ランニング中のマーカーの画像を指定</string>
 
+    <string name="profile_record_run">写真館</string>
+    <string name="diet_text">ランニングで痩せるには？</string>
+    <string name="hogehogehoehogehoge">hogehogehoehogehoge</string>
+    <string name="memo_draft">memo</string>
+    <string name="calcalcalcal_draft">calcalcalcal</string>
+    <string name="hogehoeg">hogehoeg</string>
+    <string name="kmkmkmkkkk">kmkmkmkkkk</string>
 
 </resources>
 

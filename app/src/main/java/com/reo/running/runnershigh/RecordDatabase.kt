@@ -4,16 +4,16 @@ import android.graphics.Bitmap
 import androidx.room.*
 
 @Database(entities = arrayOf(
-    Record::class,
-    Record2::class) ,version = 1)
-@TypeConverters(BitmapConverter::class)
-abstract class RecordDatabase : RoomDatabase() {
-    abstract fun recordDao(): RecordDao
-    abstract fun recordDao2(): RecordDao2
+    JustRunData::class,
+    RunResult::class) ,version = 1)
+@TypeConverters(BitmapForRoom::class)
+abstract class RunRecordDatabase : RoomDatabase() {
+    abstract fun justRunDao(): JustRunDataDao
+    abstract fun runResultDao(): RunResultDao
 }
 
 @Entity
-data class Record(
+data class JustRunData(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val time: String,
@@ -25,7 +25,7 @@ data class Record(
 )
 
 @Entity
-data class Record2(
+data class RunResult(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val bitmap: Bitmap?,
@@ -36,43 +36,42 @@ data class Record2(
     val colorId: String,
     val revaluationMark: String,
     val memo: String
-)
+    )
 
 @Dao
-interface RecordDao {
-    @Query("Select * From record")
-    fun getAll(): List<Record>
+interface JustRunDataDao {
+    @Query("Select * From justrundata")
+    suspend fun getAll(): List<JustRunData>
 
-    @Query("select * From record Where id = :id")
-    suspend fun getRecord(id: Int): Record
+    @Query("select * From justrundata Where id = :id")
+    suspend fun getRecord(id: Int): JustRunData
 
     @Insert
-    suspend fun insertRecord(record: Record)
+    suspend fun insertRecord(record: JustRunData)
 
     @Update
-    suspend fun updateRecord(record: Record)
+    suspend fun updateRecord(record: JustRunData)
 
     @Delete
-    suspend fun deleteRecord(record: Record)
+    suspend fun deleteRecord(record: JustRunData)
 
 }
 
 
 @Dao
-interface RecordDao2 {
-    @Query("Select * From record2")
-    fun getAll2(): List<Record2>
+interface RunResultDao {
+    @Query("Select * From runresult")
+    suspend fun getAll(): List<RunResult>
 
-    @Query("select * From record2 Where id = :id")
-    suspend fun getRecord2(id: Int): Record2
+    @Query("select * From runresult Where id = :id")
+    suspend fun getRecord(id: Int): RunResult
 
     @Insert
-    suspend fun insertRecord2(record: Record2)
+    suspend fun insertRecord(record: RunResult)
 
     @Update
-    suspend fun updateRecord2(record: Record2)
+    suspend fun updateRecord(record: RunResult)
 
     @Delete
-    suspend fun deleteRecord2(record: Record2)
-
+    suspend fun deleteRecord(recordList: List<RunResult>)
 }
