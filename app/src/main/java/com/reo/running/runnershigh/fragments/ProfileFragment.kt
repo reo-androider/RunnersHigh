@@ -47,7 +47,6 @@ class ProfileFragment : Fragment() {
     private val runDB = MyApplication.db.runResultDao()
     private var firstId:Int = 0
     private var lastId:Int = 0
-    private var i:Int? = 0  //カウント変数用
     private var totalDistance = 0.0
     private var totalCalorie = 0
     private var alienCount = 0
