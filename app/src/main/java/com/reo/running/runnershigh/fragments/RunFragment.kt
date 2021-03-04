@@ -4,7 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.*
-import android.content.Context.VIBRATOR_SERVICE
+import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Location
@@ -19,6 +19,8 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.checkSelfPermission
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -56,8 +58,8 @@ class RunFragment : Fragment() {
     private val recordDao = MyApplication.db.justRunDao()
     var marker: Marker? = null
     private var runStart = false
-    private lateinit var vibrator: Vibrator
     private lateinit var vibrationEffect: VibrationEffect
+    private lateinit var vibrator: Vibrator
     private var imageUri: Uri? = null
     private val contentResolver: ContentResolver? = null
     private var photo: Bitmap? = null
@@ -126,7 +128,7 @@ class RunFragment : Fragment() {
                                                         lastLocation.latitude,
                                                         lastLocation.longitude
                                                 )
-                                                ,18f
+                                                ,zoomValue
                                         )
                         )
                         stdLocation?.let {
@@ -137,7 +139,6 @@ class RunFragment : Fragment() {
                                     lastLocation.longitude,
                                     results
                             )
-
 //                            if (recordStop) {
 //                                stdLocation?.let {
 //                                    Location.distanceBetween(
@@ -148,15 +149,12 @@ class RunFragment : Fragment() {
 //                                            results
 //                                    )
 //                                }
-
                                 totalDistance += results[0]
                                 stdLocation = lastLocation
-
                                 kmAmount = kmConvert(totalDistance)
                                 calorieAmount = calorieConvert(totalDistance, weight)
                                 distance.text = "$kmAmount"
                                 calorieNum.text = "$calorieAmount"
-
 //                                marker?.remove()
 //                                marker = it.addMarker(
 //                                        MarkerOptions().position(
@@ -185,12 +183,7 @@ class RunFragment : Fragment() {
 //                                                                )
 //                                                )
 //                                )
-                            }
 
-                            if (gpsAdjust < 10) {
-                                totalDistance = 0.0
-                            } else {
-                                if (gpsAdjust == 10) {
                                     mapView.visibility = View.VISIBLE
                                     startNav.visibility = View.VISIBLE
                                     startNav2.visibility = View.VISIBLE
@@ -204,16 +197,13 @@ class RunFragment : Fragment() {
                                     centerCircle.startAnimation(alphaAnimation)
                                     startText.startAnimation(alphaAnimation)
 
-                                }
 
                                 marker?.showInfoWindow()
                             }
-                            gpsAdjust++
                         }
                     }
                 }
 
-                requireContext().run {
                     fusedLocationClient.requestLocationUpdates(
                             locationRequest,
                             locationCallback,
@@ -268,7 +258,7 @@ class RunFragment : Fragment() {
                                     }
 
                                     GlobalScope.launch(Dispatchers.Main) {
-                                        vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+                                        vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                                         vibrationEffect = VibrationEffect.createOneShot(1000, 255)
                                         vibrator.vibrate(vibrationEffect)
                                         runStart = true
@@ -297,7 +287,7 @@ class RunFragment : Fragment() {
                                         }
 
                                         cameraImage.setOnClickListener {
-                                            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                                            if (checkSelfPermission(requireContext(),Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
                                                 val permission = arrayOf(
                                                         Manifest.permission.CAMERA
                                                 )
@@ -308,7 +298,7 @@ class RunFragment : Fragment() {
                                         }
 
                                         restartButton.setOnClickListener {
-                                            vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+                                            vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                                             vibrationEffect = VibrationEffect.createOneShot(800, 255)
                                             vibrator.vibrate(vibrationEffect)
                                             stopWatch.base = SystemClock.elapsedRealtime() - stopTime
@@ -334,7 +324,7 @@ class RunFragment : Fragment() {
 
                                         pauseButton.setOnClickListener {
                                             lockOff.visibility = View.GONE
-                                            vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                            vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                                             vibrationEffect = VibrationEffect.createOneShot(500, 255)
                                             vibrator.vibrate(vibrationEffect)
                                             recordStop = true
@@ -362,7 +352,7 @@ class RunFragment : Fragment() {
                                         }
 
                                         finishButton.setOnClickListener {
-                                            vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
+                                            vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                                             vibrationEffect = VibrationEffect.createOneShot(600, 255)
                                             vibrator.vibrate(vibrationEffect)
                                             GlobalScope.launch(Dispatchers.Main) {
@@ -375,8 +365,7 @@ class RunFragment : Fragment() {
                                                 finishButton.clearAnimation()
 
                                                 val builder = AlertDialog.Builder(requireContext())
-                                                builder
-                                                        .setCancelable(false)
+                                                builder.setCancelable(false)
                                                         .setMessage("ランニングを終了しますか？")
                                                         .setPositiveButton("YES") { _, _ ->
                                                             lifecycleScope.launch(Dispatchers.IO) {
@@ -391,6 +380,7 @@ class RunFragment : Fragment() {
                                                                 )
                                                                 recordDao.insertRecord(record)
                                                                 withContext(Dispatchers.Main) {
+
                                                                     findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                                                                 }
                                                             }
@@ -408,7 +398,7 @@ class RunFragment : Fragment() {
                     }
                 }
         }
-    }
+
 
     override fun onStart() {
         super.onStart()
