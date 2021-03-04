@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.*
+import android.content.Context.VIBRATOR_SERVICE
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.location.Location
@@ -19,6 +20,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -34,6 +36,7 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentRunBinding
 import kotlinx.coroutines.*
+import java.security.Permission
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -54,20 +57,19 @@ class RunFragment : Fragment() {
     var recordStop = true
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.justRunDao()
-    private val readDao2 = MyApplication.db.justRunDao()
     var marker: Marker? = null
     private var runStart = false
     private lateinit var vibrator: Vibrator
     private lateinit var vibrationEffect: VibrationEffect
-    private val PERMISSION_CODE = 1000
-    private val IMAGE_CAPTURE_CODE = 1001
-    private var image_uri: Uri? = null
+    private var imageUri: Uri? = null
     private val contentResolver: ContentResolver? = null
-    private var photo:Bitmap? = null
+    private var photo: Bitmap? = null
     private var takePhoto = false
     private var  countStart = false //アニメーションが何度も再生されないように
     companion object {
-        const val REQUEST_PERMISSION = 1
+        private const val REQUEST_PERMISSION = 1
+        private const val PERMISSION_CODE = 1000
+        private const val IMAGE_CAPTURE_CODE = 1001
     }
 
     override fun onCreateView(
@@ -85,8 +87,16 @@ class RunFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-            if (ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_PERMISSION)
+            if (ContextCompat.checkSelfPermission(
+                            requireContext(),
+                            Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                        requireActivity(),
+                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                        REQUEST_PERMISSION
+                )
                 return
             }
             mapView.onCreate(savedInstanceState)
@@ -97,32 +107,33 @@ class RunFragment : Fragment() {
                         val myWeight = snapshot.value
                         if (myWeight.toString() != "") weight = myWeight.toString().toDouble()
                     }
-
                     override fun onCancelled(error: DatabaseError) {}
                 })
 
-                context?.run {
-                    fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-                }
+            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
 
-                val locationRequest = LocationRequest().apply {
-                    interval = 1
-                    fastestInterval = 1
-                    priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                }
+            val locationRequest = LocationRequest().apply {
+                interval = 1
+                fastestInterval = 1
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            }
 
-                val locationCallback = object : LocationCallback() {
-                    override fun onLocationResult(locationResult: LocationResult?) {
-                        super.onLocationResult(locationResult)
-                        val lastLocation = locationResult?.lastLocation ?: return
-                        mapView.getMapAsync {
+            val locationCallback = object : LocationCallback() {
+                override fun onLocationResult(locationResult: LocationResult?) {
+                    super.onLocationResult(locationResult)
+                    val lastLocation = locationResult?.lastLocation ?: return
+                    mapView.getMapAsync {
 //                            今後必要なので残しておく
 //                            it.isMyLocationEnabled = true
-                            it.moveCamera(
-                                    CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), zoomValue)
+                        it.moveCamera(
+                                CameraUpdateFactory.newLatLngZoom(
+                                        LatLng(
+                                                lastLocation.latitude,
+                                                lastLocation.longitude
+                                        ), zoomValue)
                             )
 
-                            if (recordStop == true) {
+                            if (recordStop) {
                                 stdLocation?.let {
                                     Location.distanceBetween(
                                             it.latitude,
@@ -138,8 +149,8 @@ class RunFragment : Fragment() {
 
                                 kmAmount = kmConvert(totalDistance)
                                 calorieAmount = calorieConvert(totalDistance, weight)
-                                binding.distance.text = "$kmAmount"
-                                binding.calorieNum.text = "$calorieAmount"
+                                distance.text = "$kmAmount"
+                                calorieNum.text = "$calorieAmount"
 
                                 marker?.remove()
                                 marker = it.addMarker(
@@ -153,12 +164,21 @@ class RunFragment : Fragment() {
                             } else {
                                 marker?.remove()
                                 marker = it.addMarker(
-                                        MarkerOptions().position(LatLng(
-                                                lastLocation.latitude,
-                                                lastLocation.longitude
-                                        ))
-                                                .icon(BitmapDescriptorFactory
-                                                        .fromBitmap(BitmapConverter.getBitmap(context, R.drawable.ic_trace)))
+                                        MarkerOptions().position(
+                                                LatLng(
+                                                        lastLocation.latitude,
+                                                        lastLocation.longitude
+                                                )
+                                        )
+                                                .icon(
+                                                        BitmapDescriptorFactory
+                                                                .fromBitmap(
+                                                                        BitmapConverter.getBitmap(
+                                                                                context,
+                                                                                R.drawable.ic_trace
+                                                                        )
+                                                                )
+                                                )
                                 )
                             }
 
@@ -169,45 +189,33 @@ class RunFragment : Fragment() {
                                     mapView.visibility = View.VISIBLE
                                     startNav.visibility = View.VISIBLE
                                     startNav2.visibility = View.VISIBLE
-
                                     startText.visibility = View.VISIBLE
                                     centerCircle.visibility = View.VISIBLE
 
                                     val alphaAnimation = AlphaAnimation(0f, 1f)
                                     alphaAnimation.duration = 500
-
-                                    val alphaAnimation2 = AlphaAnimation(0f, 1f)
-                                    alphaAnimation2.duration = 500
-
                                     startNav.startAnimation(alphaAnimation)
                                     startNav2.startAnimation(alphaAnimation)
-
-                                    centerCircle.startAnimation(alphaAnimation2)
-                                    startText.startAnimation(alphaAnimation2)
+                                    centerCircle.startAnimation(alphaAnimation)
+                                    startText.startAnimation(alphaAnimation)
 
                                 }
 
                                 marker?.showInfoWindow()
                             }
-
-                            it.uiSettings.isScrollGesturesEnabled = true
-                            it.uiSettings.isZoomGesturesEnabled = true
-                            it.uiSettings.isMapToolbarEnabled = true
-                            it.uiSettings.isCompassEnabled = true
-
                             gpsAdjust++
                         }
                     }
                 }
 
-                context?.run {
+                requireContext().run {
                     fusedLocationClient.requestLocationUpdates(
                             locationRequest,
                             locationCallback,
                             Looper.myLooper()
                     )
 
-                    if (countStart == false) {
+                    if (!countStart) {
                         countStart = true
                         binding.centerCircle.setOnClickListener {
                             recordStop = false
@@ -239,9 +247,7 @@ class RunFragment : Fragment() {
 
                                 }
 
-
-                                (activity as MainActivity).binding.bottomNavigation.visibility =
-                                        View.GONE
+                                (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
 
                                 GlobalScope.launch {
                                     withContext(Dispatchers.IO) {
@@ -257,8 +263,7 @@ class RunFragment : Fragment() {
                                     }
 
                                     GlobalScope.launch(Dispatchers.Main) {
-                                        vibrator =
-                                                getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                        vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
                                         vibrationEffect = VibrationEffect.createOneShot(1000, 255)
                                         vibrator.vibrate(vibrationEffect)
                                         runStart = true
@@ -269,134 +274,62 @@ class RunFragment : Fragment() {
                                         stopWatch.start()
 
                                         mapView.visibility = View.VISIBLE
-//                                        pauseImage.visibility = View.VISIBLE
                                         pauseButton.visibility = View.VISIBLE
                                         timerScreen.visibility = View.VISIBLE
                                         lockOff.visibility = View.VISIBLE
 
                                         lockOff.setOnClickListener {
                                             lockOff.visibility = View.GONE
-//                                            pauseImage.visibility = View.GONE
                                             pauseButton.visibility = View.GONE
                                             lockImage.visibility = View.VISIBLE
                                         }
 
                                         lockImage.setOnClickListener {
                                             lockImage.visibility = View.GONE
-//                                            pauseImage.visibility = View.VISIBLE
                                             pauseButton.visibility = View.VISIBLE
                                             lockOff.visibility = View.VISIBLE
 
                                         }
 
                                         cameraImage.setOnClickListener {
-                                            if (checkSelfPermission(Manifest.permission.CAMERA)
-                                                    == PackageManager.PERMISSION_DENIED ||
-                                                    checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                                                    == PackageManager.PERMISSION_DENIED
-                                            ) {
+                                            if (checkSelfPermission(Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
                                                 val permission = arrayOf(
-                                                        Manifest.permission.CAMERA,
-                                                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                                                        Manifest.permission.READ_EXTERNAL_STORAGE
+                                                        Manifest.permission.CAMERA
                                                 )
                                                 requestPermissions(permission, PERMISSION_CODE)
-
                                             } else {
                                                 openCamera()
                                             }
                                         }
 
                                         restartButton.setOnClickListener {
-                                            vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                            vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
                                             vibrationEffect = VibrationEffect.createOneShot(800, 255)
                                             vibrator.vibrate(vibrationEffect)
                                             stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                                             stopWatch.start()
                                             recordStop = false
                                             finishButton.visibility = View.GONE
-
                                             GlobalScope.launch(Dispatchers.Main) {
-                                                val scaleRestartImage = ScaleAnimation(
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-
-                                                val scaleRestartButton = ScaleAnimation(
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-
-                                                scaleRestartImage.let {
+                                                restartButton.startAnimation(scaleDownAnimation {
                                                     it.duration = 300
                                                     it.fillAfter = true
-                                                }
-
-                                                scaleRestartButton.let {
-                                                    it.duration = 300
-                                                    it.fillAfter = true
-                                                }
-                                                restartButton.startAnimation(scaleRestartButton)
-                                                delay(600)
-                                                lockOff.visibility = View.VISIBLE
-//                                                restartImage.clearAnimation()
+                                                })
+                                                delay(500)
                                                 restartButton.clearAnimation()
-//                                                pauseImage.visibility = View.VISIBLE
-                                                pauseButton.visibility = View.VISIBLE
-//                                                restartImage.visibility = View.GONE
                                                 restartButton.visibility = View.GONE
-                                                val scalePauseImage = ScaleAnimation(
-                                                        0.1f,
-                                                        1f,
-                                                        0.1f,
-                                                        1f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-
-                                                val scalePauseButton = ScaleAnimation(
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-
-                                                scalePauseImage.let {
+                                                lockOff.visibility = View.VISIBLE
+                                                pauseButton.visibility = View.VISIBLE
+                                                pauseButton.startAnimation(scaleUpAnimation {
                                                     it.duration = 300
-                                                }
-
-                                                scalePauseButton.let {
-                                                    it.duration = 300
-                                                }
-
-//                                                pauseImage.startAnimation(scalePauseImage)
-                                                pauseButton.startAnimation(scalePauseButton)
-
+                                                    it.fillAfter = true
+                                                })
                                             }
                                         }
 
                                         pauseButton.setOnClickListener {
                                             lockOff.visibility = View.GONE
-                                            vibrator =
-                                                    getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                            vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                                             vibrationEffect = VibrationEffect.createOneShot(500, 255)
                                             vibrator.vibrate(vibrationEffect)
                                             recordStop = true
@@ -404,163 +337,41 @@ class RunFragment : Fragment() {
                                             stopWatch.stop()
 
                                             GlobalScope.launch(Dispatchers.Main) {
-                                                val scaleImage = ScaleAnimation(
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-
-                                                val scaleButton = ScaleAnimation(
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-                                                scaleImage.duration = 300
-                                                scaleImage.fillAfter = true
-                                                scaleButton.duration = 300
-                                                scaleButton.fillAfter = true
-
-//                                                pauseImage.startAnimation(scaleImage)
-                                                pauseButton.startAnimation(scaleButton)
+                                                pauseButton.startAnimation(scaleDownAnimation {
+                                                    it.duration = 300
+                                                    it.fillAfter = true
+                                                })
                                                 delay(500)
-//                                                pauseImage.clearAnimation()
                                                 pauseButton.clearAnimation()
-//                                                pauseImage.visibility = View.GONE
                                                 pauseButton.visibility = View.INVISIBLE
-                                                val scaleRestartImage = ScaleAnimation(
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-
-                                                val scaleRestartButton = ScaleAnimation(
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-                                                val scaleFinishImage = ScaleAnimation(
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-
-                                                val scaleFinishButton = ScaleAnimation(
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-
-                                                scaleRestartImage.let {
-                                                    it.duration = 300
-                                                    it.fillAfter = true
-                                                }
-                                                scaleRestartButton.let {
-                                                    it.duration = 300
-                                                    it.fillAfter = true
-                                                }
-                                                scaleFinishImage.let {
-                                                    it.duration = 300
-                                                    it.fillAfter = true
-                                                }
-                                                scaleFinishButton.let {
-                                                    it.duration = 300
-                                                    it.fillAfter = true
-                                                }
-
-//                                                finishImage.visibility = View.VISIBLE
                                                 finishButton.visibility = View.VISIBLE
-//                                                restartImage.visibility = View.VISIBLE
                                                 restartButton.visibility = View.VISIBLE
-
-//                                                restartImage.startAnimation(scaleRestartImage)
-                                                restartButton.startAnimation(scaleRestartButton)
-//                                                finishImage.startAnimation(scaleFinishImage)
-                                                finishButton.startAnimation(scaleFinishButton)
+                                                restartButton.startAnimation(scaleUpAnimation {
+                                                    it.duration = 300
+//                                                    it.fillAfter = true
+                                                })
+                                                finishButton.startAnimation(scaleUpAnimation {
+                                                    it.duration = 300
+//                                                    it.fillAfter = true
+                                                })
                                                 delay(300)
-//                                                restartImage.clearAnimation()
-                                                restartButton.clearAnimation()
-//                                                finishImage.clearAnimation()
-                                                finishButton.clearAnimation()
+//                                                restartButton.clearAnimation()
+//                                                finishButton.clearAnimation()
                                             }
                                         }
 
                                         finishButton.setOnClickListener {
-                                            vibrator =
-                                                    getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                                            vibrator = getSystemService(VIBRATOR_SERVICE) as Vibrator
                                             vibrationEffect = VibrationEffect.createOneShot(600, 255)
                                             vibrator.vibrate(vibrationEffect)
                                             GlobalScope.launch(Dispatchers.Main) {
-                                                val scaleFinishImage = ScaleAnimation(
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
 
-                                                val scaleFinishButton = ScaleAnimation(
-                                                        1f,
-                                                        0.6f,
-                                                        1f,
-                                                        0.6f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f,
-                                                        Animation.RELATIVE_TO_SELF,
-                                                        0.5f
-                                                )
-
-                                                scaleFinishImage.let {
+                                                finishButton.startAnimation(scaleDownAnimation {
                                                     it.duration = 300
                                                     it.fillAfter = true
-                                                }
-
-                                                scaleFinishButton.let {
-                                                    it.duration = 300
-                                                    it.fillAfter = true
-                                                }
-
-//                                                finishImage.startAnimation(scaleFinishImage)
-                                                finishButton.startAnimation(scaleFinishButton)
-
+                                                })
                                                 delay(500)
-
-//                                                finishImage.clearAnimation()
                                                 finishButton.clearAnimation()
-
-                                                Log.d("test", stopWatch.text.toString())
 
                                                 val builder = AlertDialog.Builder(requireContext())
                                                 builder
@@ -620,6 +431,41 @@ class RunFragment : Fragment() {
     }
 */
 
+    private fun scaleUpAnimation(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
+            ScaleAnimation(
+                    0.6f,
+                    1f,
+                    0.6f,
+                    1f,
+                    Animation.RELATIVE_TO_SELF,
+                    0.5f,
+                    Animation.RELATIVE_TO_SELF,
+                    0.5f
+            ).apply {
+                operation(this)
+            }
+
+    private fun scaleDownAnimation(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
+            ScaleAnimation(
+                    1f,
+                    0.6f,
+                    1f,
+                    0.6f,
+                    Animation.RELATIVE_TO_SELF,
+                    0.5f,
+                    Animation.RELATIVE_TO_SELF,
+                    0.5f
+            ).apply {
+                operation(this)
+            }
+
+    private fun clearAnimation(binding: FragmentRunBinding) {
+        binding.run {
+            restartButton.clearAnimation()
+            finishButton.clearAnimation()
+        }
+    }
+
     private fun animationCount(view: View) {
         view.startAnimation(ScaleAnimation(
             0f,
@@ -653,10 +499,10 @@ class RunFragment : Fragment() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
-        image_uri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        imageUri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
 
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
     }
 
