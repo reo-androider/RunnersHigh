@@ -119,6 +119,16 @@ class RunFragment : Fragment() {
                     val lastLocation = locationResult?.lastLocation ?: return
                     mapView.getMapAsync {
                         it.isMyLocationEnabled = true
+                        it.animateCamera(
+                                CameraUpdateFactory
+                                        .newLatLngZoom(
+                                                LatLng(
+                                                        lastLocation.latitude,
+                                                        lastLocation.longitude
+                                                )
+                                                ,18f
+                                        )
+                        )
                         stdLocation?.let {
                             Location.distanceBetween(
                                     it.latitude,
