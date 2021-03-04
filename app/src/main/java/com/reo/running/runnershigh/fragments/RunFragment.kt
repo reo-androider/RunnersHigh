@@ -11,7 +11,6 @@ import android.location.Location
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -36,7 +34,6 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentRunBinding
 import kotlinx.coroutines.*
-import java.security.Permission
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -54,7 +51,7 @@ class RunFragment : Fragment() {
     var weight = 60.0
     var kmAmount: Double = 0.0
     var calorieAmount: Int = 0
-    var recordStop = true
+    var recordStop = false
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.justRunDao()
     var marker: Marker? = null
@@ -109,9 +106,7 @@ class RunFragment : Fragment() {
                     }
                     override fun onCancelled(error: DatabaseError) {}
                 })
-
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-
             val locationRequest = LocationRequest().apply {
                 interval = 1
                 fastestInterval = 1
@@ -123,26 +118,26 @@ class RunFragment : Fragment() {
                     super.onLocationResult(locationResult)
                     val lastLocation = locationResult?.lastLocation ?: return
                     mapView.getMapAsync {
-//                            今後必要なので残しておく
-//                            it.isMyLocationEnabled = true
-                        it.moveCamera(
-                                CameraUpdateFactory.newLatLngZoom(
-                                        LatLng(
-                                                lastLocation.latitude,
-                                                lastLocation.longitude
-                                        ), zoomValue)
+                        it.isMyLocationEnabled = true
+                        stdLocation?.let {
+                            Location.distanceBetween(
+                                    it.latitude,
+                                    it.longitude,
+                                    lastLocation.latitude,
+                                    lastLocation.longitude,
+                                    results
                             )
 
-                            if (recordStop) {
-                                stdLocation?.let {
-                                    Location.distanceBetween(
-                                            it.latitude,
-                                            it.longitude,
-                                            lastLocation.latitude,
-                                            lastLocation.longitude,
-                                            results
-                                    )
-                                }
+//                            if (recordStop) {
+//                                stdLocation?.let {
+//                                    Location.distanceBetween(
+//                                            it.latitude,
+//                                            it.longitude,
+//                                            lastLocation.latitude,
+//                                            lastLocation.longitude,
+//                                            results
+//                                    )
+//                                }
 
                                 totalDistance += results[0]
                                 stdLocation = lastLocation
@@ -152,34 +147,34 @@ class RunFragment : Fragment() {
                                 distance.text = "$kmAmount"
                                 calorieNum.text = "$calorieAmount"
 
-                                marker?.remove()
-                                marker = it.addMarker(
-                                        MarkerOptions().position(
-                                                LatLng(
-                                                        lastLocation.latitude,
-                                                        lastLocation.longitude
-                                                )
-                                        )
-                                )
-                            } else {
-                                marker?.remove()
-                                marker = it.addMarker(
-                                        MarkerOptions().position(
-                                                LatLng(
-                                                        lastLocation.latitude,
-                                                        lastLocation.longitude
-                                                )
-                                        )
-                                                .icon(
-                                                        BitmapDescriptorFactory
-                                                                .fromBitmap(
-                                                                        BitmapConverter.getBitmap(
-                                                                                context,
-                                                                                R.drawable.ic_trace
-                                                                        )
-                                                                )
-                                                )
-                                )
+//                                marker?.remove()
+//                                marker = it.addMarker(
+//                                        MarkerOptions().position(
+//                                                LatLng(
+//                                                        lastLocation.latitude,
+//                                                        lastLocation.longitude
+//                                                )
+//                                        )
+//                                )
+//                            } else {
+//                                marker?.remove()
+//                                marker = it.addMarker(
+//                                        MarkerOptions().position(
+//                                                LatLng(
+//                                                        lastLocation.latitude,
+//                                                        lastLocation.longitude
+//                                                )
+//                                        )
+//                                                .icon(
+//                                                        BitmapDescriptorFactory
+//                                                                .fromBitmap(
+//                                                                        BitmapConverter.getBitmap(
+//                                                                                context,
+//                                                                                R.drawable.ic_trace
+//                                                                        )
+//                                                                )
+//                                                )
+//                                )
                             }
 
                             if (gpsAdjust < 10) {
@@ -348,15 +343,11 @@ class RunFragment : Fragment() {
                                                 restartButton.visibility = View.VISIBLE
                                                 restartButton.startAnimation(scaleUpAnimation {
                                                     it.duration = 300
-//                                                    it.fillAfter = true
                                                 })
                                                 finishButton.startAnimation(scaleUpAnimation {
                                                     it.duration = 300
-//                                                    it.fillAfter = true
                                                 })
                                                 delay(300)
-//                                                restartButton.clearAnimation()
-//                                                finishButton.clearAnimation()
                                             }
                                         }
 
