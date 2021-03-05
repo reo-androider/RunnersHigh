@@ -227,7 +227,10 @@ class RunFragment : Fragment() {
                 stopWatch.start()
                 finishButton.visibility = View.GONE
                 lifecycleScope.launch {
-                    startNav.visibility = View.GONE
+                    startNav.run {
+                        visibility = View.GONE
+                        clearAnimation()
+                    }
                     withContext(Dispatchers.Main) {
                         restartButton.startAnimation(scaleDownAnimation {})
                         delay(500)
@@ -235,7 +238,9 @@ class RunFragment : Fragment() {
                         restartButton.visibility = View.GONE
                         lockOff.visibility = View.VISIBLE
                         pauseButton.visibility = View.VISIBLE
-                        pauseButton.startAnimation(scaleUpAnimation {})
+                        pauseButton.startAnimation(scaleUpAnimation {
+                            it.fillAfter = false
+                        })
                     }
                 }
             }
@@ -249,8 +254,8 @@ class RunFragment : Fragment() {
                     pauseButton.startAnimation(scaleDownAnimation {})
                     delay(500)
                     pauseButton.clearAnimation()
-                    lockOff.visibility = View.GONE
                     pauseButton.visibility = View.GONE
+                    lockOff.visibility = View.GONE
                     finishButton.visibility = View.VISIBLE
                     restartButton.visibility = View.VISIBLE
                     restartButton.startAnimation(scaleUpAnimation {})
