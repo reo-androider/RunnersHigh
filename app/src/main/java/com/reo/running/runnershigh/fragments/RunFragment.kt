@@ -69,6 +69,9 @@ class RunFragment : Fragment() {
         private const val REQUEST_PERMISSION = 1
         private const val PERMISSION_CODE = 1000
         private const val IMAGE_CAPTURE_CODE = 1001
+        private const val LONG_VIBRATION = 3
+        private const val MIDDLE_VIBRATION = 2
+        private const val SHORT_VIBRATION = 1
     }
 
     override fun onCreateView(
@@ -212,7 +215,7 @@ class RunFragment : Fragment() {
                                 delay(1000)
                             }
                         }
-                        vibratorOn("start")
+                        vibratorOn(LONG_VIBRATION)
                         startButton.clearAnimation()
                         kmAmount = 0.0
                         calorieAmount = 0
@@ -251,7 +254,7 @@ class RunFragment : Fragment() {
             }
 
             restartButton.setOnClickListener {
-                vibratorOn("restart")
+                vibratorOn(LONG_VIBRATION)
                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                 stopWatch.start()
                 recordStop = false
@@ -274,7 +277,7 @@ class RunFragment : Fragment() {
             }
 
             pauseButton.setOnClickListener {
-                vibratorOn("pause")
+                vibratorOn(MIDDLE_VIBRATION)
                 lockOff.visibility = View.GONE
                 recordStop = true
                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
@@ -301,7 +304,7 @@ class RunFragment : Fragment() {
             }
 
             finishButton.setOnClickListener {
-                vibratorOn("finish")
+                vibratorOn(SHORT_VIBRATION)
                 GlobalScope.launch(Dispatchers.Main) {
                     finishButton.startAnimation(scaleDownAnimation {
                         it.duration = 300
@@ -354,13 +357,6 @@ class RunFragment : Fragment() {
         binding.mapView.onPause()
     }
 
-/*
-    override fun onDestroy() {
-        super.onDestroy()
-        mapView.onDestroy()
-    }
-*/
-
     private fun scaleUpAnimation(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
             ScaleAnimation(
                     0.6f,
@@ -410,24 +406,20 @@ class RunFragment : Fragment() {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    private fun vibratorOn(vibratorType: String) {
+    private fun vibratorOn(vibratorType: Int) {
         vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         val vibrationEffect:VibrationEffect
         when(vibratorType) {
-            "start" -> {
+            LONG_VIBRATION -> {
                 vibrationEffect = VibrationEffect.createOneShot(800, 255)
                 vibrator.vibrate(vibrationEffect)
             }
-            "pause" -> {
-                vibrationEffect = VibrationEffect.createOneShot(500, 255)
-                vibrator.vibrate(vibrationEffect)
-            }
-            "restart" -> {
-                vibrationEffect = VibrationEffect.createOneShot(800, 255)
-                vibrator.vibrate(vibrationEffect)
-            }
-            "finish" -> {
+            MIDDLE_VIBRATION -> {
                 vibrationEffect = VibrationEffect.createOneShot(600, 255)
+                vibrator.vibrate(vibrationEffect)
+            }
+            SHORT_VIBRATION -> {
+                vibrationEffect = VibrationEffect.createOneShot(300, 255)
                 vibrator.vibrate(vibrationEffect)
             }
         }
