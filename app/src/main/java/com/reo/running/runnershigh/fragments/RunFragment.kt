@@ -39,23 +39,18 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import kotlin.math.ceil
-import kotlin.math.round
 
 class RunFragment : Fragment() {
 
     private lateinit var binding: FragmentRunBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    var stdLocation: Location? = null
-
-    //    var totalDistance = 0.0
-    var results = FloatArray(1)
-    val zoomValue = 18.0f
-    var startRun = false
-    var weight = 60.0
-    var kmAmount: Float = 0.0f
-    var calorieAmount: Int = 0
-
-    //    var recordStop = false
+    private var runState: Int = RUN_STATE_BEFORE
+    private var stdLocation: Location? = null
+    private var results = FloatArray(1)
+    private val zoomValue = 18.0f
+    private var weight = 60.0
+    private var kmAmount: Float = 0.0f
+    private var calorieAmount: Int = 0
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.justRunDao()
     private var imageUri: Uri? = null
@@ -64,12 +59,15 @@ class RunFragment : Fragment() {
     private var takePhoto = false
 
     companion object {
-        private const val REQUEST_PERMISSION = 1
-        private const val PERMISSION_CODE = 1000
-        private const val IMAGE_CAPTURE_CODE = 1001
-        private const val LONG_VIBRATION = 3
-        private const val MIDDLE_VIBRATION = 2
-        private const val SHORT_VIBRATION = 1
+        private const val REQUEST_PERMISSION = 1000
+        private const val PERMISSION_CODE = 1001
+        private const val IMAGE_CAPTURE_CODE = 1002
+        private const val LONG_VIBRATION = 2000
+        private const val MIDDLE_VIBRATION = 2001
+        private const val SHORT_VIBRATION = 2002
+        private const val RUN_STATE_BEFORE = 3001
+        private const val RUN_STATE_START = 3002
+        private const val RUN_STATE_PAUSE = 3003
     }
 
     override fun onCreateView(
@@ -124,46 +122,52 @@ class RunFragment : Fragment() {
                     mapView.getMapAsync {
                         it.isMyLocationEnabled = true
                         it.uiSettings.isMyLocationButtonEnabled = false
-
-                        if (!startRun) {
-                            it.animateCamera(
-                                    CameraUpdateFactory
-                                            .newLatLngZoom(
-                                                    latLng,
-                                                    zoomValue
-                                            )
-                            )
-                        } else {
-                            it.moveCamera(
-                                    CameraUpdateFactory.newLatLngZoom(
-                                            latLng,
-                                            zoomValue
-                                    )
-                            )
-                        }
-                    }
-
-
-                    if (startRun) {
-                        stdLocation?.let {
-                            Location.distanceBetween(
-                                    it.latitude,
-                                    it.longitude,
-                                    lastLocation.latitude,
-                                    lastLocation.longitude,
-                                    results
-                            )
-                        }
-                        stdLocation = lastLocation
-                        kmAmount += results[0]
-//                        calorieAmount = (ceil(kmAmount) * weight / 1000).toInt()
-                        distance.text = "${ceil(kmAmount * 1000) / 1000}"
-                        calorieNum.text = "${(ceil(kmAmount * 1000) / 1000 * weight).toInt()}"
-                    } else {
                         val alphaAnimation = AlphaAnimation(0f, 1f)
                         alphaAnimation.duration = 800
-                        startNav.startAnimation(alphaAnimation)
-                        startNav2.startAnimation(alphaAnimation)
+                        when (runState) {
+                            RUN_STATE_BEFORE -> {
+                                Log.d("debug-reo", "RUN_STATE_BEFORE")
+                                startNav.startAnimation(alphaAnimation)
+                                startNav2.startAnimation(alphaAnimation)
+                                it.animateCamera(
+                                        CameraUpdateFactory
+                                                .newLatLngZoom(
+                                                        latLng,
+                                                        zoomValue
+                                                )
+                                )
+                            }
+
+                            RUN_STATE_START -> {
+                                it.moveCamera(
+                                        CameraUpdateFactory.newLatLngZoom(
+                                                latLng,
+                                                zoomValue
+                                        )
+                                )
+                                stdLocation?.let {
+                                    Location.distanceBetween(
+                                            it.latitude,
+                                            it.longitude,
+                                            lastLocation.latitude,
+                                            lastLocation.longitude,
+                                            results
+                                    )
+                                }
+                                stdLocation = lastLocation
+                                kmAmount += results[0]
+                                distance.text = "${ceil(kmAmount * 1000) / 1000}"
+                                calorieNum.text = "${(ceil(kmAmount * 1000) / 1000 * weight).toInt()}"
+                            }
+
+                            RUN_STATE_PAUSE -> {
+                                startNav.run {
+                                    visibility = View.VISIBLE
+                                    setText(R.string.stop_Run)
+                                    startAnimation(alphaAnimation)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -175,8 +179,8 @@ class RunFragment : Fragment() {
             )
 
             startButton.setOnClickListener {
-
                 lifecycleScope.launch {
+                    runState = RUN_STATE_START
                     startNav.run {
                         visibility = View.GONE
                         clearAnimation()
@@ -190,7 +194,6 @@ class RunFragment : Fragment() {
                     mapView.visibility = View.GONE
                     (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
                     withContext(Dispatchers.Main) {
-                        startRun = true
                         val scaleStartButton = ScaleAnimation(
                                 1f,
                                 100f,
@@ -219,7 +222,6 @@ class RunFragment : Fragment() {
                         }
                         kmAmount = 0.0f
                         vibratorOn(LONG_VIBRATION)
-
                         startButton.clearAnimation()
                         stopWatch.base = SystemClock.elapsedRealtime()
                         stopWatch.start()
@@ -232,6 +234,8 @@ class RunFragment : Fragment() {
             }
 
             restartButton.setOnClickListener {
+                runState = RUN_STATE_START
+                startNav.visibility = View.GONE
                 vibratorOn(LONG_VIBRATION)
                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                 stopWatch.start()
@@ -248,6 +252,7 @@ class RunFragment : Fragment() {
             }
 
             pauseButton.setOnClickListener {
+                runState = RUN_STATE_PAUSE
                 vibratorOn(MIDDLE_VIBRATION)
                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                 stopWatch.stop()

@@ -26,6 +26,7 @@
     <string name="gps_search">Search for GPS</string>
     <string name="startNav">Tap the button</string>
     <string name="startNav2">and run!</string>
+    <string name="stop_Run">stopped running...</string>
     <string name="objective">目標</string>
     <string name="objective_sample">未登録</string>
 
