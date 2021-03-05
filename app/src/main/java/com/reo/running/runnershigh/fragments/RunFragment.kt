@@ -19,9 +19,7 @@ import android.view.animation.*
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -47,14 +45,16 @@ class RunFragment : Fragment() {
     private lateinit var binding: FragmentRunBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     var stdLocation: Location? = null
-    var totalDistance = 0.0
+
+    //    var totalDistance = 0.0
     var results = FloatArray(1)
     val zoomValue = 18.0f
     var startRun = false
     var weight = 60.0
-    var kmAmount: Double = 0.0
+    var kmAmount: Float = 0.0f
     var calorieAmount: Int = 0
-    var recordStop = false
+
+    //    var recordStop = false
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.justRunDao()
     private var imageUri: Uri? = null
@@ -141,6 +141,7 @@ class RunFragment : Fragment() {
                             )
                         }
                     }
+
                     stdLocation?.let {
                         Location.distanceBetween(
                                 it.latitude,
@@ -151,13 +152,13 @@ class RunFragment : Fragment() {
                         )
                     }
 
-                    totalDistance += results[0]
-                    stdLocation = lastLocation
-                    kmAmount = kmConvert(totalDistance)
-                    calorieAmount = calorieConvert(totalDistance, weight)
-                    distance.text = "$kmAmount"
-                    calorieNum.text = "$calorieAmount"
-                    if (!startRun) {
+                    if (startRun) {
+                        Log.d("debug-reo", "results[0] = ${results[0].toDouble()}")
+                        kmAmount += results[0] / 1000
+                        calorieAmount = calorieConvert(kmAmount, weight)
+                        distance.text = "$kmAmount"
+                        calorieNum.text = "$calorieAmount"
+                    } else {
                         val alphaAnimation = AlphaAnimation(0f, 1f)
                         alphaAnimation.duration = 800
                         startNav.startAnimation(alphaAnimation)
@@ -216,8 +217,6 @@ class RunFragment : Fragment() {
                         }
                         vibratorOn(LONG_VIBRATION)
                         startButton.clearAnimation()
-                        kmAmount = 0.0
-                        calorieAmount = 0
                         stopWatch.base = SystemClock.elapsedRealtime()
                         stopWatch.start()
                         mapView.visibility = View.VISIBLE
@@ -228,75 +227,37 @@ class RunFragment : Fragment() {
                 }
             }
 
-            lockOff.setOnClickListener {
-                lockOff.visibility = View.GONE
-                pauseButton.visibility = View.GONE
-                lockImage.visibility = View.VISIBLE
-            }
-
-            lockImage.setOnClickListener {
-                lockImage.visibility = View.GONE
-                pauseButton.visibility = View.VISIBLE
-                lockOff.visibility = View.VISIBLE
-
-            }
-
-            cameraImage.setOnClickListener {
-                if (checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-                    val permission = arrayOf(
-                            Manifest.permission.CAMERA
-                    )
-                    requestPermissions(permission, PERMISSION_CODE)
-                } else {
-                    openCamera()
-                }
-            }
-
             restartButton.setOnClickListener {
                 vibratorOn(LONG_VIBRATION)
                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                 stopWatch.start()
-                recordStop = false
                 finishButton.visibility = View.GONE
-                GlobalScope.launch(Dispatchers.Main) {
-                    restartButton.startAnimation(scaleDownAnimation {
-                        it.duration = 300
-                        it.fillAfter = true
-                    })
+                lifecycleScope.launch(Dispatchers.Main) {
+                    restartButton.startAnimation(scaleDownAnimation {})
                     delay(500)
                     restartButton.clearAnimation()
                     restartButton.visibility = View.GONE
                     lockOff.visibility = View.VISIBLE
                     pauseButton.visibility = View.VISIBLE
-                    pauseButton.startAnimation(scaleUpAnimation {
-                        it.duration = 300
-                        it.fillAfter = true
-                    })
+                    pauseButton.startAnimation(scaleUpAnimation {})
                 }
             }
 
             pauseButton.setOnClickListener {
                 vibratorOn(MIDDLE_VIBRATION)
-                lockOff.visibility = View.GONE
-                recordStop = true
                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                 stopWatch.stop()
-
-                GlobalScope.launch(Dispatchers.Main) {
-                    pauseButton.startAnimation(scaleDownAnimation {
-                        it.duration = 300
-                        it.fillAfter = true
-                    })
+                lifecycleScope.launch(Dispatchers.Main) {
+                    pauseButton.startAnimation(scaleDownAnimation {})
                     delay(500)
                     pauseButton.clearAnimation()
-                    pauseButton.visibility = View.INVISIBLE
+                    lockOff.visibility = View.GONE
+                    pauseButton.visibility = View.GONE
                     finishButton.visibility = View.VISIBLE
                     restartButton.visibility = View.VISIBLE
-                    restartButton.startAnimation(scaleUpAnimation {
-                        it.duration = 300
-                    })
+                    restartButton.startAnimation(scaleUpAnimation {})
                     finishButton.startAnimation(scaleUpAnimation {
-                        it.duration = 300
+                        it.fillAfter = false
                     })
                     delay(300)
                 }
@@ -304,11 +265,8 @@ class RunFragment : Fragment() {
 
             finishButton.setOnClickListener {
                 vibratorOn(SHORT_VIBRATION)
-                GlobalScope.launch(Dispatchers.Main) {
-                    finishButton.startAnimation(scaleDownAnimation {
-                        it.duration = 300
-                        it.fillAfter = true
-                    })
+                lifecycleScope.launch(Dispatchers.Main) {
+                    finishButton.startAnimation(scaleDownAnimation {})
                     delay(500)
                     finishButton.clearAnimation()
                     val builder = AlertDialog.Builder(requireContext())
@@ -336,6 +294,30 @@ class RunFragment : Fragment() {
                             ) { _, _ ->
                             }
                     builder.show()
+                }
+            }
+
+            lockOff.setOnClickListener {
+                lockOff.visibility = View.GONE
+                pauseButton.visibility = View.GONE
+                lockImage.visibility = View.VISIBLE
+            }
+
+            lockImage.setOnClickListener {
+                lockImage.visibility = View.GONE
+                pauseButton.visibility = View.VISIBLE
+                lockOff.visibility = View.VISIBLE
+
+            }
+
+            cameraImage.setOnClickListener {
+                if (checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                    val permission = arrayOf(
+                            Manifest.permission.CAMERA
+                    )
+                    requestPermissions(permission, PERMISSION_CODE)
+                } else {
+                    openCamera()
                 }
             }
         }
@@ -367,6 +349,8 @@ class RunFragment : Fragment() {
                     Animation.RELATIVE_TO_SELF,
                     0.5f
             ).apply {
+                duration = 300
+                fillAfter = true
                 operation(this)
             }
 
@@ -381,6 +365,8 @@ class RunFragment : Fragment() {
                     Animation.RELATIVE_TO_SELF,
                     0.5f
             ).apply {
+                duration = 300
+                fillAfter = true
                 operation(this)
             }
 
@@ -407,7 +393,7 @@ class RunFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     private fun vibratorOn(vibratorType: Int) {
         val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        when(vibratorType) {
+        when (vibratorType) {
             LONG_VIBRATION -> {
                 val vibrationEffect = VibrationEffect.createOneShot(800, 255)
                 vibrator.vibrate(vibrationEffect)
@@ -423,11 +409,7 @@ class RunFragment : Fragment() {
         }
     }
 
-    private fun kmConvert(distance: Double): Double {
-        return ceil(distance) / 1000
-    }
-
-    private fun calorieConvert(distance: Double, weight: Double): Int {
+    private fun calorieConvert(distance: Float, weight: Double): Int {
         return (ceil(distance) * weight / 1000).toInt()
     }
 
@@ -444,7 +426,6 @@ class RunFragment : Fragment() {
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
         imageUri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
-
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
