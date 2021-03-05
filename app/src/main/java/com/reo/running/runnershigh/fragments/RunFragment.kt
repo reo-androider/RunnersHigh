@@ -11,6 +11,7 @@ import android.location.Location
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -48,15 +49,13 @@ class RunFragment : Fragment() {
     var stdLocation: Location? = null
     var totalDistance = 0.0
     var results = FloatArray(1)
-    val zoomValue = 20.0f
-    var gpsAdjust = 10
+    val zoomValue = 18.0f
     var weight = 60.0
     var kmAmount: Double = 0.0
     var calorieAmount: Int = 0
     var recordStop = false
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.justRunDao()
-    var marker: Marker? = null
     private var runStart = false
     private lateinit var vibrationEffect: VibrationEffect
     private lateinit var vibrator: Vibrator
@@ -86,7 +85,7 @@ class RunFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-            if (ContextCompat.checkSelfPermission(
+            if (checkSelfPermission(
                             requireContext(),
                             Manifest.permission.ACCESS_FINE_LOCATION
                     ) != PackageManager.PERMISSION_GRANTED
@@ -100,7 +99,6 @@ class RunFragment : Fragment() {
             }
             mapView.onCreate(savedInstanceState)
                 val databaseRefWeight = Firebase.database.getReference("weight")
-                databaseRefWeight.setValue("")
                 databaseRefWeight.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         val myWeight = snapshot.value
@@ -121,6 +119,7 @@ class RunFragment : Fragment() {
                     val lastLocation = locationResult?.lastLocation ?: return
                     mapView.getMapAsync {
                         it.isMyLocationEnabled = true
+                        it.uiSettings.isMyLocationButtonEnabled = false
                         it.animateCamera(
                                 CameraUpdateFactory
                                         .newLatLngZoom(
@@ -131,6 +130,7 @@ class RunFragment : Fragment() {
                                                 ,zoomValue
                                         )
                         )
+                    }
                         stdLocation?.let {
                             Location.distanceBetween(
                                     it.latitude,
@@ -139,6 +139,7 @@ class RunFragment : Fragment() {
                                     lastLocation.longitude,
                                     results
                             )
+                        }
 //                            if (recordStop) {
 //                                stdLocation?.let {
 //                                    Location.distanceBetween(
@@ -155,6 +156,7 @@ class RunFragment : Fragment() {
                                 calorieAmount = calorieConvert(totalDistance, weight)
                                 distance.text = "$kmAmount"
                                 calorieNum.text = "$calorieAmount"
+                    Log.d("debug-reo","results = ${results[0]}")
 //                                marker?.remove()
 //                                marker = it.addMarker(
 //                                        MarkerOptions().position(
@@ -183,35 +185,33 @@ class RunFragment : Fragment() {
 //                                                                )
 //                                                )
 //                                )
+//                                    mapView.visibility = View.VISIBLE
+//                                    startNav.visibility = View.VISIBLE
+//                                    startNav2.visibility = View.VISIBLE
+//                                    startText.visibility = View.VISIBLE
+//                                    centerCircle.visibility = View.VISIBLE
 
-                                    mapView.visibility = View.VISIBLE
-                                    startNav.visibility = View.VISIBLE
-                                    startNav2.visibility = View.VISIBLE
-                                    startText.visibility = View.VISIBLE
-                                    centerCircle.visibility = View.VISIBLE
-
-                                    val alphaAnimation = AlphaAnimation(0f, 1f)
-                                    alphaAnimation.duration = 500
-                                    startNav.startAnimation(alphaAnimation)
-                                    startNav2.startAnimation(alphaAnimation)
-                                    centerCircle.startAnimation(alphaAnimation)
-                                    startText.startAnimation(alphaAnimation)
-
-
-                                marker?.showInfoWindow()
+                            lifecycleScope.launch(Dispatchers.Main) {
+                                val alphaAnimation = AlphaAnimation(0f, 1f)
+                                alphaAnimation.duration = 3000
+                                startNav.startAnimation(alphaAnimation)
+                                startNav2.startAnimation(alphaAnimation)
+                                delay(3000)
                             }
-                        }
-                    }
-                }
 
-                    fusedLocationClient.requestLocationUpdates(
-                            locationRequest,
-                            locationCallback,
-                            Looper.myLooper()
-                    )
+
+                }
+            }
+
+            fusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    Looper.myLooper()
+            )
 
                     if (!countStart) {
                         countStart = true
+                        Log.d("debug-reo","countStart")
                         binding.centerCircle.setOnClickListener {
                             recordStop = false
                                 lifecycleScope.launch(Dispatchers.Main) {
@@ -398,7 +398,6 @@ class RunFragment : Fragment() {
                     }
                 }
         }
-
 
     override fun onStart() {
         super.onStart()
