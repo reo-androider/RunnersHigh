@@ -152,9 +152,11 @@ class RunFragment : Fragment() {
                         )
                     }
 
+                    stdLocation = lastLocation
+
                     if (startRun) {
-                        Log.d("debug-reo", "results[0] = ${results[0].toDouble()}")
-                        kmAmount += results[0] / 1000
+                        Log.d("debug-reo", "results[0] = ${ceil(results[0]) / 1000}")
+                        kmAmount += ceil(results[0]) / 1000
                         calorieAmount = calorieConvert(kmAmount, weight)
                         distance.text = "$kmAmount"
                         calorieNum.text = "$calorieAmount"
