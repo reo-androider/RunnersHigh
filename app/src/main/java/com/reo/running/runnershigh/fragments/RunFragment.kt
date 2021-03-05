@@ -57,7 +57,6 @@ class RunFragment : Fragment() {
     var recordStop = false
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.justRunDao()
-    private var runStart = false
     private lateinit var vibrationEffect: VibrationEffect
     private lateinit var vibrator: Vibrator
     private var imageUri: Uri? = null
@@ -121,6 +120,7 @@ class RunFragment : Fragment() {
                     super.onLocationResult(locationResult)
                     val lastLocation = locationResult?.lastLocation ?: return
                     val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+                    vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                     mapView.getMapAsync {
                         it.isMyLocationEnabled = true
                         it.uiSettings.isMyLocationButtonEnabled = false
@@ -151,63 +151,18 @@ class RunFragment : Fragment() {
                                 results
                         )
                     }
-//                            if (recordStop) {
-//                                stdLocation?.let {
-//                                    Location.distanceBetween(
-//                                            it.latitude,
-//                                            it.longitude,
-//                                            lastLocation.latitude,
-//                                            lastLocation.longitude,
-//                                            results
-//                                    )
-//                                }
+
                     totalDistance += results[0]
                     stdLocation = lastLocation
                     kmAmount = kmConvert(totalDistance)
                     calorieAmount = calorieConvert(totalDistance, weight)
                     distance.text = "$kmAmount"
                     calorieNum.text = "$calorieAmount"
-//                                marker?.remove()
-//                                marker = it.addMarker(
-//                                        MarkerOptions().position(
-//                                                LatLng(
-//                                                        lastLocation.latitude,
-//                                                        lastLocation.longitude
-//                                                )
-//                                        )
-//                                )
-//                            } else {
-//                                marker?.remove()
-//                                marker = it.addMarker(
-//                                        MarkerOptions().position(
-//                                                LatLng(
-//                                                        lastLocation.latitude,
-//                                                        lastLocation.longitude
-//                                                )
-//                                        )
-//                                                .icon(
-//                                                        BitmapDescriptorFactory
-//                                                                .fromBitmap(
-//                                                                        BitmapConverter.getBitmap(
-//                                                                                context,
-//                                                                                R.drawable.ic_trace
-//                                                                        )
-//                                                                )
-//                                                )
-//                                )
-//                                    mapView.visibility = View.VISIBLE
-//                                    startNav.visibility = View.VISIBLE
-//                                    startNav2.visibility = View.VISIBLE
-//                                    startText.visibility = View.VISIBLE
-//                                    centerCircle.visibility = View.VISIBLE
                     if (!startRun) {
-                        lifecycleScope.launch(Dispatchers.Main) {
-                            val alphaAnimation = AlphaAnimation(0f, 1f)
-                            alphaAnimation.duration = 800
-                            startNav.startAnimation(alphaAnimation)
-                            startNav2.startAnimation(alphaAnimation)
-                            delay(2000)
-                        }
+                        val alphaAnimation = AlphaAnimation(0f, 1f)
+                        alphaAnimation.duration = 800
+                        startNav.startAnimation(alphaAnimation)
+                        startNav2.startAnimation(alphaAnimation)
                     }
                 }
             }
@@ -218,40 +173,36 @@ class RunFragment : Fragment() {
                     Looper.myLooper()
             )
 
-            if (!countStart) {
-                countStart = true
-                binding.centerCircle.setOnClickListener {
+//            if (!countStart) {
+//                countStart = true
+
+            startButton.setOnClickListener {
+                startRun = true
+                lifecycleScope.launch(Dispatchers.Main) {
                     startNav.visibility = View.GONE
                     startNav2.visibility = View.GONE
-                    runStart = true
-                    val scaleStartButton = ScaleAnimation(
-                            1f,
-                            100f,
-                            1f,
-                            100f,
-                            Animation.RELATIVE_TO_SELF,
-                            0.5f,
-                            Animation.RELATIVE_TO_SELF,
-                            0.5f
-                    )
-                    scaleStartButton.let {
-                        it.duration = 1500
-                        it.fillAfter = true
-                    }
-
-                    mapView.visibility = View.GONE
                     startText.visibility = View.GONE
-                    centerCircle.visibility = View.GONE
-                    startNav.visibility = View.GONE
-                    startNav2.visibility = View.GONE
-
-                    lifecycleScope.launch(Dispatchers.Main) {
-
-                        centerCircle.startAnimation(scaleStartButton)
-                        delay(1000)
-                        (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
+                    startButton.visibility = View.GONE
+                    mapView.visibility = View.GONE
+                    (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
+                    withContext(Dispatchers.Main) {
+                        val scaleStartButton = ScaleAnimation(
+                                1f,
+                                100f,
+                                1f,
+                                100f,
+                                Animation.RELATIVE_TO_SELF,
+                                0.5f,
+                                Animation.RELATIVE_TO_SELF,
+                                0.5f
+                        )
+                        scaleStartButton.run {
+                            duration = 1500
+                            fillAfter = true
+                        }
+                        startButton.startAnimation(scaleStartButton)
                         withContext(Dispatchers.IO) {
-                            delay(1000)
+                            delay(2000)
                             listOf(
                                     countNum3,
                                     countNum2,
@@ -261,145 +212,129 @@ class RunFragment : Fragment() {
                                 delay(1000)
                             }
                         }
-                        vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                        vibrationEffect = VibrationEffect.createOneShot(1000, 255)
-                        vibrator.vibrate(vibrationEffect)
-
-                        centerCircle.clearAnimation()
-                        startNav.visibility = View.GONE
-                        startNav2.visibility = View.GONE
+                        vibratorOn("start")
+                        startButton.clearAnimation()
+                        kmAmount = 0.0
+                        calorieAmount = 0
                         stopWatch.base = SystemClock.elapsedRealtime()
-                        Log.d("debug", "${SystemClock.elapsedRealtime()}")
-                        Log.d("debug", "${stopWatch.base}")
                         stopWatch.start()
-
                         mapView.visibility = View.VISIBLE
                         pauseButton.visibility = View.VISIBLE
                         timerScreen.visibility = View.VISIBLE
                         lockOff.visibility = View.VISIBLE
                     }
                 }
-                lockOff.setOnClickListener {
-                    lockOff.visibility = View.GONE
-                    pauseButton.visibility = View.GONE
-                    lockImage.visibility = View.VISIBLE
-                }
+            }
 
-                lockImage.setOnClickListener {
-                    lockImage.visibility = View.GONE
-                    pauseButton.visibility = View.VISIBLE
+            lockOff.setOnClickListener {
+                lockOff.visibility = View.GONE
+                pauseButton.visibility = View.GONE
+                lockImage.visibility = View.VISIBLE
+            }
+
+            lockImage.setOnClickListener {
+                lockImage.visibility = View.GONE
+                pauseButton.visibility = View.VISIBLE
+                lockOff.visibility = View.VISIBLE
+
+            }
+
+            cameraImage.setOnClickListener {
+                if (checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                    val permission = arrayOf(
+                            Manifest.permission.CAMERA
+                    )
+                    requestPermissions(permission, PERMISSION_CODE)
+                } else {
+                    openCamera()
+                }
+            }
+
+            restartButton.setOnClickListener {
+                vibratorOn("restart")
+                stopWatch.base = SystemClock.elapsedRealtime() - stopTime
+                stopWatch.start()
+                recordStop = false
+                finishButton.visibility = View.GONE
+                GlobalScope.launch(Dispatchers.Main) {
+                    restartButton.startAnimation(scaleDownAnimation {
+                        it.duration = 300
+                        it.fillAfter = true
+                    })
+                    delay(500)
+                    restartButton.clearAnimation()
+                    restartButton.visibility = View.GONE
                     lockOff.visibility = View.VISIBLE
-
+                    pauseButton.visibility = View.VISIBLE
+                    pauseButton.startAnimation(scaleUpAnimation {
+                        it.duration = 300
+                        it.fillAfter = true
+                    })
                 }
+            }
 
-                cameraImage.setOnClickListener {
-                    if (checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
-                        val permission = arrayOf(
-                                Manifest.permission.CAMERA
-                        )
-                        requestPermissions(permission, PERMISSION_CODE)
-                    } else {
-                        openCamera()
-                    }
+            pauseButton.setOnClickListener {
+                vibratorOn("pause")
+                lockOff.visibility = View.GONE
+                recordStop = true
+                stopTime = SystemClock.elapsedRealtime() - stopWatch.base
+                stopWatch.stop()
+
+                GlobalScope.launch(Dispatchers.Main) {
+                    pauseButton.startAnimation(scaleDownAnimation {
+                        it.duration = 300
+                        it.fillAfter = true
+                    })
+                    delay(500)
+                    pauseButton.clearAnimation()
+                    pauseButton.visibility = View.INVISIBLE
+                    finishButton.visibility = View.VISIBLE
+                    restartButton.visibility = View.VISIBLE
+                    restartButton.startAnimation(scaleUpAnimation {
+                        it.duration = 300
+                    })
+                    finishButton.startAnimation(scaleUpAnimation {
+                        it.duration = 300
+                    })
+                    delay(300)
                 }
+            }
 
-                restartButton.setOnClickListener {
-                    vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                    vibrationEffect = VibrationEffect.createOneShot(800, 255)
-                    vibrator.vibrate(vibrationEffect)
-                    stopWatch.base = SystemClock.elapsedRealtime() - stopTime
-                    stopWatch.start()
-                    recordStop = false
-                    finishButton.visibility = View.GONE
-                    GlobalScope.launch(Dispatchers.Main) {
-                        restartButton.startAnimation(scaleDownAnimation {
-                            it.duration = 300
-                            it.fillAfter = true
-                        })
-                        delay(500)
-                        restartButton.clearAnimation()
-                        restartButton.visibility = View.GONE
-                        lockOff.visibility = View.VISIBLE
-                        pauseButton.visibility = View.VISIBLE
-                        pauseButton.startAnimation(scaleUpAnimation {
-                            it.duration = 300
-                            it.fillAfter = true
-                        })
-                    }
-                }
-
-                pauseButton.setOnClickListener {
-                    lockOff.visibility = View.GONE
-                    vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                    vibrationEffect = VibrationEffect.createOneShot(500, 255)
-                    vibrator.vibrate(vibrationEffect)
-                    recordStop = true
-                    stopTime = SystemClock.elapsedRealtime() - stopWatch.base
-                    stopWatch.stop()
-
-                    GlobalScope.launch(Dispatchers.Main) {
-                        pauseButton.startAnimation(scaleDownAnimation {
-                            it.duration = 300
-                            it.fillAfter = true
-                        })
-                        delay(500)
-                        pauseButton.clearAnimation()
-                        pauseButton.visibility = View.INVISIBLE
-                        finishButton.visibility = View.VISIBLE
-                        restartButton.visibility = View.VISIBLE
-                        restartButton.startAnimation(scaleUpAnimation {
-                            it.duration = 300
-                        })
-                        finishButton.startAnimation(scaleUpAnimation {
-                            it.duration = 300
-                        })
-                        delay(300)
-                    }
-                }
-
-                finishButton.setOnClickListener {
-                    vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                    vibrationEffect = VibrationEffect.createOneShot(600, 255)
-                    vibrator.vibrate(vibrationEffect)
-                    GlobalScope.launch(Dispatchers.Main) {
-
-                        finishButton.startAnimation(scaleDownAnimation {
-                            it.duration = 300
-                            it.fillAfter = true
-                        })
-                        delay(500)
-                        finishButton.clearAnimation()
-
-                        val builder = AlertDialog.Builder(requireContext())
-                        builder.setCancelable(false)
-                                .setMessage("ランニングを終了しますか？")
-                                .setPositiveButton("YES") { _, _ ->
-                                    lifecycleScope.launch(Dispatchers.IO) {
-                                        val record = JustRunData(
-                                                0,
-                                                stopWatch.text.toString(),
-                                                kmAmount,
-                                                calorieAmount,
-                                                getRunDate(),
-                                                photo,
-                                                takePhoto
-                                        )
-                                        recordDao.insertRecord(record)
-                                        withContext(Dispatchers.Main) {
-
-                                            findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
-                                        }
+            finishButton.setOnClickListener {
+                vibratorOn("finish")
+                GlobalScope.launch(Dispatchers.Main) {
+                    finishButton.startAnimation(scaleDownAnimation {
+                        it.duration = 300
+                        it.fillAfter = true
+                    })
+                    delay(500)
+                    finishButton.clearAnimation()
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setCancelable(false)
+                            .setMessage("ランニングを終了しますか？")
+                            .setPositiveButton("YES") { _, _ ->
+                                lifecycleScope.launch(Dispatchers.IO) {
+                                    val record = JustRunData(
+                                            0,
+                                            stopWatch.text.toString(),
+                                            kmAmount,
+                                            calorieAmount,
+                                            getRunDate(),
+                                            photo,
+                                            takePhoto
+                                    )
+                                    recordDao.insertRecord(record)
+                                    withContext(Dispatchers.Main) {
+                                        findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                                     }
                                 }
-                                .setNegativeButton(
-                                        "CANCEL"
-                                ) { _, _ ->
-                                }
-                        builder.show()
-                    }
+                            }
+                            .setNegativeButton(
+                                    "CANCEL"
+                            ) { _, _ ->
+                            }
+                    builder.show()
                 }
-
-
             }
         }
     }
@@ -472,6 +407,30 @@ class RunFragment : Fragment() {
                 Animation.RELATIVE_TO_SELF,
                 0.55f
         ).apply { duration = 1000 })
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun vibratorOn(vibratorType: String) {
+        vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        val vibrationEffect:VibrationEffect
+        when(vibratorType) {
+            "start" -> {
+                vibrationEffect = VibrationEffect.createOneShot(800, 255)
+                vibrator.vibrate(vibrationEffect)
+            }
+            "pause" -> {
+                vibrationEffect = VibrationEffect.createOneShot(500, 255)
+                vibrator.vibrate(vibrationEffect)
+            }
+            "restart" -> {
+                vibrationEffect = VibrationEffect.createOneShot(800, 255)
+                vibrator.vibrate(vibrationEffect)
+            }
+            "finish" -> {
+                vibrationEffect = VibrationEffect.createOneShot(600, 255)
+                vibrator.vibrate(vibrationEffect)
+            }
+        }
     }
 
     private fun kmConvert(distance: Double): Double {
