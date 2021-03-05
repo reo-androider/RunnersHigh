@@ -44,8 +44,6 @@ class ResultFragment : Fragment() {
     private var position = 0
     private var draft: String = ""
     private var selectColor = ""
-    private var viewWidth = 0f //アニメーション用
-    private var viewHeight = 0f
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -53,9 +51,9 @@ class ResultFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentResultBinding.inflate(layoutInflater, container, false)
@@ -73,7 +71,11 @@ class ResultFragment : Fragment() {
                     totalDistance.text = "${record.lastOrNull()?.distance}km"
                     totalCalorie.text = "${record.lastOrNull()?.calorie}kcal"
                     today.text = record.lastOrNull()?.runDate
-                    photoEmpty.setImageBitmap(record.lastOrNull()?.bitmap)
+                    photoEmpty.run {
+                        setImageBitmap(record.lastOrNull()?.bitmap)
+                        rotation = 90f
+                    }
+
 
                     if (record.lastOrNull()?.takenPhoto == true) {
                         cameraImage.visibility = View.GONE
@@ -841,27 +843,27 @@ class ResultFragment : Fragment() {
 
     private fun openCamera() {
         val value = ContentValues()
-        value.put(MediaStore.Images.Media.TITLE,"New Picture")
-        value.put(MediaStore.Images.Media.DESCRIPTION,"From Picture")
-        image_uri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,value)
+        value.put(MediaStore.Images.Media.TITLE, "New Picture")
+        value.put(MediaStore.Images.Media.DESCRIPTION, "From Picture")
+        image_uri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
 
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,image_uri)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
 
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
-        when(requestCode) {
+        when (requestCode) {
             PERMISSION_CODE -> {
                 if (grantResults.isEmpty() && grantResults[0] ==
                         PackageManager.PERMISSION_DENIED
                 ) {
-                    Toast.makeText(requireContext(),"カメラ拒否されました",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "カメラ拒否されました", Toast.LENGTH_LONG).show()
                 } else {
                     openCamera()
                 }
@@ -875,10 +877,11 @@ class ResultFragment : Fragment() {
                 Matrix().apply {
                     postRotate(90f)
                 }.run {
-                    Bitmap.createBitmap(bitmap,0,0,bitmap.width,bitmap.height,this,true)
+                    Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, this, true)
                 }.run {
                     binding.photoEmpty.visibility = View.VISIBLE
                     binding.photoEmpty.setImageBitmap(this)
+                    binding.photoEmpty.rotation = -3f
                     binding.cameraImage.visibility = View.GONE
                     binding.photoCancel.visibility = View.VISIBLE
                 }

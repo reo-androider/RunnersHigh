@@ -156,7 +156,6 @@ class RunFragment : Fragment() {
                                 }
                                 stdLocation = lastLocation
                                 kmAmount += results[0]
-                                Log.d("debug", "${results[0]}")
                                 distance.text = "${round(kmAmount) / 1000}"
                                 calorieNum.text = "${(round(kmAmount) / 1000 * weight).toInt()}"
                             }
@@ -280,7 +279,7 @@ class RunFragment : Fragment() {
                                     val record = JustRunData(
                                             0,
                                             stopWatch.text.toString(),
-                                            kmAmount,
+                                            round(kmAmount) / 1000,
                                             calorieAmount,
                                             getRunDate(),
                                             photo,
@@ -387,13 +386,6 @@ class RunFragment : Fragment() {
                 fillAfter = true
                 operation(this)
             }
-
-    private fun clearAnimation(binding: FragmentRunBinding) {
-        binding.run {
-            restartButton.clearAnimation()
-            finishButton.clearAnimation()
-        }
-    }
 
     private fun animationCount(view: View) {
         view.startAnimation(ScaleAnimation(

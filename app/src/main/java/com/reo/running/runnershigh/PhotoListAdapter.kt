@@ -17,6 +17,7 @@ class PhotoListAdapter(val list: List<RunResult>) : RecyclerView.Adapter<PhotoLi
         holder.run {
             runPhoto.run {
                 setImageBitmap(list[position].bitmap)
+                rotation = 90f
                 if (list[position].colorId.isNotEmpty()) {
                     setBackgroundColor(Color.parseColor(list[position].colorId))
                 }
