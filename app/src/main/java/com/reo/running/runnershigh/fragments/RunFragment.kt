@@ -39,6 +39,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import kotlin.math.ceil
+import kotlin.math.round
 
 class RunFragment : Fragment() {
 
@@ -126,7 +127,6 @@ class RunFragment : Fragment() {
                         alphaAnimation.duration = 800
                         when (runState) {
                             RUN_STATE_BEFORE -> {
-                                Log.d("debug-reo", "RUN_STATE_BEFORE")
                                 startNav.startAnimation(alphaAnimation)
                                 startNav2.startAnimation(alphaAnimation)
                                 it.animateCamera(
@@ -156,8 +156,9 @@ class RunFragment : Fragment() {
                                 }
                                 stdLocation = lastLocation
                                 kmAmount += results[0]
-                                distance.text = "${ceil(kmAmount * 1000) / 1000}"
-                                calorieNum.text = "${(ceil(kmAmount * 1000) / 1000 * weight).toInt()}"
+                                Log.d("debug", "${results[0]}")
+                                distance.text = "${round(kmAmount) / 1000}"
+                                calorieNum.text = "${(round(kmAmount) / 1000 * weight).toInt()}"
                             }
 
                             RUN_STATE_PAUSE -> {
