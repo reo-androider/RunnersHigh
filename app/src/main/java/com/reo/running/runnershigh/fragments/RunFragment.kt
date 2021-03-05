@@ -57,13 +57,10 @@ class RunFragment : Fragment() {
     var recordStop = false
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.justRunDao()
-    private lateinit var vibrationEffect: VibrationEffect
-    private lateinit var vibrator: Vibrator
     private var imageUri: Uri? = null
     private val contentResolver: ContentResolver? = null
     private var photo: Bitmap? = null
     private var takePhoto = false
-    private var countStart = false //アニメーションが何度も再生されないように
 
     companion object {
         private const val REQUEST_PERMISSION = 1
@@ -123,7 +120,6 @@ class RunFragment : Fragment() {
                     super.onLocationResult(locationResult)
                     val lastLocation = locationResult?.lastLocation ?: return
                     val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
-                    vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                     mapView.getMapAsync {
                         it.isMyLocationEnabled = true
                         it.uiSettings.isMyLocationButtonEnabled = false
@@ -176,14 +172,17 @@ class RunFragment : Fragment() {
                     Looper.myLooper()
             )
 
-//            if (!countStart) {
-//                countStart = true
-
             startButton.setOnClickListener {
                 startRun = true
-                lifecycleScope.launch(Dispatchers.Main) {
-                    startNav.visibility = View.GONE
-                    startNav2.visibility = View.GONE
+                lifecycleScope.launch {
+                    startNav.run {
+                        visibility = View.GONE
+                        clearAnimation()
+                    }
+                    startNav2.run {
+                        visibility = View.GONE
+                        clearAnimation()
+                    }
                     startText.visibility = View.GONE
                     startButton.visibility = View.GONE
                     mapView.visibility = View.GONE
@@ -205,7 +204,7 @@ class RunFragment : Fragment() {
                         }
                         startButton.startAnimation(scaleStartButton)
                         withContext(Dispatchers.IO) {
-                            delay(2000)
+                            delay(1000)
                             listOf(
                                     countNum3,
                                     countNum2,
@@ -407,19 +406,18 @@ class RunFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun vibratorOn(vibratorType: Int) {
-        vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        val vibrationEffect:VibrationEffect
+        val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         when(vibratorType) {
             LONG_VIBRATION -> {
-                vibrationEffect = VibrationEffect.createOneShot(800, 255)
+                val vibrationEffect = VibrationEffect.createOneShot(800, 255)
                 vibrator.vibrate(vibrationEffect)
             }
             MIDDLE_VIBRATION -> {
-                vibrationEffect = VibrationEffect.createOneShot(600, 255)
+                val vibrationEffect = VibrationEffect.createOneShot(600, 255)
                 vibrator.vibrate(vibrationEffect)
             }
             SHORT_VIBRATION -> {
-                vibrationEffect = VibrationEffect.createOneShot(300, 255)
+                val vibrationEffect = VibrationEffect.createOneShot(300, 255)
                 vibrator.vibrate(vibrationEffect)
             }
         }
