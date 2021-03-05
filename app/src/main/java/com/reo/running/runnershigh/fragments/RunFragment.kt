@@ -195,21 +195,7 @@ class RunFragment : Fragment() {
                     mapView.visibility = View.GONE
                     (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
                     withContext(Dispatchers.Main) {
-                        val scaleStartButton = ScaleAnimation(
-                                1f,
-                                100f,
-                                1f,
-                                100f,
-                                Animation.RELATIVE_TO_SELF,
-                                0.5f,
-                                Animation.RELATIVE_TO_SELF,
-                                0.5f
-                        )
-                        scaleStartButton.run {
-                            duration = 1500
-                            fillAfter = true
-                        }
-                        startButton.startAnimation(scaleStartButton)
+                        startButton.startAnimation(scaleUpAnimationMore {})
                         withContext(Dispatchers.IO) {
                             delay(1000)
                             listOf(
@@ -221,8 +207,8 @@ class RunFragment : Fragment() {
                                 delay(1000)
                             }
                         }
-                        kmAmount = 0.0f
                         vibratorOn(LONG_VIBRATION)
+                        kmAmount = 0.0f
                         startButton.clearAnimation()
                         stopWatch.base = SystemClock.elapsedRealtime()
                         stopWatch.start()
@@ -236,19 +222,21 @@ class RunFragment : Fragment() {
 
             restartButton.setOnClickListener {
                 runState = RUN_STATE_START
-                startNav.visibility = View.GONE
                 vibratorOn(LONG_VIBRATION)
                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                 stopWatch.start()
                 finishButton.visibility = View.GONE
-                lifecycleScope.launch(Dispatchers.Main) {
-                    restartButton.startAnimation(scaleDownAnimation {})
-                    delay(500)
-                    restartButton.clearAnimation()
-                    restartButton.visibility = View.GONE
-                    lockOff.visibility = View.VISIBLE
-                    pauseButton.visibility = View.VISIBLE
-                    pauseButton.startAnimation(scaleUpAnimation {})
+                lifecycleScope.launch {
+                    startNav.visibility = View.GONE
+                    withContext(Dispatchers.Main) {
+                        restartButton.startAnimation(scaleDownAnimation {})
+                        delay(500)
+                        restartButton.clearAnimation()
+                        restartButton.visibility = View.GONE
+                        lockOff.visibility = View.VISIBLE
+                        pauseButton.visibility = View.VISIBLE
+                        pauseButton.startAnimation(scaleUpAnimation {})
+                    }
                 }
             }
 
@@ -362,6 +350,21 @@ class RunFragment : Fragment() {
                 duration = 300
                 fillAfter = true
                 operation(this)
+            }
+
+    private fun scaleUpAnimationMore(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
+            ScaleAnimation(
+                    1f,
+                    100f,
+                    1f,
+                    100f,
+                    Animation.RELATIVE_TO_SELF,
+                    0.5f,
+                    Animation.RELATIVE_TO_SELF,
+                    0.5f
+            ).apply {
+                duration = 1500
+                fillAfter = true
             }
 
     private fun scaleDownAnimation(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
