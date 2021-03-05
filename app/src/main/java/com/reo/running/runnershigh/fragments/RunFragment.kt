@@ -39,6 +39,7 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import kotlin.math.ceil
+import kotlin.math.round
 
 class RunFragment : Fragment() {
 
@@ -142,24 +143,22 @@ class RunFragment : Fragment() {
                         }
                     }
 
-                    stdLocation?.let {
-                        Location.distanceBetween(
-                                it.latitude,
-                                it.longitude,
-                                lastLocation.latitude,
-                                lastLocation.longitude,
-                                results
-                        )
-                    }
-
-                    stdLocation = lastLocation
 
                     if (startRun) {
-                        Log.d("debug-reo", "results[0] = ${ceil(results[0]) / 1000}")
-                        kmAmount += ceil(results[0]) / 1000
-                        calorieAmount = calorieConvert(kmAmount, weight)
-                        distance.text = "$kmAmount"
-                        calorieNum.text = "$calorieAmount"
+                        stdLocation?.let {
+                            Location.distanceBetween(
+                                    it.latitude,
+                                    it.longitude,
+                                    lastLocation.latitude,
+                                    lastLocation.longitude,
+                                    results
+                            )
+                        }
+                        stdLocation = lastLocation
+                        kmAmount += results[0]
+//                        calorieAmount = (ceil(kmAmount) * weight / 1000).toInt()
+                        distance.text = "${ceil(kmAmount * 1000) / 1000}"
+                        calorieNum.text = "${(ceil(kmAmount * 1000) / 1000 * weight).toInt()}"
                     } else {
                         val alphaAnimation = AlphaAnimation(0f, 1f)
                         alphaAnimation.duration = 800
@@ -176,7 +175,7 @@ class RunFragment : Fragment() {
             )
 
             startButton.setOnClickListener {
-                startRun = true
+
                 lifecycleScope.launch {
                     startNav.run {
                         visibility = View.GONE
@@ -191,6 +190,7 @@ class RunFragment : Fragment() {
                     mapView.visibility = View.GONE
                     (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
                     withContext(Dispatchers.Main) {
+                        startRun = true
                         val scaleStartButton = ScaleAnimation(
                                 1f,
                                 100f,
@@ -217,7 +217,9 @@ class RunFragment : Fragment() {
                                 delay(1000)
                             }
                         }
+                        kmAmount = 0.0f
                         vibratorOn(LONG_VIBRATION)
+
                         startButton.clearAnimation()
                         stopWatch.base = SystemClock.elapsedRealtime()
                         stopWatch.start()
@@ -409,10 +411,6 @@ class RunFragment : Fragment() {
                 vibrator.vibrate(vibrationEffect)
             }
         }
-    }
-
-    private fun calorieConvert(distance: Float, weight: Double): Int {
-        return (ceil(distance) * weight / 1000).toInt()
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
