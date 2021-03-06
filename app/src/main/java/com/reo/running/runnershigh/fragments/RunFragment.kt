@@ -51,7 +51,6 @@ class RunFragment : Fragment() {
     private val zoomValue = 18.0f
     private var weight = 60.0
     private var kmAmount: Float = 0.0f
-    private var calorieAmount: Int = 0
     private var stopTime: Long = 0L
     private val recordDao = MyApplication.db.justRunDao()
     private var imageUri: Uri? = null

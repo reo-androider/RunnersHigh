@@ -45,7 +45,6 @@ class ResultFragment : Fragment() {
     private var draft: String = ""
     private var selectColor = ""
     private var photo: Bitmap? = null
-    private var rotation = false
 
     companion object {
         const val PERMISSION_CODE = 1
