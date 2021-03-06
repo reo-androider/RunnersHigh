@@ -280,7 +280,7 @@ class RunFragment : Fragment() {
                                             0,
                                             stopWatch.text.toString(),
                                             round(kmAmount) / 1000,
-                                            calorieAmount,
+                                            (round(kmAmount) / 1000 * weight).toInt(),
                                             getRunDate(),
                                             photo,
                                             takePhoto
