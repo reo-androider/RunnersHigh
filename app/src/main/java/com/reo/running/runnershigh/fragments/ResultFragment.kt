@@ -44,6 +44,7 @@ class ResultFragment : Fragment() {
     private var position = 0
     private var draft: String = ""
     private var selectColor = ""
+    private var photo: Bitmap? = null
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -795,8 +796,6 @@ class ResultFragment : Fragment() {
                         draft = myEdit.text.toString()
                         memo.text = draft
                     }
-//                    setNegativeButton("戻る") { _, _ ->
-//                    }
                     show()
                 }
             }
@@ -816,20 +815,23 @@ class ResultFragment : Fragment() {
             resultButton.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
                     val record = readDao.getAll().lastOrNull()
-                    val record2 = record?.time?.let { it1 ->
-                        RunResult(
-                                0,
-                                record.bitmap,
-                                it1,
-                                record.distance,
-                                record.calorie,
-                                record.runDate,
-                                selectColor,
-                                selectMark,
-                                draft
-                        )
+                    if (record?.bitmap != null) {
+                        photo = record.bitmap
                     }
-
+                    val record2 =
+                            record?.let { it1 ->
+                                RunResult(
+                                        0,
+                                        photo,
+                                        it1.time,
+                                        record.distance,
+                                        record.calorie,
+                                        record.runDate,
+                                        selectColor,
+                                        selectMark,
+                                        draft
+                                )
+                            }
                     if (record2 != null) {
                         runDB.insertRecord(record2)
                     }
@@ -846,7 +848,6 @@ class ResultFragment : Fragment() {
         value.put(MediaStore.Images.Media.TITLE, "New Picture")
         value.put(MediaStore.Images.Media.DESCRIPTION, "From Picture")
         image_uri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
-
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
@@ -879,6 +880,7 @@ class ResultFragment : Fragment() {
                 }.run {
                     Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, this, true)
                 }.run {
+                    photo = this
                     binding.photoEmpty.visibility = View.VISIBLE
                     binding.photoEmpty.setImageBitmap(this)
                     binding.photoEmpty.rotation = -3f
