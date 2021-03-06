@@ -37,7 +37,7 @@ class ResultFragment : Fragment() {
     private lateinit var binding: FragmentResultBinding
     private val readDao = MyApplication.db.justRunDao()
     private val runDB = MyApplication.db.runResultDao()
-    private var select = false//二回押しても同じアニメーションが実行されない為
+    private var select = false
     private var selectMark = ""
     private var image_uri: Uri? = null
     private val contentResolver: ContentResolver? = null
@@ -45,6 +45,7 @@ class ResultFragment : Fragment() {
     private var draft: String = ""
     private var selectColor = ""
     private var photo: Bitmap? = null
+    private var rotation = false
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -829,7 +830,7 @@ class ResultFragment : Fragment() {
                                         record.runDate,
                                         selectColor,
                                         selectMark,
-                                        draft
+                                        draft,
                                 )
                             }
                     if (record2 != null) {

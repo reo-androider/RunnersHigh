@@ -35,7 +35,7 @@ data class RunResult(
     val runData: String,
     val colorId: String,
     val revaluationMark: String,
-    val memo: String
+    val memo: String,
     )
 
 @Dao
