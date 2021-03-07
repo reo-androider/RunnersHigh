@@ -674,95 +674,23 @@ class ResultFragment : Fragment() {
                     object : PaintsAdapter.OnCourseListener {
                         override fun onItemClick(list: List<Int>, position: Int) {
                             when (courseList[position]) {
-                                R.drawable.ic_black -> {
-                                    selectColor = "#FF000000"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_red -> {
-                                    selectColor = "#f44336"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_return2 -> {
-                                    selectColor = "#FFFFFFFF"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_blue -> {
-                                    selectColor = "#2196F3"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_green -> {
-                                    selectColor = "#4CAF50"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_pink -> {
-                                    selectColor = "#ff1493"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_yellow -> {
-                                    selectColor = "#FFFF00"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_purple -> {
-                                    selectColor = "#800080"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_brown -> {
-                                    selectColor = "#795548"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_gray -> {
-                                    selectColor = "#757575"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
+                                R.drawable.ic_black -> "#FF000000"
+                                R.drawable.ic_red -> "#f44336"
+                                R.drawable.ic_return2 -> "#FFFFFFFF"
+                                R.drawable.ic_blue -> "#2196F3"
+                                R.drawable.ic_green -> "#4CAF50"
+                                R.drawable.ic_pink -> "#ff1493"
+                                R.drawable.ic_yellow -> "#FFFF00"
+                                R.drawable.ic_purple -> "#800080"
+                                R.drawable.ic_brown -> "#795548"
+                                R.drawable.ic_gray -> "#757575"
+                                else -> "#000000"
+                            }.let {
+                                totalTime.setTextColor(Color.parseColor(it))
+                                totalDistance.setTextColor(Color.parseColor(it))
+                                totalCalorie.setTextColor(Color.parseColor(it))
+                                today.setTextColor(Color.parseColor(it))
+                                photoText.setTextColor(Color.parseColor(it))
                             }
                         }
                     })
