@@ -124,6 +124,7 @@ class RunFragment : Fragment() {
                         it.uiSettings.isMyLocationButtonEnabled = false
                         val alphaAnimation = AlphaAnimation(0f, 1f)
                         alphaAnimation.duration = 800
+                        Log.d("debug","$latLng")
                         when (runState) {
                             RUN_STATE_BEFORE -> {
                                 startNav.startAnimation(alphaAnimation)
