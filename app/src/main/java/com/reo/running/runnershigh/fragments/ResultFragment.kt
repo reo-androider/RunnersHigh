@@ -742,26 +742,25 @@ class ResultFragment : Fragment() {
 
             resultButton.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val record = readDao.getAll().lastOrNull()
-                    if (record?.bitmap != null) {
-                        photo = record.bitmap
-                    }
-                    val record2 =
-                            record?.let { it1 ->
-                                RunResult(
-                                        0,
-                                        photo,
-                                        it1.time,
-                                        record.distance,
-                                        record.calorie,
-                                        record.runDate,
-                                        selectColor,
-                                        selectMark,
-                                        draft,
-                                )
+                    readDao.getAll().lastOrNull()?.let { record ->
+                        record.let {
+                            it.bitmap?.let {
+                                photo = it
                             }
-                    if (record2 != null) {
-                        runDB.insertRecord(record2)
+                            RunResult(
+                                0,
+                                photo,
+                                it.time,
+                                record.distance,
+                                record.calorie,
+                                record.runDate,
+                                selectColor,
+                                selectMark,
+                                draft,
+                            ).run {
+                                runDB.insertRecord(this)
+                            }
+                        }
                     }
                     withContext(Dispatchers.Main) {
                         findNavController().navigate(R.id.action_fragmentResult_to_navi_graph)
