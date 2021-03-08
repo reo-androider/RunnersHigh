@@ -21,7 +21,7 @@ data class JustRunData(
     val calorie: Int,
     val runDate: String,
     val bitmap: Bitmap?,
-    val takenPhoto: Boolean
+    val isTakenPhoto: Boolean
 )
 
 @Entity

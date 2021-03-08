@@ -78,7 +78,7 @@ class ResultFragment : Fragment() {
                     }
 
 
-                    if (record.lastOrNull()?.takenPhoto == true) {
+                    if (record.lastOrNull()?.isTakenPhoto == true) {
                         cameraImage.visibility = View.GONE
                     }
 
