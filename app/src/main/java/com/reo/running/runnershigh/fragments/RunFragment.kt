@@ -56,7 +56,7 @@ class RunFragment : Fragment() {
     private var imageUri: Uri? = null
     private val contentResolver: ContentResolver? = null
     private var photo: Bitmap? = null
-    private var takePhoto = false
+    private var isTakenPhoto = false
 
     companion object {
         private const val REQUEST_PERMISSION = 1000
@@ -283,7 +283,7 @@ class RunFragment : Fragment() {
                                             (round(kmAmount) / 1000 * weight).toInt(),
                                             getRunDate(),
                                             photo,
-                                            takePhoto
+                                            isTakenPhoto
                                     )
                                     recordDao.insertRecord(record)
                                     withContext(Dispatchers.Main) {
@@ -462,7 +462,7 @@ class RunFragment : Fragment() {
                 binding.cameraSet.setImageBitmap(it)
                 binding.cameraSet.rotation = 90f
                 photo = it
-                takePhoto = true
+                isTakenPhoto = true
             }
         }
     }

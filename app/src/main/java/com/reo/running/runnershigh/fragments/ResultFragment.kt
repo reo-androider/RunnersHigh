@@ -37,7 +37,7 @@ class ResultFragment : Fragment() {
     private lateinit var binding: FragmentResultBinding
     private val readDao = MyApplication.db.justRunDao()
     private val runDB = MyApplication.db.runResultDao()
-    private var select = false
+    private var isSelected = false
     private var selectMark = ""
     private var image_uri: Uri? = null
     private val contentResolver: ContentResolver? = null
@@ -109,8 +109,8 @@ class ResultFragment : Fragment() {
 
                     lifecycleScope.launch(Dispatchers.Main) {
                         perfectImage.setOnClickListener {
-                            if (!select) {
-                                select = true
+                            if (!isSelected) {
+                                isSelected = true
                                 selectMark = "perfect"
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     val scaleAnimation = ScaleAnimation(
@@ -171,8 +171,8 @@ class ResultFragment : Fragment() {
                         }
 
                         goodImage.setOnClickListener {
-                            if (!select) {
-                                select = true
+                            if (!isSelected) {
+                                isSelected = true
                                 selectMark = "good"
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     val scaleAnimation = ScaleAnimation(
@@ -241,8 +241,8 @@ class ResultFragment : Fragment() {
                         }
 
                         sosoImage.setOnClickListener {
-                            if (!select) {
-                                select = true
+                            if (!isSelected) {
+                                isSelected = true
                                 selectMark = "soso"
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     val scaleAnimation = ScaleAnimation(
@@ -317,8 +317,8 @@ class ResultFragment : Fragment() {
                         }
 
                         badImage.setOnClickListener {
-                            if (!select) {
-                                select = true
+                            if (!isSelected) {
+                                isSelected = true
                                 selectMark = "bad"
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     val scaleAnimation = ScaleAnimation(
@@ -394,8 +394,8 @@ class ResultFragment : Fragment() {
                     }
 
                     tooBadImage.setOnClickListener {
-                        if (!select) {
-                            select = true
+                        if (!isSelected) {
+                            isSelected = true
                             selectMark = "tooBad"
                             lifecycleScope.launch(Dispatchers.Main) {
                                 val scaleAnimation = ScaleAnimation(
@@ -474,7 +474,7 @@ class ResultFragment : Fragment() {
 
             cancel.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.Main) {
-                    select = false
+                    isSelected = false
                     val rotateAnimation = RotateAnimation(
                             0f,
                             -90f,
