@@ -32,29 +32,25 @@ class PhotoListAdapter(val list: List<RunResult>) : RecyclerView.Adapter<PhotoLi
                     FeedBack.PERFECT.revaluationMark -> {
                         setImageResource(R.drawable.ic_perfect)
                         setColorFilter(ContextCompat.getColor(context, R.color.perfect))
-                        visibility = View.VISIBLE
                     }
                     FeedBack.GOOD.revaluationMark -> {
                         setImageResource(R.drawable.ic_good)
                         setColorFilter(ContextCompat.getColor(context, R.color.good))
-                        visibility = View.VISIBLE
                     }
                     FeedBack.SOSO.revaluationMark -> {
                         setImageResource(R.drawable.ic_soso)
                         setColorFilter(ContextCompat.getColor(context, R.color.soso))
-                        visibility = View.VISIBLE
                     }
                     FeedBack.BAD.revaluationMark -> {
                         setImageResource(R.drawable.ic_bad)
                         setColorFilter(ContextCompat.getColor(context, R.color.bad))
-                        visibility = View.VISIBLE
                     }
                     FeedBack.TOOBAD.revaluationMark -> {
                         setImageResource(R.drawable.ic_sick)
                         setColorFilter(ContextCompat.getColor(context, R.color.tooBad))
-                        visibility = View.VISIBLE
                     }
                 }
+                if (list[position].revaluationMark != "") visibility = View.VISIBLE
             }
         }
     }
