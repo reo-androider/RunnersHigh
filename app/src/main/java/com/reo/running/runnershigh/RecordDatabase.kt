@@ -17,11 +17,11 @@ data class JustRunData(
     @PrimaryKey(autoGenerate = true)
     val id: Int,
     val time: String,
-    val distance: Double,
+    val distance: Float,
     val calorie: Int,
     val runDate: String,
     val bitmap: Bitmap?,
-    val takenPhoto: Boolean
+    val isTakenPhoto: Boolean
 )
 
 @Entity
@@ -30,12 +30,12 @@ data class RunResult(
     val id: Int,
     val bitmap: Bitmap?,
     val time: String,
-    val distance: Double,
+    val distance: Float,
     val calorie: Int,
     val runData: String,
     val colorId: String,
     val revaluationMark: String,
-    val memo: String
+    val memo: String,
     )
 
 @Dao

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 
 class PhotoListAdapter(val list: List<RunResult>) : RecyclerView.Adapter<PhotoListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoListViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_photo_item,parent,false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.recyclerview_photo_item, parent, false)
         return PhotoListViewHolder(itemView)
     }
 
@@ -17,6 +17,7 @@ class PhotoListAdapter(val list: List<RunResult>) : RecyclerView.Adapter<PhotoLi
         holder.run {
             runPhoto.run {
                 setImageBitmap(list[position].bitmap)
+                rotation = 90f
                 if (list[position].colorId.isNotEmpty()) {
                     setBackgroundColor(Color.parseColor(list[position].colorId))
                 }
@@ -30,37 +31,34 @@ class PhotoListAdapter(val list: List<RunResult>) : RecyclerView.Adapter<PhotoLi
                 when (list[position].revaluationMark) {
                     FeedBack.PERFECT.revaluationMark -> {
                         setImageResource(R.drawable.ic_perfect)
-                        setColorFilter(ContextCompat.getColor(context,R.color.perfect))
-                        visibility = View.VISIBLE
+                        setColorFilter(ContextCompat.getColor(context, R.color.perfect))
                     }
                     FeedBack.GOOD.revaluationMark -> {
                         setImageResource(R.drawable.ic_good)
-                        setColorFilter(ContextCompat.getColor(context,R.color.good))
-                        visibility = View.VISIBLE
+                        setColorFilter(ContextCompat.getColor(context, R.color.good))
                     }
                     FeedBack.SOSO.revaluationMark -> {
                         setImageResource(R.drawable.ic_soso)
-                        setColorFilter(ContextCompat.getColor(context,R.color.soso))
-                        visibility = View.VISIBLE
+                        setColorFilter(ContextCompat.getColor(context, R.color.soso))
                     }
                     FeedBack.BAD.revaluationMark -> {
                         setImageResource(R.drawable.ic_bad)
-                        setColorFilter(ContextCompat.getColor(context,R.color.bad))
-                        visibility = View.VISIBLE
+                        setColorFilter(ContextCompat.getColor(context, R.color.bad))
                     }
                     FeedBack.TOOBAD.revaluationMark -> {
                         setImageResource(R.drawable.ic_sick)
-                        setColorFilter(ContextCompat.getColor(context,R.color.tooBad))
-                        visibility = View.VISIBLE
+                        setColorFilter(ContextCompat.getColor(context, R.color.tooBad))
                     }
                 }
+                if (list[position].revaluationMark != "") visibility = View.VISIBLE
             }
         }
     }
+
     override fun getItemCount(): Int = list.size
 }
 
-enum class FeedBack(val revaluationMark:String) {
+enum class FeedBack(val revaluationMark: String) {
     PERFECT("perfect"),
     GOOD("good"),
     SOSO("soso"),

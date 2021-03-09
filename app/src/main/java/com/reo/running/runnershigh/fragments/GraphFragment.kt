@@ -56,10 +56,9 @@ class GraphFragment : Fragment() {
                     withContext(Dispatchers.Main) {
                         val entries: ArrayList<Entry> = ArrayList()
                         for (i in 0..lastId) {
-                            entries.add(i, Entry(mConverter(yValue[i]), i))
+                            entries.add(i, Entry((yValue[i]).toFloat(), i))
                         }
                         val dataset = LineDataSet(entries, "")
-                        dataset.lineWidth = 300f
                         val data = LineData(xValue, dataset)
                         dataset.setColors(ColorTemplate.COLORFUL_COLORS)
                         distanceGraph.getAxisRight().run {
@@ -98,11 +97,10 @@ class GraphFragment : Fragment() {
                             for (i in 0..lastId) {
                                 entries2.add(i, Entry(yValue2[i].toFloat(), i))
                             }
-                            val dataset2 = LineDataSet(entries2, "")
+                            val dataSet2 = LineDataSet(entries2, "")
 
-                            val data2 = LineData(xValue2, dataset2)
-                            dataset2.lineWidth = 300f
-                            dataset2.setColors(ColorTemplate.COLORFUL_COLORS)
+                            val data2 = LineData(xValue2, dataSet2)
+                            dataSet2.setColors(ColorTemplate.COLORFUL_COLORS)
                             graphCalorie.getAxisRight().run {
                                 isEnabled = false
                                 setDrawLabels(false)
@@ -119,10 +117,6 @@ class GraphFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun mConverter(km: Double): Float {
-        return (km * 1000).toFloat()
     }
 }
 

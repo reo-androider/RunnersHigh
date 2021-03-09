@@ -30,7 +30,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="距離の記録"
-                app:titleTextColor="@color/normal"
+                app:titleTextColor="@color/teal_200"
                 android:background="@color/white"/>
             <com.github.mikephil.charting.charts.LineChart
                 android:id="@+id/distance_graph"
@@ -41,7 +41,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="消費カロリーの記録"
-                app:titleTextColor="@color/normal"
+                app:titleTextColor="@color/orange"
                 android:background="@color/white" />
 
             <com.github.mikephil.charting.charts.LineChart
