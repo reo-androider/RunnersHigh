@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.fragments
+package com.reo.running.runnershigh.fragments.profile
 
 import androidx.lifecycle.*
 import com.reo.running.runnershigh.RunResult

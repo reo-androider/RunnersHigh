@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.fragments
+package com.reo.running.runnershigh.fragments.run
 
 import android.Manifest
 import android.app.Activity
@@ -38,7 +38,6 @@ import kotlinx.coroutines.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import kotlin.math.ceil
 import kotlin.math.round
 
 class RunFragment : Fragment() {

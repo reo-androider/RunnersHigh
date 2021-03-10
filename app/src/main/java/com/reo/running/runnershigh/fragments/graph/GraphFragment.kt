@@ -1,14 +1,9 @@
-package com.reo.running.runnershigh.fragments
+package com.reo.running.runnershigh.fragments.graph
 
-import android.graphics.Color
-import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
-import android.text.style.LineHeightSpan
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.github.kittinunf.fuel.httpGet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
@@ -18,7 +13,6 @@ import com.reo.running.runnershigh.databinding.FragmentGraphBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.*
 
 class GraphFragment : Fragment() {
     private lateinit var binding: FragmentGraphBinding

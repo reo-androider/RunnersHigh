@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh
+package com.reo.running.runnershigh.recyclerview.photolist
 
 import android.graphics.Color
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.reo.running.runnershigh.R
+import com.reo.running.runnershigh.RunResult
 
 class PhotoListAdapter(val list: List<RunResult>) : RecyclerView.Adapter<PhotoListViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoListViewHolder {
