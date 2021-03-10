@@ -7,11 +7,9 @@ import android.content.*
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.location.Location
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,18 +19,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.model.*
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentRunBinding
@@ -45,20 +37,16 @@ import kotlin.math.round
 class RunFragment : Fragment() {
 
     private lateinit var binding: FragmentRunBinding
-    private lateinit var viewModel: RunViewModel
+    private val runViewModel: RunViewModel by viewModels {
+        RunViewModel.Companion.Factory(
+            MyApplication.db.justRunDao()
+        )
+    }
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private var runState: Int = RUN_STATE_BEFORE
-    private var stdLocation: Location? = null
-    private var results = FloatArray(1)
-    private val zoomValue = 18.0f
-    private var weight = 60.0
-    private var kmAmount: Float = 0.0f
     private var stopTime: Long = 0L
-    private val recordDao = MyApplication.db.justRunDao()
     private var imageUri: Uri? = null
     private val contentResolver: ContentResolver? = null
     private var photo: Bitmap? = null
-    private var isTakenPhoto = false
 
     companion object {
         private const val REQUEST_PERMISSION = 1000
@@ -67,9 +55,6 @@ class RunFragment : Fragment() {
         private const val LONG_VIBRATION = 2000
         private const val MIDDLE_VIBRATION = 2001
         private const val SHORT_VIBRATION = 2002
-        private const val RUN_STATE_BEFORE = 3001
-        private const val RUN_STATE_START = 3002
-        private const val RUN_STATE_PAUSE = 3003
     }
 
     override fun onCreateView(
@@ -85,9 +70,6 @@ class RunFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel = ViewModelProvider(this).get(RunViewModel::class.java)
-
         binding.run {
             if (checkSelfPermission(
                     requireContext(),
@@ -102,15 +84,6 @@ class RunFragment : Fragment() {
                 return
             }
             mapView.onCreate(savedInstanceState)
-            val databaseRefWeight = Firebase.database.getReference("weight")
-            databaseRefWeight.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val myWeight = snapshot.value
-                    if (myWeight.toString() != "") weight = myWeight.toString().toDouble()
-                }
-
-                override fun onCancelled(error: DatabaseError) {}
-            })
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
             val locationRequest = LocationRequest().apply {
                 interval = 1
@@ -121,52 +94,36 @@ class RunFragment : Fragment() {
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     super.onLocationResult(locationResult)
-                    val lastLocation = locationResult?.lastLocation ?: return
-                    val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+                    val latLng = LatLng(runViewModel.lastLocation.value?.latitude ?: 0.0, runViewModel.lastLocation.value?.longitude ?: 0.0)
                     mapView.getMapAsync {
                         it.isMyLocationEnabled = true
                         it.uiSettings.isMyLocationButtonEnabled = false
                         val alphaAnimation = AlphaAnimation(0f, 1f)
                         alphaAnimation.duration = 800
-                        when (runState) {
-                            RUN_STATE_BEFORE -> {
+                        when (runViewModel.runState.value) {
+                            RunState.RUN_STATE_BEFORE -> {
                                 startNav.startAnimation(alphaAnimation)
                                 startNav2.startAnimation(alphaAnimation)
                                 it.animateCamera(
                                     CameraUpdateFactory
                                         .newLatLngZoom(
                                             latLng,
-                                            zoomValue
+                                            runViewModel.zoomValue
                                         )
                                 )
                             }
 
-                            RUN_STATE_START -> {
+                            RunState.RUN_STATE_START -> {
                                 it.moveCamera(
                                     CameraUpdateFactory.newLatLngZoom(
                                         latLng,
-                                        zoomValue
+                                        runViewModel.zoomValue
                                     )
                                 )
-                                stdLocation?.let {
-                                    Location.distanceBetween(
-                                        it.latitude,
-                                        it.longitude,
-                                        lastLocation.latitude,
-                                        lastLocation.longitude,
-                                        results
-                                    )
-                                }
-
-                                viewModel.distance.observe(viewLifecycleOwner, { newDistance ->
-                                    distance.text = newDistance.toString()
-                                })
-                                kmAmount += results[0]
-                                distance.text = "${round(kmAmount) / 1000}"
-                                calorieNum.text = "${(round(kmAmount) / 1000 * weight).toInt()}"
+                                runViewModel.calcTotalMileage(locationResult?.lastLocation)
                             }
 
-                            RUN_STATE_PAUSE -> {
+                            RunState.RUN_STATE_PAUSE -> {
                                 startNav.run {
                                     visibility = View.VISIBLE
                                     setText(R.string.stop_Run)
@@ -186,7 +143,7 @@ class RunFragment : Fragment() {
 
             startButton.setOnClickListener {
                 lifecycleScope.launch {
-                    runState = RUN_STATE_START
+                    runViewModel.setRunState(RunState.RUN_STATE_START)
                     startNav.run {
                         visibility = View.GONE
                         clearAnimation()
@@ -212,7 +169,6 @@ class RunFragment : Fragment() {
                                 delay(1000)
                             }
                         }
-                        kmAmount = 0.0f
                         vibratorOn(LONG_VIBRATION)
                         startButton.clearAnimation()
                         stopWatch.base = SystemClock.elapsedRealtime()
@@ -226,7 +182,7 @@ class RunFragment : Fragment() {
             }
 
             restartButton.setOnClickListener {
-                runState = RUN_STATE_START
+                runViewModel.setRunState(RunState.RUN_STATE_START)
                 vibratorOn(LONG_VIBRATION)
                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                 stopWatch.start()
@@ -251,7 +207,7 @@ class RunFragment : Fragment() {
             }
 
             pauseButton.setOnClickListener {
-                runState = RUN_STATE_PAUSE
+                runViewModel.setRunState(RunState.RUN_STATE_PAUSE)
                 vibratorOn(MIDDLE_VIBRATION)
                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                 stopWatch.stop()
@@ -281,21 +237,9 @@ class RunFragment : Fragment() {
                     builder.setCancelable(false)
                         .setMessage("ランニングを終了しますか？")
                         .setPositiveButton("YES") { _, _ ->
-                            runState = RUN_STATE_BEFORE
-                            lifecycleScope.launch(Dispatchers.IO) {
-                                val record = JustRunData(
-                                    0,
-                                    stopWatch.text.toString(),
-                                    round(kmAmount) / 1000,
-                                    (round(kmAmount) / 1000 * weight).toInt(),
-                                    getRunDate(),
-                                    photo,
-                                    isTakenPhoto
-                                )
-                                recordDao.insertRecord(record)
-                                withContext(Dispatchers.Main) {
-                                    findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
-                                }
+                            runViewModel.setRunState(RunState.RUN_STATE_BEFORE)
+                            runViewModel.saveRunData(stopWatch.text.toString(), photo) {
+                                findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                             }
                         }
                         .setNegativeButton(
@@ -430,14 +374,6 @@ class RunFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun getRunDate(): String {
-        val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
-        val formatted = current.format(formatter)
-        return formatted
-    }
-
     private fun openCamera() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
@@ -473,7 +409,7 @@ class RunFragment : Fragment() {
                 binding.cameraSet.setImageBitmap(it)
                 binding.cameraSet.rotation = 90f
                 photo = it
-                isTakenPhoto = true
+                runViewModel.isTakenPhoto.value = true
             }
         }
     }
