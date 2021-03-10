@@ -28,8 +28,7 @@ class RunViewModel(
     val distance: LiveData<Float>
         get() = _distance
 
-    private val _weight = MutableLiveData<Double>()
-    val weight: LiveData<Double> = _weight
+    private val weight = MutableLiveData<Double>()
 
     private val _runState = MutableLiveData(RunState.RUN_STATE_BEFORE)
     val runState: LiveData<RunState> = _runState
@@ -50,13 +49,14 @@ class RunViewModel(
 
     val zoomValue = 18.0F
 
+    val takenPhoto = MutableLiveData<Bitmap>()
     val isTakenPhoto = MutableLiveData(false)
 
     init {
         _distance.value = 0f
         firebaseDB.getReference("weight").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.value.toString() != "") _weight.value =
+                if (snapshot.value.toString() != "") weight.value =
                     snapshot.value.toString().toDouble()
             }
 
@@ -80,13 +80,14 @@ class RunViewModel(
                     differenceMileage.value
                 )
             }
+
+            previousLastLocation.value = lastLocation
         }
-        previousLastLocation.value = lastLocation.value
 
         totalMileage.value = totalMileage.value?.plus(differenceMileage.value?.firstOrNull() ?: 0F)
     }
 
-    fun saveRunData(stopWatchText: String, photo: Bitmap?, callback: () -> Unit) {
+    fun saveRunData(stopWatchText: String, callback: () -> Unit) {
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
         val record = JustRunData(
@@ -95,7 +96,7 @@ class RunViewModel(
             roundedTotalMileage.value ?: 0.0F,
             totalConsumptionCalorie.value ?: 0,
             current.format(formatter),
-            photo,
+            takenPhoto.value,
             isTakenPhoto.value ?: false
         )
 

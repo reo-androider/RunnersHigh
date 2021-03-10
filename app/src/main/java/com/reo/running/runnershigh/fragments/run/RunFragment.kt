@@ -46,7 +46,6 @@ class RunFragment : Fragment() {
     private var stopTime: Long = 0L
     private var imageUri: Uri? = null
     private val contentResolver: ContentResolver? = null
-    private var photo: Bitmap? = null
 
     companion object {
         private const val REQUEST_PERMISSION = 1000
@@ -94,7 +93,10 @@ class RunFragment : Fragment() {
             val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(locationResult: LocationResult?) {
                     super.onLocationResult(locationResult)
-                    val latLng = LatLng(runViewModel.lastLocation.value?.latitude ?: 0.0, runViewModel.lastLocation.value?.longitude ?: 0.0)
+                    val latLng = LatLng(
+                        runViewModel.lastLocation.value?.latitude ?: 0.0,
+                        runViewModel.lastLocation.value?.longitude ?: 0.0
+                    )
                     mapView.getMapAsync {
                         it.isMyLocationEnabled = true
                         it.uiSettings.isMyLocationButtonEnabled = false
@@ -238,7 +240,7 @@ class RunFragment : Fragment() {
                         .setMessage("ランニングを終了しますか？")
                         .setPositiveButton("YES") { _, _ ->
                             runViewModel.setRunState(RunState.RUN_STATE_BEFORE)
-                            runViewModel.saveRunData(stopWatch.text.toString(), photo) {
+                            runViewModel.saveRunData(stopWatch.text.toString()) {
                                 findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                             }
                         }
@@ -405,10 +407,10 @@ class RunFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK) {
-            (data?.extras?.get("data") as? Bitmap?).let {
+            (data?.extras?.get("data") as? Bitmap?)?.let {
                 binding.cameraSet.setImageBitmap(it)
                 binding.cameraSet.rotation = 90f
-                photo = it
+                runViewModel.takenPhoto.value = it
                 runViewModel.isTakenPhoto.value = true
             }
         }
