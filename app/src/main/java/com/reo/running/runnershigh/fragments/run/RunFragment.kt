@@ -21,6 +21,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
@@ -43,6 +45,7 @@ import kotlin.math.round
 class RunFragment : Fragment() {
 
     private lateinit var binding: FragmentRunBinding
+    private lateinit var viewModel: RunViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var runState: Int = RUN_STATE_BEFORE
     private var stdLocation: Location? = null
@@ -70,29 +73,31 @@ class RunFragment : Fragment() {
     }
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentRunBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        viewModel = ViewModelProvider(this).get(RunViewModel::class.java)
+
         binding.run {
             if (checkSelfPermission(
-                            requireContext(),
-                            Manifest.permission.ACCESS_FINE_LOCATION
-                    ) != PackageManager.PERMISSION_GRANTED
+                    requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 ActivityCompat.requestPermissions(
-                        requireActivity(),
-                        arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                        REQUEST_PERMISSION
+                    requireActivity(),
+                    arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                    REQUEST_PERMISSION
                 )
                 return
             }
@@ -128,31 +133,34 @@ class RunFragment : Fragment() {
                                 startNav.startAnimation(alphaAnimation)
                                 startNav2.startAnimation(alphaAnimation)
                                 it.animateCamera(
-                                        CameraUpdateFactory
-                                                .newLatLngZoom(
-                                                        latLng,
-                                                        zoomValue
-                                                )
+                                    CameraUpdateFactory
+                                        .newLatLngZoom(
+                                            latLng,
+                                            zoomValue
+                                        )
                                 )
                             }
 
                             RUN_STATE_START -> {
                                 it.moveCamera(
-                                        CameraUpdateFactory.newLatLngZoom(
-                                                latLng,
-                                                zoomValue
-                                        )
+                                    CameraUpdateFactory.newLatLngZoom(
+                                        latLng,
+                                        zoomValue
+                                    )
                                 )
                                 stdLocation?.let {
                                     Location.distanceBetween(
-                                            it.latitude,
-                                            it.longitude,
-                                            lastLocation.latitude,
-                                            lastLocation.longitude,
-                                            results
+                                        it.latitude,
+                                        it.longitude,
+                                        lastLocation.latitude,
+                                        lastLocation.longitude,
+                                        results
                                     )
                                 }
-                                stdLocation = lastLocation
+
+                                viewModel.distance.observe(viewLifecycleOwner, { newDistance ->
+                                    distance.text = newDistance.toString()
+                                })
                                 kmAmount += results[0]
                                 distance.text = "${round(kmAmount) / 1000}"
                                 calorieNum.text = "${(round(kmAmount) / 1000 * weight).toInt()}"
@@ -171,9 +179,9 @@ class RunFragment : Fragment() {
             }
 
             fusedLocationClient.requestLocationUpdates(
-                    locationRequest,
-                    locationCallback,
-                    Looper.myLooper()
+                locationRequest,
+                locationCallback,
+                Looper.myLooper()
             )
 
             startButton.setOnClickListener {
@@ -196,9 +204,9 @@ class RunFragment : Fragment() {
                         withContext(Dispatchers.IO) {
                             delay(1000)
                             listOf(
-                                    countNum3,
-                                    countNum2,
-                                    countNum1,
+                                countNum3,
+                                countNum2,
+                                countNum1,
                             ).map {
                                 animationCount(it)
                                 delay(1000)
@@ -271,29 +279,29 @@ class RunFragment : Fragment() {
                     finishButton.clearAnimation()
                     val builder = AlertDialog.Builder(requireContext())
                     builder.setCancelable(false)
-                            .setMessage("ランニングを終了しますか？")
-                            .setPositiveButton("YES") { _, _ ->
-                                runState = RUN_STATE_BEFORE
-                                lifecycleScope.launch(Dispatchers.IO) {
-                                    val record = JustRunData(
-                                            0,
-                                            stopWatch.text.toString(),
-                                            round(kmAmount) / 1000,
-                                            (round(kmAmount) / 1000 * weight).toInt(),
-                                            getRunDate(),
-                                            photo,
-                                            isTakenPhoto
-                                    )
-                                    recordDao.insertRecord(record)
-                                    withContext(Dispatchers.Main) {
-                                        findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
-                                    }
+                        .setMessage("ランニングを終了しますか？")
+                        .setPositiveButton("YES") { _, _ ->
+                            runState = RUN_STATE_BEFORE
+                            lifecycleScope.launch(Dispatchers.IO) {
+                                val record = JustRunData(
+                                    0,
+                                    stopWatch.text.toString(),
+                                    round(kmAmount) / 1000,
+                                    (round(kmAmount) / 1000 * weight).toInt(),
+                                    getRunDate(),
+                                    photo,
+                                    isTakenPhoto
+                                )
+                                recordDao.insertRecord(record)
+                                withContext(Dispatchers.Main) {
+                                    findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                                 }
                             }
-                            .setNegativeButton(
-                                    "CANCEL"
-                            ) { _, _ ->
-                            }
+                        }
+                        .setNegativeButton(
+                            "CANCEL"
+                        ) { _, _ ->
+                        }
                     builder.show()
                 }
             }
@@ -312,9 +320,13 @@ class RunFragment : Fragment() {
             }
 
             cameraImage.setOnClickListener {
-                if (checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+                if (checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.CAMERA
+                    ) == PackageManager.PERMISSION_DENIED
+                ) {
                     val permission = arrayOf(
-                            Manifest.permission.CAMERA
+                        Manifest.permission.CAMERA
                     )
                     requestPermissions(permission, PERMISSION_CODE)
                 } else {
@@ -340,62 +352,62 @@ class RunFragment : Fragment() {
     }
 
     private fun scaleUpAnimation(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
-            ScaleAnimation(
-                    0.6f,
-                    1f,
-                    0.6f,
-                    1f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f
-            ).apply {
-                duration = 300
-                fillAfter = true
-                operation(this)
-            }
+        ScaleAnimation(
+            0.6f,
+            1f,
+            0.6f,
+            1f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        ).apply {
+            duration = 300
+            fillAfter = true
+            operation(this)
+        }
 
     private fun scaleUpAnimationMore(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
-            ScaleAnimation(
-                    1f,
-                    100f,
-                    1f,
-                    100f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f
-            ).apply {
-                duration = 1500
-                fillAfter = true
-            }
+        ScaleAnimation(
+            1f,
+            100f,
+            1f,
+            100f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        ).apply {
+            duration = 1500
+            fillAfter = true
+        }
 
     private fun scaleDownAnimation(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
-            ScaleAnimation(
-                    1f,
-                    0.6f,
-                    1f,
-                    0.6f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f,
-                    Animation.RELATIVE_TO_SELF,
-                    0.5f
-            ).apply {
-                duration = 300
-                fillAfter = true
-                operation(this)
-            }
+        ScaleAnimation(
+            1f,
+            0.6f,
+            1f,
+            0.6f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f,
+            Animation.RELATIVE_TO_SELF,
+            0.5f
+        ).apply {
+            duration = 300
+            fillAfter = true
+            operation(this)
+        }
 
     private fun animationCount(view: View) {
         view.startAnimation(ScaleAnimation(
-                0f,
-                400f,
-                0f,
-                400f,
-                Animation.RELATIVE_TO_SELF,
-                0.255f,
-                Animation.RELATIVE_TO_SELF,
-                0.55f
+            0f,
+            400f,
+            0f,
+            400f,
+            Animation.RELATIVE_TO_SELF,
+            0.255f,
+            Animation.RELATIVE_TO_SELF,
+            0.55f
         ).apply { duration = 1000 })
     }
 
@@ -437,14 +449,14 @@ class RunFragment : Fragment() {
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         when (requestCode) {
             PERMISSION_CODE -> {
                 if (grantResults.isNotEmpty() && grantResults[0] ==
-                        PackageManager.PERMISSION_DENIED
+                    PackageManager.PERMISSION_DENIED
                 ) {
                     Toast.makeText(context, "Permission dined", Toast.LENGTH_SHORT).show()
 

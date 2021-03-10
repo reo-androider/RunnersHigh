@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.recyclerview.recyclerview
+package com.reo.running.runnershigh.fragments.result.paints
 
 import android.view.View
 import android.widget.ImageView

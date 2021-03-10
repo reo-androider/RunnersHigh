@@ -29,7 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
-import com.reo.running.runnershigh.recyclerview.recyclerview.PaintsAdapter
+import com.reo.running.runnershigh.fragments.result.paints.PaintsAdapter
 import kotlinx.coroutines.*
 
 class ResultFragment : Fragment() {
