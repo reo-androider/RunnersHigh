@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.recyclerview.paints
+package com.reo.running.runnershigh.recyclerview.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

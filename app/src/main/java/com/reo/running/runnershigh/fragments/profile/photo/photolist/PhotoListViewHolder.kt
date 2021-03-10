@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.recyclerview.photolist
+package com.reo.running.runnershigh.fragments.profile.photo.photolist
 
 import android.view.View
 import android.widget.ImageView

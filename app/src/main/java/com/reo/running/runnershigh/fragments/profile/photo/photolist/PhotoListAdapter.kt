@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.recyclerview.photolist
+package com.reo.running.runnershigh.fragments.profile.photo.photolist
 
 import android.graphics.Color
 import android.view.LayoutInflater

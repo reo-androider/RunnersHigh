@@ -10,7 +10,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentPhotoBinding
-import com.reo.running.runnershigh.recyclerview.photolist.PhotoListAdapter
+import com.reo.running.runnershigh.fragments.profile.photo.photolist.PhotoListAdapter
 
 class PhotoFragment : Fragment() {
     private lateinit var binding:FragmentPhotoBinding
