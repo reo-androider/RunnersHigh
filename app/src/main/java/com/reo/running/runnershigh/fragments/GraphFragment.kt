@@ -88,7 +88,6 @@ class GraphFragment : Fragment() {
                         val yValue2 = mutableListOf<Double>()
                         for (i in 0..lastId) {
                             yValue2.add((read[i].calorie) + totalCalorie)
-                            Log.d("ROOM", "${yValue2[i]}")
                             totalCalorie += read[i].calorie
                         }
 
