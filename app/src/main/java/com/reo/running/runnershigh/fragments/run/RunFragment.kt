@@ -21,6 +21,8 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
@@ -35,6 +37,7 @@ import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentRunBinding
 import kotlinx.coroutines.*
+import java.security.acl.Owner
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -43,6 +46,7 @@ import kotlin.math.round
 class RunFragment : Fragment() {
 
     private lateinit var binding: FragmentRunBinding
+    private lateinit var viewModel: RunFragmentViewModel
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private var runState: Int = RUN_STATE_BEFORE
     private var stdLocation: Location? = null
@@ -118,6 +122,11 @@ class RunFragment : Fragment() {
                     super.onLocationResult(locationResult)
                     val lastLocation = locationResult?.lastLocation ?: return
                     val latLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+//                    viewModel = ViewModelProvider(this@RunFragment).get(RunFragmentViewModel::class.java)
+//                    viewModel.kmAmount.observe(viewLifecycleOwner, Observer { newDistance ->
+//                        distance.text = newDistance.toString()
+//                        calorieNum.text = (newDistance * weight).toInt().toString()
+//                    })
                     mapView.getMapAsync {
                         it.isMyLocationEnabled = true
                         it.uiSettings.isMyLocationButtonEnabled = false
@@ -154,7 +163,9 @@ class RunFragment : Fragment() {
                                     )
                                 }
                                 stdLocation = lastLocation
-                                kmAmount += results[0]
+//                                viewModel. += results[0]
+//                                viewModel.roundUp()
+//                                必要なので残しておく
                                 distance.text = "${round(kmAmount) / 1000}"
                                 calorieNum.text = "${(round(kmAmount) / 1000 * weight).toInt()}"
                             }
