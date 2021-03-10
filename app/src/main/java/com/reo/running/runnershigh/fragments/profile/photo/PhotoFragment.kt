@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.fragments.profile
+package com.reo.running.runnershigh.fragments.profile.photo
 
 import android.os.Bundle
 import android.view.LayoutInflater

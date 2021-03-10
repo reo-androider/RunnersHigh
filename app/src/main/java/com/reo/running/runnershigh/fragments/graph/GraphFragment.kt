@@ -10,6 +10,8 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentGraphBinding
+import com.reo.running.runnershigh.fragments.graph.unit.CalorieUnit
+import com.reo.running.runnershigh.fragments.graph.unit.DistanceUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

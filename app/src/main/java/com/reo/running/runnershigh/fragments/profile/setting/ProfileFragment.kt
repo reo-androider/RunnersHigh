@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.fragments.profile
+package com.reo.running.runnershigh.fragments.profile.setting
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -34,7 +34,6 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.*
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding

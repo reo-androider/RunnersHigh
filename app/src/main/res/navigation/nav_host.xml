@@ -20,7 +20,7 @@
 
     <fragment
         android:id="@+id/fragment3"
-        android:name="com.reo.running.runnershigh.fragments.profile.ProfileFragment"
+        android:name="com.reo.running.runnershigh.fragments.profile.setting.ProfileFragment"
         android:label="fragment_3"
         tools:layout="@layout/fragment_profile" />
 
