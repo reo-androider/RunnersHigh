@@ -4,13 +4,10 @@ import android.Manifest
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.*
-import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,11 +26,8 @@ import com.google.android.gms.maps.model.*
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentRunBinding
+import com.reo.running.runnershigh.fragments.common.*
 import kotlinx.coroutines.*
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import java.time.format.FormatStyle
-import kotlin.math.round
 
 class RunFragment : Fragment() {
 
@@ -53,9 +47,6 @@ class RunFragment : Fragment() {
         private const val REQUEST_PERMISSION = 1000
         private const val PERMISSION_CODE = 1001
         private const val IMAGE_CAPTURE_CODE = 1002
-        private const val LONG_VIBRATION = 2000
-        private const val MIDDLE_VIBRATION = 2001
-        private const val SHORT_VIBRATION = 2002
     }
 
     override fun onCreateView(
@@ -174,7 +165,7 @@ class RunFragment : Fragment() {
                                 delay(1000)
                             }
                         }
-                        vibratorOn(LONG_VIBRATION)
+                        vibratorOn(VibrationType.LONG_VIBRATION)
                         startButton.clearAnimation()
                         stopWatch.base = SystemClock.elapsedRealtime()
                         stopWatch.start()
@@ -188,7 +179,7 @@ class RunFragment : Fragment() {
 
             restartButton.setOnClickListener {
                 runViewModel.setRunState(RunState.RUN_STATE_START)
-                vibratorOn(LONG_VIBRATION)
+                vibratorOn(VibrationType.LONG_VIBRATION)
                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                 stopWatch.start()
                 finishButton.visibility = View.GONE
@@ -211,7 +202,7 @@ class RunFragment : Fragment() {
 
             pauseButton.setOnClickListener {
                 runViewModel.setRunState(RunState.RUN_STATE_PAUSE)
-                vibratorOn(MIDDLE_VIBRATION)
+                vibratorOn(VibrationType.MIDDLE_VIBRATION)
                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                 stopWatch.stop()
                 pauseButton.startAnimation(scaleDownAnimation(
@@ -231,23 +222,22 @@ class RunFragment : Fragment() {
             }
 
             finishButton.setOnClickListener {
-                vibratorOn(SHORT_VIBRATION)
-                finishButton.startAnimation(scaleDownAnimation {})
-                Handler(Looper.getMainLooper()).postDelayed({
+                vibratorOn(VibrationType.SHORT_VIBRATION)
+                finishButton.startAnimation(scaleDownAnimation(animationEndOperation = {
                     finishButton.clearAnimation()
-                }, 500)
-                AlertDialog.Builder(requireContext())
-                    .setCancelable(false)
-                    .setMessage("ランニングを終了しますか？")
-                    .setPositiveButton("YES") { _, _ ->
-                        runViewModel.saveRunData {
-                            findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
+                    AlertDialog.Builder(requireContext())
+                        .setCancelable(false)
+                        .setMessage("ランニングを終了しますか？")
+                        .setPositiveButton("YES") { _, _ ->
+                            runViewModel.saveRunData {
+                                findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
+                            }
                         }
-                    }
-                    .setNegativeButton(
-                        "CANCEL"
-                    ) { _, _ ->
-                    }.show()
+                        .setNegativeButton(
+                            "CANCEL"
+                        ) { _, _ ->
+                        }.show()
+                }))
             }
 
             lockOff.setOnClickListener {
@@ -293,116 +283,6 @@ class RunFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         binding.mapView.onPause()
-    }
-
-    private fun scaleUpAnimation(
-        operation: (ScaleAnimation) -> Unit = {},
-        animationStartOperation: () -> Unit = {},
-        animationEndOperation: () -> Unit = {},
-        animationRepeatOperation: () -> Unit = {}
-    ): ScaleAnimation =
-        ScaleAnimation(
-            0.6f,
-            1f,
-            0.6f,
-            1f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f
-        ).apply {
-            duration = 300
-            fillAfter = true
-            operation(this)
-            setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation?) = animationStartOperation()
-                override fun onAnimationEnd(animation: Animation?) = animationEndOperation()
-                override fun onAnimationRepeat(animation: Animation?) = animationRepeatOperation()
-            })
-        }
-
-    private fun scaleUpAnimationMore(
-        operation: (ScaleAnimation) -> Unit = {},
-        animationStartOperation: () -> Unit = {},
-        animationEndOperation: () -> Unit = {},
-        animationRepeatOperation: () -> Unit = {}
-    ): ScaleAnimation =
-        ScaleAnimation(
-            1f,
-            100f,
-            1f,
-            100f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f
-        ).apply {
-            duration = 1500
-            fillAfter = true
-            operation(this)
-            setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation?) = animationStartOperation()
-                override fun onAnimationEnd(animation: Animation?) = animationEndOperation()
-                override fun onAnimationRepeat(animation: Animation?) = animationRepeatOperation()
-            })
-        }
-
-    private fun scaleDownAnimation(
-        operation: (ScaleAnimation) -> Unit = {},
-        animationStartOperation: () -> Unit = {},
-        animationEndOperation: () -> Unit = {},
-        animationRepeatOperation: () -> Unit = {}
-    ): ScaleAnimation =
-        ScaleAnimation(
-            1f,
-            0.6f,
-            1f,
-            0.6f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f
-        ).apply {
-            duration = 300
-            fillAfter = true
-            operation(this)
-            setAnimationListener(object : Animation.AnimationListener {
-                override fun onAnimationStart(animation: Animation?) = animationStartOperation()
-                override fun onAnimationEnd(animation: Animation?) = animationEndOperation()
-                override fun onAnimationRepeat(animation: Animation?) = animationRepeatOperation()
-            })
-        }
-
-    private fun animationCount(view: View) {
-        view.startAnimation(ScaleAnimation(
-            0f,
-            400f,
-            0f,
-            400f,
-            Animation.RELATIVE_TO_SELF,
-            0.255f,
-            Animation.RELATIVE_TO_SELF,
-            0.55f
-        ).apply { duration = 1000 })
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun vibratorOn(vibratorType: Int) {
-        val vibrator = context?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        when (vibratorType) {
-            LONG_VIBRATION -> {
-                val vibrationEffect = VibrationEffect.createOneShot(800, 255)
-                vibrator.vibrate(vibrationEffect)
-            }
-            MIDDLE_VIBRATION -> {
-                val vibrationEffect = VibrationEffect.createOneShot(600, 255)
-                vibrator.vibrate(vibrationEffect)
-            }
-            SHORT_VIBRATION -> {
-                val vibrationEffect = VibrationEffect.createOneShot(300, 255)
-                vibrator.vibrate(vibrationEffect)
-            }
-        }
     }
 
     private fun openCamera() {
