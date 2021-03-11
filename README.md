@@ -1,6 +1,6 @@
 # RunnersHigh
 ほぼ、毎朝走るする習慣があるので、いっそのこと自前のランニングアプリを作ってしまえ！というノリで作りました。  
-※アプリのスクショは位置情報の関係東京駅周辺に緯度と経度を
+※アプリのスクショは位置情報の関係東京駅周辺に緯度と経度を合わせました。  
 ***
 ![start縮小版](https://user-images.githubusercontent.com/65647834/110730103-3a837900-8263-11eb-9ebd-e65cc8b5afb1.jpg)
 ![18721syukusyoubann](https://user-images.githubusercontent.com/65647834/110730120-40795a00-8263-11eb-9e49-6947bc0ce231.jpg)
@@ -26,3 +26,6 @@
  CameraX  
  MPAndroidChart  
 
+
+## 製作期間
+1か月と3週間
