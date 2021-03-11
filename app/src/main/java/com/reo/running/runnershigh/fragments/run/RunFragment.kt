@@ -283,6 +283,7 @@ class RunFragment : Fragment() {
             }
 
             val locationCallback = object : LocationCallback() {
+                @SuppressLint("MissingPermission")
                 override fun onLocationResult(locationResult: LocationResult?) {
                     super.onLocationResult(locationResult)
                     val latLng = LatLng(
