@@ -32,6 +32,7 @@ import kotlinx.coroutines.*
 class RunFragment : Fragment() {
 
     private lateinit var binding: FragmentRunBinding
+    
     private val runViewModel: RunViewModel by viewModels {
         RunViewModel.Companion.Factory(
             MyApplication.db.justRunDao()
@@ -40,7 +41,6 @@ class RunFragment : Fragment() {
     private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
     }
-    private var stopTime: Long = 0L
     private val contentResolver: ContentResolver? = null
 
     companion object {
@@ -138,20 +138,20 @@ class RunFragment : Fragment() {
             )
 
             startButton.setOnClickListener {
+                runViewModel.setRunState(RunState.RUN_STATE_START)
+                startNav.run {
+                    visibility = View.GONE
+                    clearAnimation()
+                }
+                startNav2.run {
+                    visibility = View.GONE
+                    clearAnimation()
+                }
+                startText.visibility = View.GONE
+                startButton.visibility = View.GONE
+                mapView.visibility = View.GONE
+                (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
                 lifecycleScope.launch {
-                    runViewModel.setRunState(RunState.RUN_STATE_START)
-                    startNav.run {
-                        visibility = View.GONE
-                        clearAnimation()
-                    }
-                    startNav2.run {
-                        visibility = View.GONE
-                        clearAnimation()
-                    }
-                    startText.visibility = View.GONE
-                    startButton.visibility = View.GONE
-                    mapView.visibility = View.GONE
-                    (activity as MainActivity).binding.bottomNavigation.visibility = View.GONE
                     withContext(Dispatchers.Main) {
                         startButton.startAnimation(scaleUpAnimationMore {})
                         withContext(Dispatchers.IO) {
@@ -165,6 +165,7 @@ class RunFragment : Fragment() {
                                 delay(1000)
                             }
                         }
+                    }
                         vibratorOn(VibrationType.LONG_VIBRATION)
                         startButton.clearAnimation()
                         stopWatch.base = SystemClock.elapsedRealtime()
@@ -174,13 +175,13 @@ class RunFragment : Fragment() {
                         timerScreen.visibility = View.VISIBLE
                         lockOff.visibility = View.VISIBLE
                     }
-                }
+
             }
 
             restartButton.setOnClickListener {
                 runViewModel.setRunState(RunState.RUN_STATE_START)
                 vibratorOn(VibrationType.LONG_VIBRATION)
-                stopWatch.base = SystemClock.elapsedRealtime() - stopTime
+                stopWatch.base = SystemClock.elapsedRealtime() - (runViewModel.stopTime.value ?: 0L)
                 stopWatch.start()
                 finishButton.visibility = View.GONE
                 startNav.run {
@@ -203,7 +204,7 @@ class RunFragment : Fragment() {
             pauseButton.setOnClickListener {
                 runViewModel.setRunState(RunState.RUN_STATE_PAUSE)
                 vibratorOn(VibrationType.MIDDLE_VIBRATION)
-                stopTime = SystemClock.elapsedRealtime() - stopWatch.base
+                runViewModel.stopTime.value = SystemClock.elapsedRealtime() - stopWatch.base
                 stopWatch.stop()
                 pauseButton.startAnimation(scaleDownAnimation(
                     animationEndOperation = {

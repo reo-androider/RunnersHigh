@@ -65,6 +65,8 @@ class RunViewModel(
 
     val stopWatchText = MutableLiveData<String>()
 
+    val stopTime = MutableLiveData(0L)
+
     fun setRunState(runState: RunState) {
         _runState.value = runState
     }
