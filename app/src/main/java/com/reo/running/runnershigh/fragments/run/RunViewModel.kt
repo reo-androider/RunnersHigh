@@ -2,6 +2,8 @@ package com.reo.running.runnershigh.fragments.run
 
 import android.graphics.Bitmap
 import android.location.Location
+import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -11,6 +13,7 @@ import com.google.firebase.ktx.Firebase
 import com.reo.running.runnershigh.JustRunData
 import com.reo.running.runnershigh.JustRunDataDao
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
@@ -41,10 +44,16 @@ class RunViewModel(
         round(it) / 1000
     }
 
-    private val differenceMileage = MutableLiveData<FloatArray>()
+    private val differenceMileage = MutableLiveData(FloatArray(1))
 
-    val totalConsumptionCalorie = combine(0, weight, roundedTotalMileage) { _, weight,  roundedTotalMileage->
-        (roundedTotalMileage * weight).toInt()
+    private val totalConsumptionCalorie: LiveData<Int> by lazy {
+        combine(0, weight, roundedTotalMileage) { _, weight, roundedTotalMileage ->
+            (roundedTotalMileage * weight).toInt()
+        }
+    }
+
+    val totalConsumptionCalorieText = totalConsumptionCalorie.map {
+        it.toString()
     }
 
     val zoomValue = 18.0F
@@ -52,17 +61,9 @@ class RunViewModel(
     val takenPhoto = MutableLiveData<Bitmap>()
     val isTakenPhoto = MutableLiveData(false)
 
-    init {
-        _distance.value = 0f
-        firebaseDB.getReference("weight").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.value.toString() != "") weight.value =
-                    snapshot.value.toString().toDouble()
-            }
+    val imageUri = MutableLiveData<Uri>()
 
-            override fun onCancelled(error: DatabaseError) {}
-        })
-    }
+    val stopWatchText = MutableLiveData<String>()
 
     fun setRunState(runState: RunState) {
         _runState.value = runState
@@ -87,12 +88,13 @@ class RunViewModel(
         totalMileage.value = totalMileage.value?.plus(differenceMileage.value?.firstOrNull() ?: 0F)
     }
 
-    fun saveRunData(stopWatchText: String, callback: () -> Unit) {
+    fun saveRunData(callback: () -> Unit) {
+        _runState.value = RunState.RUN_STATE_BEFORE
         val current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM)
         val record = JustRunData(
             0,
-            stopWatchText,
+            stopWatchText.value ?: "00:00",
             roundedTotalMileage.value ?: 0.0F,
             totalConsumptionCalorie.value ?: 0,
             current.format(formatter),
@@ -106,6 +108,19 @@ class RunViewModel(
                 callback()
             }
         }
+    }
+
+    init {
+        _distance.value = 0f
+        weight.value = 0.0
+        firebaseDB.getReference("weight").addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.value.toString() != "") weight.value =
+                    snapshot.value.toString().toDouble()
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
 
@@ -130,6 +145,7 @@ inline fun <T : Any, LIVE1 : Any, LIVE2 : Any> combine(
     return MediatorLiveData<T>().apply {
         value = initialValue
         listOf(liveData1, liveData2).forEach { liveData ->
+            Log.d("debug", "liveData ${liveData.value}")
             addSource(liveData) {
                 val currentValue = value
                 val liveData1Value = liveData1.value

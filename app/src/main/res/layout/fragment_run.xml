@@ -55,6 +55,7 @@
                 android:textColor="#00B8D4"
                 android:textSize="70sp"
                 android:textStyle="bold|italic"
+                android:text="@{viewModel.stopWatchText}"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -91,7 +92,7 @@
                 android:id="@+id/calorie_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.totalConsumptionCalorie.toString()}"
+                android:text="@{viewModel.totalConsumptionCalorieText}"
                 android:textSize="30sp"
                 android:textColor="#00B8D4"
                 android:textStyle="bold|italic"

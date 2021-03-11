@@ -10,6 +10,7 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,9 +43,10 @@ class RunFragment : Fragment() {
             MyApplication.db.justRunDao()
         )
     }
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+        LocationServices.getFusedLocationProviderClient(requireContext())
+    }
     private var stopTime: Long = 0L
-    private var imageUri: Uri? = null
     private val contentResolver: ContentResolver? = null
 
     companion object {
@@ -70,6 +72,8 @@ class RunFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
+            lifecycleOwner = viewLifecycleOwner
+            viewModel = runViewModel
             if (checkSelfPermission(
                     requireContext(),
                     Manifest.permission.ACCESS_FINE_LOCATION
@@ -83,7 +87,6 @@ class RunFragment : Fragment() {
                 return
             }
             mapView.onCreate(savedInstanceState)
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
             val locationRequest = LocationRequest().apply {
                 interval = 1
                 fastestInterval = 1
@@ -189,23 +192,21 @@ class RunFragment : Fragment() {
                 stopWatch.base = SystemClock.elapsedRealtime() - stopTime
                 stopWatch.start()
                 finishButton.visibility = View.GONE
-                lifecycleScope.launch {
-                    startNav.run {
-                        visibility = View.GONE
-                        clearAnimation()
-                    }
-                    withContext(Dispatchers.Main) {
-                        restartButton.startAnimation(scaleDownAnimation {})
-                        delay(500)
+                startNav.run {
+                    visibility = View.GONE
+                    clearAnimation()
+                }
+                restartButton.startAnimation(scaleDownAnimation(
+                    animationEndOperation = {
                         restartButton.clearAnimation()
                         restartButton.visibility = View.GONE
                         lockOff.visibility = View.VISIBLE
                         pauseButton.visibility = View.VISIBLE
-                        pauseButton.startAnimation(scaleUpAnimation {
-                            it.fillAfter = false
-                        })
+                        pauseButton.startAnimation(scaleUpAnimation(
+                            operation = { it.fillAfter = false }
+                        ))
                     }
-                }
+                ))
             }
 
             pauseButton.setOnClickListener {
@@ -213,43 +214,40 @@ class RunFragment : Fragment() {
                 vibratorOn(MIDDLE_VIBRATION)
                 stopTime = SystemClock.elapsedRealtime() - stopWatch.base
                 stopWatch.stop()
-                lifecycleScope.launch(Dispatchers.Main) {
-                    pauseButton.startAnimation(scaleDownAnimation {})
-                    delay(500)
-                    pauseButton.clearAnimation()
-                    pauseButton.visibility = View.GONE
-                    lockOff.visibility = View.GONE
-                    finishButton.visibility = View.VISIBLE
-                    restartButton.visibility = View.VISIBLE
-                    restartButton.startAnimation(scaleUpAnimation {})
-                    finishButton.startAnimation(scaleUpAnimation {
-                        it.fillAfter = false
-                    })
-                    delay(300)
-                }
+                pauseButton.startAnimation(scaleDownAnimation(
+                    animationEndOperation = {
+                        pauseButton.clearAnimation()
+                        pauseButton.visibility = View.GONE
+                        lockOff.visibility = View.GONE
+                        finishButton.visibility = View.VISIBLE
+                        restartButton.visibility = View.VISIBLE
+                        restartButton.startAnimation(scaleUpAnimation {})
+                        finishButton.startAnimation(scaleUpAnimation(
+                            operation = { it.fillAfter = false }
+                        ))
+                    }
+                ))
+
             }
 
             finishButton.setOnClickListener {
                 vibratorOn(SHORT_VIBRATION)
-                lifecycleScope.launch(Dispatchers.Main) {
-                    finishButton.startAnimation(scaleDownAnimation {})
-                    delay(500)
+                finishButton.startAnimation(scaleDownAnimation {})
+                Handler(Looper.getMainLooper()).postDelayed({
                     finishButton.clearAnimation()
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setCancelable(false)
-                        .setMessage("ランニングを終了しますか？")
-                        .setPositiveButton("YES") { _, _ ->
-                            runViewModel.setRunState(RunState.RUN_STATE_BEFORE)
-                            runViewModel.saveRunData(stopWatch.text.toString()) {
-                                findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
-                            }
+                }, 500)
+                AlertDialog.Builder(requireContext())
+                    .setCancelable(false)
+                    .setMessage("ランニングを終了しますか？")
+                    .setPositiveButton("YES") { _, _ ->
+                        runViewModel.saveRunData {
+                            findNavController().navigate(R.id.action_navi_run_to_fragmentResult)
                         }
-                        .setNegativeButton(
-                            "CANCEL"
-                        ) { _, _ ->
-                        }
-                    builder.show()
-                }
+                    }
+                    .setNegativeButton(
+                        "CANCEL"
+                    ) { _, _ ->
+                    }.show()
             }
 
             lockOff.setOnClickListener {
@@ -297,7 +295,12 @@ class RunFragment : Fragment() {
         binding.mapView.onPause()
     }
 
-    private fun scaleUpAnimation(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
+    private fun scaleUpAnimation(
+        operation: (ScaleAnimation) -> Unit = {},
+        animationStartOperation: () -> Unit = {},
+        animationEndOperation: () -> Unit = {},
+        animationRepeatOperation: () -> Unit = {}
+    ): ScaleAnimation =
         ScaleAnimation(
             0.6f,
             1f,
@@ -311,9 +314,19 @@ class RunFragment : Fragment() {
             duration = 300
             fillAfter = true
             operation(this)
+            setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) = animationStartOperation()
+                override fun onAnimationEnd(animation: Animation?) = animationEndOperation()
+                override fun onAnimationRepeat(animation: Animation?) = animationRepeatOperation()
+            })
         }
 
-    private fun scaleUpAnimationMore(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
+    private fun scaleUpAnimationMore(
+        operation: (ScaleAnimation) -> Unit = {},
+        animationStartOperation: () -> Unit = {},
+        animationEndOperation: () -> Unit = {},
+        animationRepeatOperation: () -> Unit = {}
+    ): ScaleAnimation =
         ScaleAnimation(
             1f,
             100f,
@@ -326,9 +339,20 @@ class RunFragment : Fragment() {
         ).apply {
             duration = 1500
             fillAfter = true
+            operation(this)
+            setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) = animationStartOperation()
+                override fun onAnimationEnd(animation: Animation?) = animationEndOperation()
+                override fun onAnimationRepeat(animation: Animation?) = animationRepeatOperation()
+            })
         }
 
-    private fun scaleDownAnimation(operation: (ScaleAnimation) -> Unit = {}): ScaleAnimation =
+    private fun scaleDownAnimation(
+        operation: (ScaleAnimation) -> Unit = {},
+        animationStartOperation: () -> Unit = {},
+        animationEndOperation: () -> Unit = {},
+        animationRepeatOperation: () -> Unit = {}
+    ): ScaleAnimation =
         ScaleAnimation(
             1f,
             0.6f,
@@ -342,6 +366,11 @@ class RunFragment : Fragment() {
             duration = 300
             fillAfter = true
             operation(this)
+            setAnimationListener(object : Animation.AnimationListener {
+                override fun onAnimationStart(animation: Animation?) = animationStartOperation()
+                override fun onAnimationEnd(animation: Animation?) = animationEndOperation()
+                override fun onAnimationRepeat(animation: Animation?) = animationRepeatOperation()
+            })
         }
 
     private fun animationCount(view: View) {
@@ -380,9 +409,10 @@ class RunFragment : Fragment() {
         val values = ContentValues()
         values.put(MediaStore.Images.Media.TITLE, "New Picture")
         values.put(MediaStore.Images.Media.DESCRIPTION, "From the Camera")
-        imageUri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
+        runViewModel.imageUri.value =
+            contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values)
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, runViewModel.imageUri.value)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
     }
 
