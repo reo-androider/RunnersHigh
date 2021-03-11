@@ -25,6 +25,7 @@
  RecyclerView  
  CameraX  
  MPAndroidChart  
+ Git-flow
 
 
 ## 製作期間
