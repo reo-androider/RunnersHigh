@@ -1,8 +1,9 @@
-package com.reo.running.runnershigh
+package com.reo.running.runnershigh.fragments.result.paints
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.reo.running.runnershigh.R
 
 class PaintsAdapter(val list: List<Int>, var index: Int) : RecyclerView.Adapter<paintsViewHolder>() {
 

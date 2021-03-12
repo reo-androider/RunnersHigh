@@ -1,10 +1,10 @@
-package com.reo.running.runnershigh
+package com.reo.running.runnershigh.fragments.profile.photo.photolist
 
-import android.media.Image
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.reo.running.runnershigh.R
 
 class PhotoListViewHolder(itemView:View) : RecyclerView.ViewHolder(itemView) {
     val runPhoto: ImageView = itemView.findViewById(R.id.runPhoto)

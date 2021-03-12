@@ -2,6 +2,7 @@ package com.reo.running.runnershigh
 
 import android.graphics.Bitmap
 import androidx.room.*
+import com.reo.running.runnershigh.converter.BitmapForRoom
 
 @Database(entities = arrayOf(
     JustRunData::class,

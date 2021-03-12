@@ -1,24 +1,20 @@
-package com.reo.running.runnershigh.fragments
+package com.reo.running.runnershigh.fragments.graph
 
-import android.graphics.Color
-import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
-import android.text.style.LineHeightSpan
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
-import com.github.kittinunf.fuel.httpGet
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentGraphBinding
+import com.reo.running.runnershigh.fragments.graph.unit.CalorieUnit
+import com.reo.running.runnershigh.fragments.graph.unit.DistanceUnit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.*
 
 class GraphFragment : Fragment() {
     private lateinit var binding: FragmentGraphBinding
@@ -88,7 +84,6 @@ class GraphFragment : Fragment() {
                         val yValue2 = mutableListOf<Double>()
                         for (i in 0..lastId) {
                             yValue2.add((read[i].calorie) + totalCalorie)
-                            Log.d("ROOM", "${yValue2[i]}")
                             totalCalorie += read[i].calorie
                         }
 

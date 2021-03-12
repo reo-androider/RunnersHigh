@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.fragments
+package com.reo.running.runnershigh.fragments.profile.setting
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -21,7 +21,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
@@ -35,7 +34,6 @@ import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.*
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
