@@ -9,7 +9,7 @@
 ![18713 minjpg](https://user-images.githubusercontent.com/65647834/110730808-7834d180-8264-11eb-88b8-80a9e622834d.jpg)
 ![18708min](https://user-images.githubusercontent.com/65647834/110730823-7c60ef00-8264-11eb-9086-f4c74fc2f74b.jpg)
 ***
-## どんなアプリ？
+# どんなアプリ？
 #### ランニングフラグメント(runFragment)
 スタートボタンを押すと、カウントダウンが始まり走った距離と時間、消費カロリーを計測できます。  
 また、ランニング中に写真を撮ることもできます。
@@ -32,7 +32,7 @@
 
 
 
-## 使用したライブラリ
+# 使用したライブラリ
  GoogleMapAPI
  ViewModel
  LiveData
@@ -48,5 +48,5 @@
  MPAndroidChart  
  Git-flow
 
-## 製作期間
+# 製作期間
 1か月と3週間
