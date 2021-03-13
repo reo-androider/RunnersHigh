@@ -36,6 +36,7 @@
  GoogleMapAPI
  ViewModel
  LiveData
+ DataBinding
  Coroutines  
  Room  
  Navigation Component  
