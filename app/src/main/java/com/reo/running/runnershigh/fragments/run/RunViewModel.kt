@@ -46,12 +46,13 @@ class RunViewModel(
 
     private val differenceMileage = MutableLiveData(FloatArray(1))
 
-    val totalConsumptionCalorie: LiveData<Int> by lazy {
+    private val totalConsumptionCalorie: LiveData<Int> by lazy {
         combine(0, weight, roundedTotalMileage) { _, weight, roundedTotalMileage ->
             (roundedTotalMileage * weight).toInt()
         }
     }
 
+    val totalConsumptionCalorieText = totalConsumptionCalorie.map { it.toString() }
     val zoomValue = 18.0F
 
     val takenPhoto = MutableLiveData<Bitmap>()
