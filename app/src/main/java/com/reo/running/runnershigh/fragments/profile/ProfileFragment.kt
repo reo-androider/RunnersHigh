@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.fragments.profile.setting
+package com.reo.running.runnershigh.fragments.profile
 
 import android.app.Activity
 import android.app.AlertDialog

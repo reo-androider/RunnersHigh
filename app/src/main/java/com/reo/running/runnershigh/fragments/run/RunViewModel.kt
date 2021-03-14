@@ -3,7 +3,9 @@ package com.reo.running.runnershigh.fragments.run
 import android.graphics.Bitmap
 import android.location.Location
 import android.net.Uri
+import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.*
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -13,7 +15,6 @@ import com.google.firebase.ktx.Firebase
 import com.reo.running.runnershigh.JustRunData
 import com.reo.running.runnershigh.JustRunDataDao
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
@@ -87,6 +88,7 @@ class RunViewModel(
         totalMileage.value = totalMileage.value?.plus(differenceMileage.value?.firstOrNull() ?: 0F)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun saveRunData(callback: () -> Unit) {
         _runState.value = RunState.RUN_STATE_BEFORE
         val current = LocalDateTime.now()

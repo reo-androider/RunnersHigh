@@ -21,7 +21,7 @@
         android:label="FragmentDistance"/>
 
     <fragment android:id="@+id/navi_setting"
-        android:name="com.reo.running.runnershigh.fragments.profile.setting.ProfileFragment"
+        android:name="com.reo.running.runnershigh.fragments.profile.ProfileFragment"
         android:label="Fragment4">
         <action
             android:id="@+id/action_navi_setting_to_fragmentProfileSetting"
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentProfileSetting"
-        android:name="com.reo.running.runnershigh.fragments.profile.ProfileSettingFragment"
+        android:name="com.reo.running.runnershigh.fragments.profile.setting.ProfileSettingFragment"
         android:label="FragmentProfileSetting" >
         <action
             android:id="@+id/action_fragmentProfileSetting_to_navi_setting2"

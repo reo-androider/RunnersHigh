@@ -39,13 +39,20 @@ class RunFragment : Fragment() {
             MyApplication.db.justRunDao()
         )
     }
-    private val fusedLocationClient: FusedLocationProviderClient by lazy {
+    super.onCreateView(inflater, container, savedInstanceState)
+    binding = FragmentRunBinding.inflate(layoutInflater, container, false)
+    return binding.root
+}
+
+@SuppressLint("MissingPermission")
+
+private val fusedLocationClient: FusedLocationProviderClient by lazy {
         LocationServices.getFusedLocationProviderClient(requireContext())
     }
-    private val contentResolver: ContentResolver? = null
+    private val contentResolver: ContentResolver? = nullProfileViewModel
 
     companion object {
-        private const val REQUEST_PERMISSION = 1000
+    private const val REQUEST_PERMISSION = 1000
         private const val PERMISSION_CODE = 1001
         private const val IMAGE_CAPTURE_CODE = 1002
     }
@@ -54,14 +61,7 @@ class RunFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        super.onCreateView(inflater, container, savedInstanceState)
-        binding = FragmentRunBinding.inflate(layoutInflater, container, false)
-        return binding.root
-    }
-
-    @SuppressLint("MissingPermission")
-    @RequiresApi(Build.VERSION_CODES.O)
+    ): View {  @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
