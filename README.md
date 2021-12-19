@@ -34,16 +34,16 @@ https://play.google.com/store/apps/details?id=com.reo.running.runnershigh
 
 
 # 使用したライブラリ
- GoogleMapAPI
- ViewModel
- LiveData
- DataBinding
+ GoogleMapAPI  
+ ViewModel  
+ LiveData  
+ DataBinding  
  Coroutines  
  Room  
  Navigation Component  
  Firebase-Auth  
  Firebase-RealTimeDatabase  
- Firebase-Storage
+ Firebase-Storage  
  CardView  
  RecyclerView  
  CameraX  
