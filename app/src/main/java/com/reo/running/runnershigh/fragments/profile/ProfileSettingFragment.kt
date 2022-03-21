@@ -9,6 +9,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.compose.material.Text
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.database.DataSnapshot
@@ -24,8 +26,8 @@ import java.util.*
 
 class ProfileSettingFragment : Fragment() {
 
-    private lateinit var binding:FragmentProfileSettingBinding
-    lateinit var storage:FirebaseStorage
+    private lateinit var binding: FragmentProfileSettingBinding
+    lateinit var storage: FirebaseStorage
     private lateinit var uri: Uri
     private var firstName = ""
     private var familyName = ""
@@ -33,13 +35,22 @@ class ProfileSettingFragment : Fragment() {
     private var weight = ""
     private val db = Firebase.database
     private val dbPhoto = Firebase.database.getReference("profile")
+
     companion object {
         const val READ_REQUEST_CODE = 2
     }
+
     var deletePath = "" //写真更新の際削除する為
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentProfileSettingBinding.inflate(layoutInflater,container,false)
-        return binding.root
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                Text(text = "設定")
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,6 +67,7 @@ class ProfileSettingFragment : Fragment() {
                             }
                         }
                 }
+
                 override fun onCancelled(error: DatabaseError) {}
             })
             storage = Firebase.storage
@@ -141,7 +153,7 @@ class ProfileSettingFragment : Fragment() {
                 startActivityForResult(intent, READ_REQUEST_CODE)
             }
 
-                // TODO 削除機能は保留
+            // TODO 削除機能は保留
 //            deleteText.setOnClickListener {
 //                lifecycleScope.launch(Dispatchers.IO) {
 //                    if (runDB.getAll2().isEmpty()) {
