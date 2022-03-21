@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -48,7 +49,7 @@ class ProfileSettingFragment : Fragment() {
     ): View? {
         return ComposeView(requireContext()).apply {
             setContent {
-                Text(text = "設定")
+                TextHoge()
             }
         }
     }
@@ -228,5 +229,10 @@ class ProfileSettingFragment : Fragment() {
 
     private fun makeUid(): String {
         return UUID.randomUUID().toString()
+    }
+
+    @Composable
+    private fun TextHoge() {
+        Text("設定")
     }
 }
