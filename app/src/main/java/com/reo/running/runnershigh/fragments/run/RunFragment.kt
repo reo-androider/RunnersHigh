@@ -4,15 +4,20 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
-import android.content.*
+import android.content.ContentResolver
+import android.content.ContentValues
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.os.*
+import android.os.Build
+import android.os.Bundle
+import android.os.Looper
+import android.os.SystemClock
 import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.*
+import android.view.animation.AlphaAnimation
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
@@ -23,12 +28,16 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.model.*
-import com.reo.running.runnershigh.*
+import com.google.android.gms.maps.model.LatLng
+import com.reo.running.runnershigh.MainActivity
+import com.reo.running.runnershigh.MyApplication
 import com.reo.running.runnershigh.R
 import com.reo.running.runnershigh.databinding.FragmentRunBinding
 import com.reo.running.runnershigh.fragments.common.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RunFragment : Fragment() {
 
@@ -284,8 +293,8 @@ class RunFragment : Fragment() {
 
             val locationCallback = object : LocationCallback() {
                 @SuppressLint("MissingPermission")
-                override fun onLocationResult(locationResult: LocationResult?) {
-                    super.onLocationResult(locationResult)
+                override fun onLocationResult(p0: LocationResult) {
+                    super.onLocationResult(p0)
                     val latLng = LatLng(
                         runViewModel.lastLocation.value?.latitude ?: 0.0,
                         runViewModel.lastLocation.value?.longitude ?: 0.0
@@ -315,7 +324,7 @@ class RunFragment : Fragment() {
                                         runViewModel.zoomValue
                                     )
                                 )
-                                runViewModel.calcTotalMileage(locationResult?.lastLocation)
+                                runViewModel.calcTotalMileage(p0?.lastLocation)
                             }
 
                             RunState.RUN_STATE_PAUSE -> {
@@ -325,16 +334,19 @@ class RunFragment : Fragment() {
                                     startAnimation(alphaAnimation)
                                 }
                             }
+                            else -> {}
                         }
                     }
                 }
             }
 
-            fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.myLooper()
-            )
+            Looper.myLooper()?.let {
+                fusedLocationClient.requestLocationUpdates(
+                    locationRequest,
+                    locationCallback,
+                    it
+                )
+            }
         }
     }
 

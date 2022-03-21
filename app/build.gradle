@@ -54,6 +54,10 @@ android {
         dataBinding true
         compose true
     }
+    composeOptions {
+        kotlinCompilerVersion = "${kotlin_version}"
+        kotlinCompilerExtensionVersion = '1.1.1'
+    }
 }
 
 dependencies {

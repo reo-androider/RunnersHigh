@@ -13,7 +13,6 @@ import com.google.firebase.ktx.Firebase
 import com.reo.running.runnershigh.JustRunData
 import com.reo.running.runnershigh.JustRunDataDao
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
@@ -129,7 +128,7 @@ class RunViewModel(
             private val justRunDataDao: JustRunDataDao
         ) : ViewModelProvider.NewInstanceFactory() {
             @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>) = RunViewModel(
+            override fun <T : ViewModel> create(modelClass: Class<T>): T = RunViewModel(
                 justRunDataDao
             ) as T
         }

@@ -5,8 +5,8 @@ import com.reo.running.runnershigh.RunResult
 import com.reo.running.runnershigh.RunResultDao
 import kotlinx.coroutines.launch
 
-class PhotoListViewModel (
-        private val runResultDao: RunResultDao
+class PhotoListViewModel(
+    private val runResultDao: RunResultDao
 ) : ViewModel() {
 
     private val _runResultList: MutableLiveData<List<RunResult>> = MutableLiveData()
@@ -20,11 +20,11 @@ class PhotoListViewModel (
 
     companion object {
         class Factory(
-                private val runResultDao: RunResultDao
-                ) : ViewModelProvider.NewInstanceFactory() {
+            private val runResultDao: RunResultDao
+        ) : ViewModelProvider.NewInstanceFactory() {
             @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel?> create(modelClass: Class<T>) = PhotoListViewModel(
-                    runResultDao
+            override fun <T : ViewModel> create(modelClass: Class<T>): T = PhotoListViewModel(
+                runResultDao
             ) as T
         }
     }
