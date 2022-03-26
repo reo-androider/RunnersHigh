@@ -263,7 +263,7 @@ class ProfileSettingFragment : Fragment() {
 
     @Composable
     private fun BorderLine() {
-        Divider(color = Color(R.color.normal), thickness = 10.dp)
+        Divider(color = Color.Gray, thickness = 10.dp)
     }
 
     @Composable
