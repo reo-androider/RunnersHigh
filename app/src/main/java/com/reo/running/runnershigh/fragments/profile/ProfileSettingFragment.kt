@@ -55,22 +55,13 @@ class ProfileSettingFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setContent {
                 Column {
-                    TopAppBar(title = { Text(text = "設定") })
-                    Divider(color = Color(R.color.normal), thickness = 20.dp)
+                    ToolBar()
+                    BorderLine()
                     Row {
-                        Image(
-                            painter = painterResource(id = R.drawable.ic_account),
-                            contentDescription = null,
-                            modifier = Modifier.size(120.dp, 120.dp)
-                        )
-                        Column {
-                            Text(text = "姓")
-                            EditLastName()
-                            Text(text = "名")
-                            EditFirstName()
-                        }
+                        ProfileImage()
+                        NameSetting()
                     }
-                    Text(text = "よはく")
+                    OtherProfileSettings()
                 }
             }
         }
@@ -176,60 +167,59 @@ class ProfileSettingFragment : Fragment() {
 //                startActivityForResult(intent, READ_REQUEST_CODE)
 //            }
 //
-//            // TODO 削除機能は保留
-////            deleteText.setOnClickListener {
-////                lifecycleScope.launch(Dispatchers.IO) {
-////                    if (runDB.getAll2().isEmpty()) {
-////                        withContext(Dispatchers.Main) {
-////                            AlertDialog.Builder(requireContext())
-////                                .setMessage("データがありません")
-////                                .setPositiveButton("閉じる") { _, _, -> }
-////                                .show()
-////                        }
-////                    } else {
-////                        withContext(Dispatchers.Main) {
-////                            AlertDialog.Builder(requireContext())
-////                                .setMessage("データを削除しますか？")
-////                                .setCancelable(false)
-////                                .setPositiveButton("はい") { _, _, ->
-////                                    lifecycleScope.launch {
-////                                        delay(1000)
-////                                        AlertDialog.Builder(requireContext())
-////                                            .setMessage("もしかして、後悔しました？")
-////                                            .setCancelable(false)
-////                                            .setPositiveButton("はい") { _, _ ->
-////                                                Toast.makeText(
-////                                                    requireContext(),
-////                                                    "データは残しておきましたよ！",
-////                                                    Toast.LENGTH_SHORT
-////                                                ).show()
-////                                            }
-////                                            .setNegativeButton("いいえ") { _, _ ->
-////                                                lifecycleScope.launch(Dispatchers.IO) {
-////                                                    Log.d("debug", "before = ${runDB.getAll2()}")
-////                                                    runDB.deleteRecord2(runDB.getAll2())
-////                                                    Log.d("debug", "after = ${runDB.getAll2()}")
-////                                                    withContext(Dispatchers.Main) {
-////                                                        Toast.makeText(
-////                                                            requireContext(),
-////                                                            "データを削除しました",
-////                                                            Toast.LENGTH_SHORT
-////                                                        ).show()
-////                                                    }
-////                                                }
-////                                            }
-////                                            .show()
-////                                    }
-////                                }
-////                                .setNegativeButton("いいえ") { _, _ -> }
-////                                .show()
-////                        }
-////                    }
-////                }
-////            }
+        // TODO 削除機能は保留
+//            deleteText.setOnClickListener {
+//                lifecycleScope.launch(Dispatchers.IO) {
+//                    if (runDB.getAll2().isEmpty()) {
+//                        withContext(Dispatchers.Main) {
+//                            AlertDialog.Builder(requireContext())
+//                                .setMessage("データがありません")
+//                                .setPositiveButton("閉じる") { _, _, -> }
+//                                .show()
+//                        }
+//                    } else {
+//                        withContext(Dispatchers.Main) {
+//                            AlertDialog.Builder(requireContext())
+//                                .setMessage("データを削除しますか？")
+//                                .setCancelable(false)
+//                                .setPositiveButton("はい") { _, _, ->
+//                                    lifecycleScope.launch {
+//                                        delay(1000)
+//                                        AlertDialog.Builder(requireContext())
+//                                            .setMessage("もしかして、後悔しました？")
+//                                            .setCancelable(false)
+//                                            .setPositiveButton("はい") { _, _ ->
+//                                                Toast.makeText(
+//                                                    requireContext(),
+//                                                    "データは残しておきましたよ！",
+//                                                    Toast.LENGTH_SHORT
+//                                                ).show()
+//                                            }
+//                                            .setNegativeButton("いいえ") { _, _ ->
+//                                                lifecycleScope.launch(Dispatchers.IO) {
+//                                                    Log.d("debug", "before = ${runDB.getAll2()}")
+//                                                    runDB.deleteRecord2(runDB.getAll2())
+//                                                    Log.d("debug", "after = ${runDB.getAll2()}")
+//                                                    withContext(Dispatchers.Main) {
+//                                                        Toast.makeText(
+//                                                            requireContext(),
+//                                                            "データを削除しました",
+//                                                            Toast.LENGTH_SHORT
+//                                                        ).show()
+//                                                    }
+//                                                }
+//                                            }
+//                                            .show()
+//                                    }
+//                                }
+//                                .setNegativeButton("いいえ") { _, _ -> }
+//                                .show()
+//                        }
+//                    }
+//                }
+//            }
 //        }
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
@@ -254,14 +244,64 @@ class ProfileSettingFragment : Fragment() {
     }
 
     @Composable
-    private fun EditLastName() {
-        var lastName by remember { mutableStateOf("") }
-        TextField(value = lastName, onValueChange = { lastName = it })
+    private fun ToolBar() {
+        TopAppBar(
+            title = { Text(text = "設定") },
+            backgroundColor = Color.White,
+            navigationIcon = {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_back),
+                    contentDescription = null,
+                    modifier = Modifier.size(32.dp)
+                )
+            },
+            actions = {
+                // TODO: プロフィール画面に戻る
+            }
+        )
     }
 
     @Composable
-    private fun EditFirstName() {
-        var firstName by remember { mutableStateOf("") }
-        TextField(value = firstName, onValueChange = { firstName = it })
+    private fun BorderLine() {
+        Divider(color = Color(R.color.normal), thickness = 10.dp)
+    }
+
+    @Composable
+    private fun ProfileImage() {
+        Image(
+            painter = painterResource(id = R.drawable.ic_account),
+            contentDescription = null,
+            modifier = Modifier.size(120.dp, 120.dp)
+        )
+    }
+
+    @Composable
+    private fun NameSetting() {
+        Column {
+            Text(text = "姓")
+            EditText()
+            Text(text = "名")
+            EditText()
+        }
+    }
+
+    @Composable
+    private fun EditText() {
+        var value by remember { mutableStateOf("") }
+        TextField(value = value, onValueChange = { value = it })
+    }
+
+    @Composable
+    private fun OtherProfileSettings() {
+        Text(text = "目標")
+        EditText()
+        Text(text = "体重(kg)")
+        EditText()
+        Text(text = "マーカー")
+        Image(
+            painter = painterResource(id = R.drawable.ic_trace),
+            contentDescription = null,
+            modifier = Modifier.size(40.dp)
+        )
     }
 }
