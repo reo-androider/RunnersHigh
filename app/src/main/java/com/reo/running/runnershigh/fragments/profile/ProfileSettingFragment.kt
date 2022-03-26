@@ -59,9 +59,12 @@ class ProfileSettingFragment : Fragment() {
                     BorderLine()
                     Row {
                         ProfileImage()
-                        NameSetting()
+                        EditText(type = EditContentType.LAST_NAME)
+                        EditText(type = EditContentType.FIRST_NAME)
                     }
-                    OtherProfileSettings()
+                    EditText(type = EditContentType.TARGET)
+                    EditText(type = EditContentType.WEIGHT)
+                    EditText(type = EditContentType.MARKER)
                 }
             }
         }
@@ -276,32 +279,31 @@ class ProfileSettingFragment : Fragment() {
     }
 
     @Composable
-    private fun NameSetting() {
-        Column {
-            Text(text = "姓")
-            EditText()
-            Text(text = "名")
-            EditText()
+    private fun EditText(
+        type: EditContentType
+    ) {
+        if (type.title == "マーカー") {
+            Text(text = type.title)
+            Image(
+                painter = painterResource(id = type.option),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
+            return
         }
-    }
+        var editValue by remember { mutableStateOf("") }
+        Column {
+            Text(text = type.title)
+            TextField(value = editValue, onValueChange = { editValue = it })
+        }
 
-    @Composable
-    private fun EditText() {
-        var value by remember { mutableStateOf("") }
-        TextField(value = value, onValueChange = { value = it })
     }
+}
 
-    @Composable
-    private fun OtherProfileSettings() {
-        Text(text = "目標")
-        EditText()
-        Text(text = "体重(kg)")
-        EditText()
-        Text(text = "マーカー")
-        Image(
-            painter = painterResource(id = R.drawable.ic_trace),
-            contentDescription = null,
-            modifier = Modifier.size(40.dp)
-        )
-    }
+enum class EditContentType(val title: String, val option: Int) {
+    LAST_NAME("姓", 100),
+    FIRST_NAME("名", 100),
+    TARGET("目標", 100),
+    WEIGHT("体重", 20),
+    MARKER("マーカー", R.drawable.ic_trace)
 }
