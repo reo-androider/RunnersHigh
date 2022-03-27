@@ -1,52 +1,30 @@
 package com.reo.running.runnershigh.fragments.profile
 
-import android.app.Activity
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.Divider
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TopAppBar
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.ktx.storage
-import com.reo.running.runnershigh.R
-import com.reo.running.runnershigh.databinding.FragmentProfileSettingBinding
-import java.util.*
+import com.reo.running.runnershigh.fragments.profile.setting.ProfileSettingScreen
 
 class ProfileSettingFragment : Fragment() {
 
-    private lateinit var binding: FragmentProfileSettingBinding
-    lateinit var storage: FirebaseStorage
-    private lateinit var uri: Uri
-    private var firstName = ""
-    private var familyName = ""
-    private var objective = ""
-    private var weight = ""
-    private val db = Firebase.database
-    private val dbPhoto = Firebase.database.getReference("profile")
+//    private lateinit var binding: FragmentProfileSettingBinding
+//    lateinit var storage: FirebaseStorage
+//    private lateinit var uri: Uri
+//    private var firstName = ""
+//    private var familyName = ""
+//    private var objective = ""
+//    private var weight = ""
+//    private val db = Firebase.database
+//    private val dbPhoto = Firebase.database.getReference("profile")
 
-    companion object {
-        const val READ_REQUEST_CODE = 2
-    }
+//    companion object {
+//        const val READ_REQUEST_CODE = 2
+//    }
 
-    var deletePath = "" //写真更新の際削除する為
+    //    var deletePath = "" //写真更新の際削除する為
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -54,24 +32,13 @@ class ProfileSettingFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                Column {
-                    ToolBar()
-                    BorderLine()
-                    Row {
-                        ProfileImage()
-                        EditText(type = EditContentType.LAST_NAME)
-                        EditText(type = EditContentType.FIRST_NAME)
-                    }
-                    EditText(type = EditContentType.TARGET)
-                    EditText(type = EditContentType.WEIGHT)
-                    EditText(type = EditContentType.MARKER)
-                }
+                ProfileSettingScreen()
             }
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//        super.onViewCreated(view, savedInstanceState)
 //        binding.run {
 //            dbPhoto.addValueEventListener(object : ValueEventListener {
 //                override fun onDataChange(snapshot: DataSnapshot) {
@@ -170,7 +137,7 @@ class ProfileSettingFragment : Fragment() {
 //                startActivityForResult(intent, READ_REQUEST_CODE)
 //            }
 //
-        // TODO 削除機能は保留
+    // TODO 削除機能は保留
 //            deleteText.setOnClickListener {
 //                lifecycleScope.launch(Dispatchers.IO) {
 //                    if (runDB.getAll2().isEmpty()) {
@@ -222,88 +189,39 @@ class ProfileSettingFragment : Fragment() {
 //                }
 //            }
 //        }
-    }
+//    }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            if (data != null) {
-                uri = data.data as Uri
-                binding.profileImageDefault.setImageURI(uri)
-                val storage = Firebase.storage
-                val storageRef = storage.reference
-                val uid = makeUid()
-                val profileRef = storageRef.child(":$uid/profiles.jpg")
-                val databaseRefProfile = Firebase.database.getReference("profile")
-                val databaseRefUid = Firebase.database.getReference(uid)
-                databaseRefProfile.setValue(":$uid/profiles.jpg")
-                profileRef.putFile(uri)
-                storageRef.child(deletePath).delete()
-            }
-        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        if (requestCode == READ_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+//            if (data != null) {
+//                uri = data.data as Uri
+//                binding.profileImageDefault.setImageURI(uri)
+//                val storage = Firebase.storage
+//                val storageRef = storage.reference
+//                val uid = makeUid()
+//                val profileRef = storageRef.child(":$uid/profiles.jpg")
+//                val databaseRefProfile = Firebase.database.getReference("profile")
+//                val databaseRefUid = Firebase.database.getReference(uid)
+//                databaseRefProfile.setValue(":$uid/profiles.jpg")
+//                profileRef.putFile(uri)
+//                storageRef.child(deletePath).delete()
+//            }
+//        }
+//    }
 
-    private fun makeUid(): String {
-        return UUID.randomUUID().toString()
-    }
+//    private fun makeUid(): String {
+//        return UUID.randomUUID().toString()
+//    }
 
-    @Composable
-    private fun ToolBar() {
-        TopAppBar(
-            title = { Text(text = "設定") },
-            backgroundColor = Color.White,
-            navigationIcon = {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_back),
-                    contentDescription = null,
-                    modifier = Modifier.size(32.dp)
-                )
-            },
-            actions = {
-                // TODO: プロフィール画面に戻る
-            }
-        )
-    }
 
-    @Composable
-    private fun BorderLine() {
-        Divider(color = Color.Gray, thickness = 10.dp)
-    }
-
-    @Composable
-    private fun ProfileImage() {
-        Image(
-            painter = painterResource(id = R.drawable.ic_account),
-            contentDescription = null,
-            modifier = Modifier.size(120.dp, 120.dp)
-        )
-    }
-
-    @Composable
-    private fun EditText(
-        type: EditContentType
-    ) {
-        if (type.title == "マーカー") {
-            Text(text = type.title)
-            Image(
-                painter = painterResource(id = type.option),
-                contentDescription = null,
-                modifier = Modifier.size(40.dp)
-            )
-            return
-        }
-        var editValue by remember { mutableStateOf("") }
-        Column {
-            Text(text = type.title)
-            TextField(value = editValue, onValueChange = { editValue = it })
-        }
-
-    }
 }
 
-enum class EditContentType(val title: String, val option: Int) {
-    LAST_NAME("姓", 100),
-    FIRST_NAME("名", 100),
-    TARGET("目標", 100),
-    WEIGHT("体重", 20),
-    MARKER("マーカー", R.drawable.ic_trace)
+enum class ProfileSettingsType(
+    val title: String,
+    val width: Int = 100,
+) {
+    LAST_NAME(title = "姓"),
+    FIRST_NAME(title = "名"),
+    TARGET(title = "目標", width = 200),
+    WEIGHT(title = "体重", width = 20),
 }
