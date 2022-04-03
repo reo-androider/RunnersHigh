@@ -51,12 +51,15 @@ fun EditText(
     title: String
 ) {
     var editValue by remember { mutableStateOf("") }
-    Text(text = title)
+    Text(text = title, color = Color.Gray)
     TextField(
-        modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
+        modifier = Modifier.padding(bottom = 32.dp),
         value = editValue,
         onValueChange = { editValue = it },
-        colors = TextFieldDefaults.textFieldColors(backgroundColor = Color(R.color.gray))
+        colors = TextFieldDefaults.textFieldColors(
+            textColor = Color.Gray,
+            backgroundColor = Color.White
+        )
     )
 }
 
