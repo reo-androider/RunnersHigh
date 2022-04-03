@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/reoru/dev/runApp/RunnersHigh/app/src/main/res/drawable-anydpi/ic_account.xml" value="0.183" />
+        <entry key="..\:/Users/reoru/dev/runApp/RunnersHigh/app/src/main/res/drawable-anydpi/ic_back.xml" value="0.183" />
+        <entry key="..\:/Users/reoru/dev/runApp/RunnersHigh/app/src/main/res/drawable-anydpi/ic_profile.xml" value="0.183" />
+        <entry key="..\:/Users/reoru/dev/runApp/RunnersHigh/app/src/main/res/drawable-anydpi/ic_return2.xml" value="0.183" />
+        <entry key="..\:/Users/reoru/dev/runApp/RunnersHigh/app/src/main/res/drawable-anydpi/ic_trace.xml" value="0.183" />
+        <entry key="..\:/Users/reoru/dev/runApp/RunnersHigh/app/src/main/res/drawable/ic_return.xml" value="0.183" />
+        <entry key="..\:/Users/reoru/dev/runApp/RunnersHigh/app/src/main/res/layout/fragment_profile_setting.xml" value="0.264" />
         <entry key="..\:/Users/reoru/dev/runApp/RunnersHigh/app/src/main/res/layout/fragment_run.xml" value="0.1" />
       </map>
     </option>

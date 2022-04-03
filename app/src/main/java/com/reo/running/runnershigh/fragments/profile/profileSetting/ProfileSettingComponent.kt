@@ -51,7 +51,7 @@ fun EditText(
     title: String
 ) {
     var editValue by remember { mutableStateOf("") }
-    Text(text = title, color = Color.Gray)
+    Text(text = title, color = Color.Gray, modifier = Modifier.padding(start = 16.dp))
     TextField(
         modifier = Modifier.padding(bottom = 32.dp),
         value = editValue,

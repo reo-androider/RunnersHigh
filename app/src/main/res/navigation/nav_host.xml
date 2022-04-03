@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
@@ -10,7 +9,7 @@
         android:id="@+id/fragment1"
         android:name="com.reo.running.runnershigh.fragments.run.RunFragment"
         android:label="fragment_1"
-        tools:layout="@layout/fragment_run"/>
+        tools:layout="@layout/fragment_run" />
 
     <fragment
         android:id="@+id/fragmentGraph"
@@ -20,13 +19,21 @@
 
     <fragment
         android:id="@+id/fragment3"
-        android:name="com.reo.running.runnershigh.fragments.profile.setting.ProfileFragment"
+        android:name="com.reo.running.runnershigh.fragments.profile.ProfileFragment"
         android:label="fragment_3"
         tools:layout="@layout/fragment_profile" />
 
     <fragment
         android:id="@+id/fragment_setting"
         android:name="com.reo.running.runnershigh.fragments.profile.ProfileSettingFragment"
-        tools:layout="@layout/fragment_profile_setting"/>
+        tools:layout="@layout/fragment_profile_setting" />
+    <fragment
+        android:id="@+id/resultFragment"
+        android:name="com.reo.running.runnershigh.fragments.result.ResultFragment"
+        android:label="ResultFragment" />
+    <fragment
+        android:id="@+id/photoFragment"
+        android:name="com.reo.running.runnershigh.fragments.profile.photo.PhotoFragment"
+        android:label="PhotoFragment" />
 
 </navigation>
