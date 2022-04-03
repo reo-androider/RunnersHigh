@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.fragments
+package com.reo.running.runnershigh.fragments.result
 
 import android.Manifest
 import android.app.Activity
@@ -15,7 +15,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.text.Editable
 import android.text.method.ScrollingMovementMethod
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.reo.running.runnershigh.*
 import com.reo.running.runnershigh.databinding.FragmentResultBinding
+import com.reo.running.runnershigh.fragments.result.paints.PaintsAdapter
 import kotlinx.coroutines.*
 
 class ResultFragment : Fragment() {
@@ -37,15 +37,14 @@ class ResultFragment : Fragment() {
     private lateinit var binding: FragmentResultBinding
     private val readDao = MyApplication.db.justRunDao()
     private val runDB = MyApplication.db.runResultDao()
-    private var select = false//二回押しても同じアニメーションが実行されない為
+    private var isSelected = false
     private var selectMark = ""
     private var image_uri: Uri? = null
     private val contentResolver: ContentResolver? = null
     private var position = 0
     private var draft: String = ""
     private var selectColor = ""
-    private var viewWidth = 0f //アニメーション用
-    private var viewHeight = 0f
+    private var photo: Bitmap? = null
 
     companion object {
         const val PERMISSION_CODE = 1
@@ -53,9 +52,9 @@ class ResultFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentResultBinding.inflate(layoutInflater, container, false)
@@ -73,9 +72,13 @@ class ResultFragment : Fragment() {
                     totalDistance.text = "${record.lastOrNull()?.distance}km"
                     totalCalorie.text = "${record.lastOrNull()?.calorie}kcal"
                     today.text = record.lastOrNull()?.runDate
-                    photoEmpty.setImageBitmap(record.lastOrNull()?.bitmap)
+                    photoEmpty.run {
+                        setImageBitmap(record.lastOrNull()?.bitmap)
+                        rotation = 90f
+                    }
 
-                    if (record.lastOrNull()?.takenPhoto == true) {
+
+                    if (record.lastOrNull()?.isTakenPhoto == true) {
                         cameraImage.visibility = View.GONE
                     }
 
@@ -106,8 +109,8 @@ class ResultFragment : Fragment() {
 
                     lifecycleScope.launch(Dispatchers.Main) {
                         perfectImage.setOnClickListener {
-                            if (!select) {
-                                select = true
+                            if (!isSelected) {
+                                isSelected = true
                                 selectMark = "perfect"
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     val scaleAnimation = ScaleAnimation(
@@ -168,8 +171,8 @@ class ResultFragment : Fragment() {
                         }
 
                         goodImage.setOnClickListener {
-                            if (!select) {
-                                select = true
+                            if (!isSelected) {
+                                isSelected = true
                                 selectMark = "good"
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     val scaleAnimation = ScaleAnimation(
@@ -238,8 +241,8 @@ class ResultFragment : Fragment() {
                         }
 
                         sosoImage.setOnClickListener {
-                            if (!select) {
-                                select = true
+                            if (!isSelected) {
+                                isSelected = true
                                 selectMark = "soso"
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     val scaleAnimation = ScaleAnimation(
@@ -314,8 +317,8 @@ class ResultFragment : Fragment() {
                         }
 
                         badImage.setOnClickListener {
-                            if (!select) {
-                                select = true
+                            if (!isSelected) {
+                                isSelected = true
                                 selectMark = "bad"
                                 lifecycleScope.launch(Dispatchers.Main) {
                                     val scaleAnimation = ScaleAnimation(
@@ -391,8 +394,8 @@ class ResultFragment : Fragment() {
                     }
 
                     tooBadImage.setOnClickListener {
-                        if (!select) {
-                            select = true
+                        if (!isSelected) {
+                            isSelected = true
                             selectMark = "tooBad"
                             lifecycleScope.launch(Dispatchers.Main) {
                                 val scaleAnimation = ScaleAnimation(
@@ -471,7 +474,7 @@ class ResultFragment : Fragment() {
 
             cancel.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.Main) {
-                    select = false
+                    isSelected = false
                     val rotateAnimation = RotateAnimation(
                             0f,
                             -90f,
@@ -671,95 +674,24 @@ class ResultFragment : Fragment() {
                     object : PaintsAdapter.OnCourseListener {
                         override fun onItemClick(list: List<Int>, position: Int) {
                             when (courseList[position]) {
-                                R.drawable.ic_black -> {
-                                    selectColor = "#FF000000"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_red -> {
-                                    selectColor = "#f44336"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_return2 -> {
-                                    selectColor = "#FFFFFFFF"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_blue -> {
-                                    selectColor = "#2196F3"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    binding.today.setTextColor(Color.parseColor(selectColor))
-                                    binding.photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_green -> {
-                                    selectColor = "#4CAF50"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_pink -> {
-                                    selectColor = "#ff1493"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_yellow -> {
-                                    selectColor = "#FFFF00"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_purple -> {
-                                    selectColor = "#800080"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_brown -> {
-                                    selectColor = "#795548"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
-
-                                R.drawable.ic_gray -> {
-                                    selectColor = "#757575"
-                                    totalTime.setTextColor(Color.parseColor(selectColor))
-                                    totalDistance.setTextColor(Color.parseColor(selectColor))
-                                    totalCalorie.setTextColor(Color.parseColor(selectColor))
-                                    today.setTextColor(Color.parseColor(selectColor))
-                                    photoText.setTextColor(Color.parseColor(selectColor))
-                                }
+                                R.drawable.ic_black -> "#FF000000"
+                                R.drawable.ic_red -> "#f44336"
+                                R.drawable.ic_return2 -> "#FFFFFFFF"
+                                R.drawable.ic_blue -> "#2196F3"
+                                R.drawable.ic_green -> "#4CAF50"
+                                R.drawable.ic_pink -> "#ff1493"
+                                R.drawable.ic_yellow -> "#FFFF00"
+                                R.drawable.ic_purple -> "#800080"
+                                R.drawable.ic_brown -> "#795548"
+                                R.drawable.ic_gray -> "#757575"
+                                else -> "#000000"
+                            }.let {
+                                selectColor = it
+                                totalTime.setTextColor(Color.parseColor(it))
+                                totalDistance.setTextColor(Color.parseColor(it))
+                                totalCalorie.setTextColor(Color.parseColor(it))
+                                today.setTextColor(Color.parseColor(it))
+                                photoText.setTextColor(Color.parseColor(it))
                             }
                         }
                     })
@@ -793,8 +725,6 @@ class ResultFragment : Fragment() {
                         draft = myEdit.text.toString()
                         memo.text = draft
                     }
-//                    setNegativeButton("戻る") { _, _ ->
-//                    }
                     show()
                 }
             }
@@ -813,23 +743,25 @@ class ResultFragment : Fragment() {
 
             resultButton.setOnClickListener {
                 lifecycleScope.launch(Dispatchers.IO) {
-                    val record = readDao.getAll().lastOrNull()
-                    val record2 = record?.time?.let { it1 ->
-                        RunResult(
+                    readDao.getAll().lastOrNull()?.let { record ->
+                        record.let {
+                            it.bitmap?.let {
+                                photo = it
+                            }
+                            RunResult(
                                 0,
-                                record.bitmap,
-                                it1,
+                                photo,
+                                it.time,
                                 record.distance,
                                 record.calorie,
                                 record.runDate,
                                 selectColor,
                                 selectMark,
-                                draft
-                        )
-                    }
-
-                    if (record2 != null) {
-                        runDB.insertRecord(record2)
+                                draft,
+                            ).run {
+                                runDB.insertRecord(this)
+                            }
+                        }
                     }
                     withContext(Dispatchers.Main) {
                         findNavController().navigate(R.id.action_fragmentResult_to_navi_graph)
@@ -841,27 +773,26 @@ class ResultFragment : Fragment() {
 
     private fun openCamera() {
         val value = ContentValues()
-        value.put(MediaStore.Images.Media.TITLE,"New Picture")
-        value.put(MediaStore.Images.Media.DESCRIPTION,"From Picture")
-        image_uri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,value)
-
+        value.put(MediaStore.Images.Media.TITLE, "New Picture")
+        value.put(MediaStore.Images.Media.DESCRIPTION, "From Picture")
+        image_uri = contentResolver?.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, value)
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT,image_uri)
+        cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, image_uri)
         startActivityForResult(cameraIntent, IMAGE_CAPTURE_CODE)
 
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
-        when(requestCode) {
+        when (requestCode) {
             PERMISSION_CODE -> {
                 if (grantResults.isEmpty() && grantResults[0] ==
                         PackageManager.PERMISSION_DENIED
                 ) {
-                    Toast.makeText(requireContext(),"カメラ拒否されました",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "カメラ拒否されました", Toast.LENGTH_LONG).show()
                 } else {
                     openCamera()
                 }
@@ -875,10 +806,12 @@ class ResultFragment : Fragment() {
                 Matrix().apply {
                     postRotate(90f)
                 }.run {
-                    Bitmap.createBitmap(bitmap,0,0,bitmap.width,bitmap.height,this,true)
+                    Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, this, true)
                 }.run {
+                    photo = this
                     binding.photoEmpty.visibility = View.VISIBLE
                     binding.photoEmpty.setImageBitmap(this)
+                    binding.photoEmpty.rotation = -3f
                     binding.cameraImage.visibility = View.GONE
                     binding.photoCancel.visibility = View.VISIBLE
                 }

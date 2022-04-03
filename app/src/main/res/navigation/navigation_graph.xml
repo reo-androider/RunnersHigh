@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/navi_run"
-        android:name="com.reo.running.runnershigh.fragments.RunFragment"
+        android:name="com.reo.running.runnershigh.fragments.run.RunFragment"
         android:label="Fragment1" >
         <argument
             android:name="totalDistance" />
@@ -17,11 +17,11 @@
     </fragment>
 
     <fragment android:id="@+id/navi_graph"
-        android:name="com.reo.running.runnershigh.fragments.GraphFragment"
+        android:name="com.reo.running.runnershigh.fragments.graph.GraphFragment"
         android:label="FragmentDistance"/>
 
     <fragment android:id="@+id/navi_setting"
-        android:name="com.reo.running.runnershigh.fragments.ProfileFragment"
+        android:name="com.reo.running.runnershigh.fragments.profile.setting.ProfileFragment"
         android:label="Fragment4">
         <action
             android:id="@+id/action_navi_setting_to_fragmentProfileSetting"
@@ -33,7 +33,7 @@
 
     <fragment
         android:id="@+id/fragmentResult"
-        android:name="com.reo.running.runnershigh.fragments.ResultFragment"
+        android:name="com.reo.running.runnershigh.fragments.result.ResultFragment"
         android:label="FragmentResult" >
         <action
             android:id="@+id/action_fragmentResult_to_navi_graph"
@@ -41,7 +41,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentProfileSetting"
-        android:name="com.reo.running.runnershigh.fragments.ProfileSettingFragment"
+        android:name="com.reo.running.runnershigh.fragments.profile.ProfileSettingFragment"
         android:label="FragmentProfileSetting" >
         <action
             android:id="@+id/action_fragmentProfileSetting_to_navi_setting2"
@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentPhoto"
-        android:name="com.reo.running.runnershigh.fragments.PhotoFragment"
+        android:name="com.reo.running.runnershigh.fragments.profile.photo.PhotoFragment"
         android:label="FragmentPhoto" >
         <action
             android:id="@+id/action_fragmentPhoto_to_navi_setting"
