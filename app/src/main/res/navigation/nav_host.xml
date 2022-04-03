@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/profile_fragment"
-        android:name="com.reo.running.runnershigh.fragments.profile.setting.ProfileFragment"
+        android:name="com.reo.running.runnershigh.fragments.profile.ProfileSettingFragment"
         android:label="fragment_3"
         tools:layout="@layout/fragment_profile" />
 
