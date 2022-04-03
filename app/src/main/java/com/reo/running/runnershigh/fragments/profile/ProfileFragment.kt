@@ -1,4 +1,4 @@
-package com.reo.running.runnershigh.fragments.profile.setting
+package com.reo.running.runnershigh.fragments.profile
 
 import android.app.Activity
 import android.app.AlertDialog
@@ -41,15 +41,16 @@ class ProfileFragment : Fragment() {
     private val databaseReferenceLogin = Firebase.database.getReference("Login")
     private val databaseReferenceLoginDay = Firebase.database.getReference("LoginDay")
     private val databaseReferencePhoto = Firebase.database.getReference("profile")
-    private lateinit var auth:FirebaseAuth
+    private lateinit var auth: FirebaseAuth
     private val runDB = MyApplication.db.runResultDao()
-    private var firstId:Int = 0
-    private var lastId:Int = 0
+    private var firstId: Int = 0
+    private var lastId: Int = 0
     private var totalDistance = 0.0
     private var totalCalorie = 0
     private var alienCount = 0
     private var fatCount = 0
     private val db = Firebase.database
+
     companion object {
         private const val RC_SIGN_IN = 123
     }
@@ -67,17 +68,19 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-            databaseReferencePhoto.addValueEventListener(object:ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        Firebase.storage.reference.child(snapshot.value.toString()).getBytes(2048 * 2048)
-                            .addOnSuccessListener {
-                                BitmapFactory.decodeByteArray(it,0,it.size).also {
-                                    profileImageDefault.setImageBitmap(it)
-                                }
-                            }.addOnFailureListener { Log.d("debug","failure ${it.cause}") }
-                    }
-                    override fun onCancelled(error: DatabaseError) {}
-                })
+            databaseReferencePhoto.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    Firebase.storage.reference.child(snapshot.value.toString())
+                        .getBytes(2048 * 2048)
+                        .addOnSuccessListener {
+                            BitmapFactory.decodeByteArray(it, 0, it.size).also {
+                                profileImageDefault.setImageBitmap(it)
+                            }
+                        }.addOnFailureListener { Log.d("debug", "failure ${it.cause}") }
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+            })
 
             auth = FirebaseAuth.getInstance()
             val user = Firebase.auth.currentUser
@@ -104,23 +107,28 @@ class ProfileFragment : Fragment() {
                                 when {
                                     it < 5 -> {
                                         distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_level0))
-                                        distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_0)}"
+                                        distanceLevelText.text =
+                                            "${resources.getString(R.string.profile_distance_num_metaphor_0)}"
                                     }
                                     it < 10 -> {
                                         distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_5km))
-                                        distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_5)}"
+                                        distanceLevelText.text =
+                                            "${resources.getString(R.string.profile_distance_num_metaphor_5)}"
                                     }
                                     it > 80 && it > 100 -> {
                                         distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_mountain))
-                                        distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_10)}"
+                                        distanceLevelText.text =
+                                            "${resources.getString(R.string.profile_distance_num_metaphor_10)}"
                                     }
                                     it < 100 -> {
                                         distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_plane))
-                                        distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_50)}"
+                                        distanceLevelText.text =
+                                            "${resources.getString(R.string.profile_distance_num_metaphor_50)}"
                                     }
                                     it > 100 -> {
                                         distanceLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_space_human))
-                                        distanceLevelText.text = "${resources.getString(R.string.profile_distance_num_metaphor_100)}"
+                                        distanceLevelText.text =
+                                            "${resources.getString(R.string.profile_distance_num_metaphor_100)}"
                                     }
                                 }
                             }
@@ -129,46 +137,55 @@ class ProfileFragment : Fragment() {
                                 when {
                                     it / 100 < 1 -> {
                                         calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_level0))
-                                        calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_1)}"
+                                        calorieLevelText.text =
+                                            "${resources.getString(R.string.profile_calorie_metaphor_1)}"
                                     }
                                     it / 100 > 1 -> {
                                         calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_rice_ball))
-                                        calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_2)}"
+                                        calorieLevelText.text =
+                                            "${resources.getString(R.string.profile_calorie_metaphor_2)}"
                                     }
                                     it / 100 > 3 -> {
                                         calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_hamberger))
-                                        calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_3)}"
+                                        calorieLevelText.text =
+                                            "${resources.getString(R.string.profile_calorie_metaphor_3)}"
                                     }
                                     it / 100 > 4 -> {
                                         calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_cake))
-                                        calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_4)}"
+                                        calorieLevelText.text =
+                                            "${resources.getString(R.string.profile_calorie_metaphor_4)}"
                                     }
                                     it / 100 > 10 -> {
                                         calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_curry))
-                                        calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_10)}"
+                                        calorieLevelText.text =
+                                            "${resources.getString(R.string.profile_calorie_metaphor_10)}"
                                     }
                                     it / 100 > 2 -> {
                                         calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_ramen))
-                                        calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_20)}"
+                                        calorieLevelText.text =
+                                            "${resources.getString(R.string.profile_calorie_metaphor_20)}"
                                     }
                                     it / 100 > 2 -> {
                                         calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_pizza))
-                                        calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_30)}"
+                                        calorieLevelText.text =
+                                            "${resources.getString(R.string.profile_calorie_metaphor_30)}"
                                     }
                                     it / 100 > 2 -> {
                                         calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_rice300))
-                                        calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_48)}"
+                                        calorieLevelText.text =
+                                            "${resources.getString(R.string.profile_calorie_metaphor_48)}"
                                     }
                                     it / 100 > 72 -> {
                                         calorieLevelImage.setImageDrawable(resources.getDrawable(R.drawable.ic_meat))
-                                        calorieLevelText.text = "${resources.getString(R.string.profile_calorie_metaphor_72)}"
+                                        calorieLevelText.text =
+                                            "${resources.getString(R.string.profile_calorie_metaphor_72)}"
                                     }
                                 }
                             }
                         }
                     }
                 }
-                Toast.makeText(requireContext(),"Loginされています",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Loginされています", Toast.LENGTH_SHORT).show()
                 databaseReferenceLogin.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         loginImage.visibility = View.GONE
@@ -179,15 +196,19 @@ class ProfileFragment : Fragment() {
                         spaceManCount.visibility = View.VISIBLE
                         calorie1kgImage.visibility = View.VISIBLE
                         calorie1kgCount.visibility = view.visibility
-                        databaseReferenceLoginDay.addValueEventListener(object : ValueEventListener {
+                        databaseReferenceLoginDay.addValueEventListener(object :
+                            ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 val day = snapshot.value.toString()
                                 loginDay.text = day
                             }
+
                             override fun onCancelled(error: DatabaseError) {}
                         })
                     }
-                    override fun onCancelled(error: DatabaseError) {} })
+
+                    override fun onCancelled(error: DatabaseError) {}
+                })
 
                 calorieLock.visibility = View.GONE
                 distanceLock.visibility = View.GONE
@@ -199,7 +220,7 @@ class ProfileFragment : Fragment() {
                 calorieLevelImage.visibility = View.VISIBLE
 
             } else {
-                Toast.makeText(requireContext(),"Loginされていません",Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Loginされていません", Toast.LENGTH_LONG).show()
             }
 
             val databaseRefFirstName = db.getReference("firstName")
@@ -211,6 +232,7 @@ class ProfileFragment : Fragment() {
                     profileFirstName.text = "$fireStore"
                     profileFirstName.setTextColor(resources.getColor(R.color.normal2))
                 }
+
                 override fun onCancelled(error: DatabaseError) {}
             })
 
@@ -220,6 +242,7 @@ class ProfileFragment : Fragment() {
                     val fireStore = snapshot.value
                     profileFamilyName.text = "$fireStore"
                 }
+
                 override fun onCancelled(error: DatabaseError) {}
             })
             val databaseRefObjective = db.getReference("objective")
@@ -228,6 +251,7 @@ class ProfileFragment : Fragment() {
                     val fireStore = snapshot.value
                     objectiveText.text = "$fireStore"
                 }
+
                 override fun onCancelled(error: DatabaseError) {}
             })
 
@@ -238,9 +262,10 @@ class ProfileFragment : Fragment() {
             loginImage.setOnClickListener {
                 databaseReferenceLogin.addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
-                            signOut()
-                            createSignInIntent()
+                        signOut()
+                        createSignInIntent()
                     }
+
                     override fun onCancelled(error: DatabaseError) {}
                 })
             }
@@ -254,18 +279,22 @@ class ProfileFragment : Fragment() {
             explainDistanceLevel.setOnClickListener {
                 AlertDialog.Builder(requireContext())
                     .setTitle("距離レベルとは")
-                    .setMessage("\n今まで走った距離に応じてレベルアップ\n※1kmごとにレベルが1上がる\n\n " +
-                            "また、その距離がどれくらい凄いかを\n比喩を用いてお教えします^_^" +
-                            "\n\nログインするとお楽しみ頂けます")
+                    .setMessage(
+                        "\n今まで走った距離に応じてレベルアップ\n※1kmごとにレベルが1上がる\n\n " +
+                                "また、その距離がどれくらい凄いかを\n比喩を用いてお教えします^_^" +
+                                "\n\nログインするとお楽しみ頂けます"
+                    )
                     .show()
             }
 
             explainCalorieLevel.setOnClickListener {
                 AlertDialog.Builder(requireContext())
                     .setTitle("消費カロリーレベルとは")
-                    .setMessage("\n総消費カロリーに応じてレベルアップ\n※100kcalごとにレベルが1上がる" +
-                            "\n\nまた、その総消費カロリーがどれくらい\n凄いかを比喩を用いてお教えします^_^" +
-                            "\n\nログインするとお楽しみ頂けます")
+                    .setMessage(
+                        "\n総消費カロリーに応じてレベルアップ\n※100kcalごとにレベルが1上がる" +
+                                "\n\nまた、その総消費カロリーがどれくらい\n凄いかを比喩を用いてお教えします^_^" +
+                                "\n\nログインするとお楽しみ頂けます"
+                    )
                     .show()
             }
 

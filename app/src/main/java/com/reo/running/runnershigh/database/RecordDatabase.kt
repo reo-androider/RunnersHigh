@@ -4,9 +4,12 @@ import android.graphics.Bitmap
 import androidx.room.*
 import com.reo.running.runnershigh.converter.BitmapForRoom
 
-@Database(entities = arrayOf(
-    JustRunData::class,
-    RunResult::class) ,version = 1)
+@Database(
+    entities = arrayOf(
+        JustRunData::class,
+        RunResult::class
+    ), version = 1, exportSchema = false
+)
 @TypeConverters(BitmapForRoom::class)
 abstract class RunRecordDatabase : RoomDatabase() {
     abstract fun justRunDao(): JustRunDataDao
@@ -37,7 +40,7 @@ data class RunResult(
     val colorId: String,
     val revaluationMark: String,
     val memo: String,
-    )
+)
 
 @Dao
 interface JustRunDataDao {
