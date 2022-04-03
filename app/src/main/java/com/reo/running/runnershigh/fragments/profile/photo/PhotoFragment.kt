@@ -37,7 +37,7 @@ class PhotoFragment : Fragment() {
                     adapter = PhotoListAdapter(it)
                     layoutManager = LinearLayoutManager(requireContext())
                     returnButton.setOnClickListener {
-                        findNavController().navigate(R.id.action_fragmentPhoto_to_fragmentProfileSetting)
+                        findNavController().navigate(R.id.action_fragmentPhoto_to_navi_profile)
                     }
                 }
             }

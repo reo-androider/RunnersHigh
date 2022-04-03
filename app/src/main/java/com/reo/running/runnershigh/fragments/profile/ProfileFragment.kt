@@ -313,7 +313,7 @@ class ProfileFragment : Fragment() {
             }
 
             folderImage.setOnClickListener {
-                findNavController().navigate(R.id.action_fragmentProfileSetting_to_fragmentPhoto)
+                findNavController().navigate(R.id.action_navi_profile_to_fragmentPhoto)
             }
         }
     }

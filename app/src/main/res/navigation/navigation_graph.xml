@@ -32,26 +32,26 @@
         android:name="com.reo.running.runnershigh.fragments.profile.ProfileSettingFragment"
         android:label="FragmentProfileSetting">
         <action
-            android:id="@+id/action_fragmentProfileSetting_to_fragmentPhoto"
-            app:destination="@id/fragmentPhoto" />
-        <action
-            android:id="@+id/action_fragmentProfileSetting_to_profileFragment"
-            app:destination="@id/navi_setting" />
+            android:id="@+id/action_fragmentProfileSetting_to_navi_profile"
+            app:destination="@id/navi_profile" />
     </fragment>
     <fragment
         android:id="@+id/fragmentPhoto"
         android:name="com.reo.running.runnershigh.fragments.profile.photo.PhotoFragment"
         android:label="FragmentPhoto">
         <action
-            android:id="@+id/action_fragmentPhoto_to_fragmentProfileSetting"
-            app:destination="@id/fragmentProfileSetting" />
+            android:id="@+id/action_fragmentPhoto_to_navi_profile"
+            app:destination="@id/navi_profile" />
     </fragment>
     <fragment
-        android:id="@+id/navi_setting"
+        android:id="@+id/navi_profile"
         android:name="com.reo.running.runnershigh.fragments.profile.ProfileFragment"
         android:label="ProfileFragment">
         <action
             android:id="@+id/action_profileFragment_to_fragmentProfileSetting"
             app:destination="@id/fragmentProfileSetting" />
+        <action
+            android:id="@+id/action_navi_profile_to_fragmentPhoto"
+            app:destination="@id/fragmentPhoto" />
     </fragment>
 </navigation>
