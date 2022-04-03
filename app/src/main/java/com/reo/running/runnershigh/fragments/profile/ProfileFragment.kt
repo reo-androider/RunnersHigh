@@ -256,7 +256,7 @@ class ProfileFragment : Fragment() {
             })
 
             settingImage.setOnClickListener {
-                findNavController().navigate(R.id.action_navi_setting_to_fragmentProfileSetting)
+                findNavController().navigate(R.id.action_profileFragment_to_fragmentProfileSetting)
             }
 
             loginImage.setOnClickListener {
@@ -313,7 +313,7 @@ class ProfileFragment : Fragment() {
             }
 
             folderImage.setOnClickListener {
-                findNavController().navigate(R.id.action_navi_setting_to_fragmentPhoto)
+                findNavController().navigate(R.id.action_fragmentProfileSetting_to_fragmentPhoto)
             }
         }
     }

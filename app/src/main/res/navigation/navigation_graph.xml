@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<navigation
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/navigation_graph"
     app:startDestination="@id/navi_run">
@@ -8,33 +7,22 @@
     <fragment
         android:id="@+id/navi_run"
         android:name="com.reo.running.runnershigh.fragments.run.RunFragment"
-        android:label="Fragment1" >
-        <argument
-            android:name="totalDistance" />
+        android:label="RunFragment">
+        <argument android:name="totalDistance" />
         <action
             android:id="@+id/action_navi_run_to_fragmentResult"
             app:destination="@id/fragmentResult" />
     </fragment>
 
-    <fragment android:id="@+id/navi_graph"
+    <fragment
+        android:id="@+id/navi_graph"
         android:name="com.reo.running.runnershigh.fragments.graph.GraphFragment"
-        android:label="FragmentDistance"/>
-
-    <fragment android:id="@+id/navi_setting"
-        android:name="com.reo.running.runnershigh.fragments.profile.setting.ProfileFragment"
-        android:label="Fragment4">
-        <action
-            android:id="@+id/action_navi_setting_to_fragmentProfileSetting"
-            app:destination="@id/fragmentProfileSetting" />
-        <action
-            android:id="@+id/action_navi_setting_to_fragmentPhoto"
-            app:destination="@id/fragmentPhoto" />
-    </fragment>
+        android:label="FragmentDistance" />
 
     <fragment
         android:id="@+id/fragmentResult"
         android:name="com.reo.running.runnershigh.fragments.result.ResultFragment"
-        android:label="FragmentResult" >
+        android:label="FragmentResult">
         <action
             android:id="@+id/action_fragmentResult_to_navi_graph"
             app:destination="@id/navi_graph" />
@@ -42,17 +30,28 @@
     <fragment
         android:id="@+id/fragmentProfileSetting"
         android:name="com.reo.running.runnershigh.fragments.profile.ProfileSettingFragment"
-        android:label="FragmentProfileSetting" >
+        android:label="FragmentProfileSetting">
         <action
-            android:id="@+id/action_fragmentProfileSetting_to_navi_setting2"
+            android:id="@+id/action_fragmentProfileSetting_to_fragmentPhoto"
+            app:destination="@id/fragmentPhoto" />
+        <action
+            android:id="@+id/action_fragmentProfileSetting_to_profileFragment"
             app:destination="@id/navi_setting" />
     </fragment>
     <fragment
         android:id="@+id/fragmentPhoto"
         android:name="com.reo.running.runnershigh.fragments.profile.photo.PhotoFragment"
-        android:label="FragmentPhoto" >
+        android:label="FragmentPhoto">
         <action
-            android:id="@+id/action_fragmentPhoto_to_navi_setting"
-            app:destination="@id/navi_setting" />
+            android:id="@+id/action_fragmentPhoto_to_fragmentProfileSetting"
+            app:destination="@id/fragmentProfileSetting" />
+    </fragment>
+    <fragment
+        android:id="@+id/navi_setting"
+        android:name="com.reo.running.runnershigh.fragments.profile.ProfileFragment"
+        android:label="ProfileFragment">
+        <action
+            android:id="@+id/action_profileFragment_to_fragmentProfileSetting"
+            app:destination="@id/fragmentProfileSetting" />
     </fragment>
 </navigation>

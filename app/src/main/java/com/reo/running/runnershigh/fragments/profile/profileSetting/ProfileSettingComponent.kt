@@ -5,20 +5,19 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
-import androidx.compose.material.TextFieldDefaults
-import androidx.compose.material.TopAppBar
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.rememberNavController
 import com.reo.running.runnershigh.R
 
 @Composable
 fun ToolBar() {
+    val navController = rememberNavController()
     TopAppBar(
         title = { Text(text = "設定") },
         backgroundColor = Color.White,
@@ -30,7 +29,7 @@ fun ToolBar() {
             )
         },
         actions = {
-            // TODO: プロフィール画面に戻る
+
         }
     )
 }
@@ -67,5 +66,22 @@ fun EditText(
 fun MarkerImage(@DrawableRes drawable: Int) {
     Text(text = stringResource(R.string.profile_marker))
     Image(painter = painterResource(id = drawable), contentDescription = null)
+}
+
+@Composable
+private fun SaveCheckDialog() {
+    val navController = rememberNavController()
+    val isOpened = remember { mutableStateOf(true) }
+    if (isOpened.value) {
+        AlertDialog(
+            onDismissRequest = { },
+            title = { Text(text = "記録を保存しますか？") },
+            confirmButton = {
+                TextButton(onClick = {
+                    navController.navigate(R.id.action_profileFragment_to_fragmentProfileSetting)
+                }) { Text(text = "はい") }
+            }
+        )
+    }
 }
 
