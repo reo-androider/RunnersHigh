@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.reo.running.runnershigh.fragments.profile.setting.ProfileSettingScreen
+import com.reo.running.runnershigh.fragments.profile.profileSetting.ProfileSettingsScreen
 
 class ProfileSettingFragment : Fragment() {
 
@@ -32,7 +32,7 @@ class ProfileSettingFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                ProfileSettingScreen()
+                ProfileSettingsScreen()
             }
         }
     }
@@ -214,14 +214,4 @@ class ProfileSettingFragment : Fragment() {
 //    }
 
 
-}
-
-enum class ProfileSettingsType(
-    val title: String,
-    val width: Int = 100,
-) {
-    LAST_NAME(title = "姓"),
-    FIRST_NAME(title = "名"),
-    TARGET(title = "目標", width = 200),
-    WEIGHT(title = "体重", width = 20),
 }
