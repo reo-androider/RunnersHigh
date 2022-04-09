@@ -1,6 +1,8 @@
 package com.reo.running.runnershigh.fragments.profile.profileSetting
 
+import android.content.Context
 import androidx.annotation.DrawableRes
+import androidx.appcompat.app.AlertDialog
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -16,14 +18,23 @@ import androidx.navigation.NavHostController
 import com.reo.running.runnershigh.R
 
 @Composable
-fun ToolBar(onNavigate: (Int) -> Unit) {
+fun ToolBar(context: Context, onNavigate: (Int) -> Unit) {
     TopAppBar(
         title = { Text(text = "設定") },
         backgroundColor = Color.White,
         navigationIcon = {
             IconButton(onClick = {
-                onNavigate(R.id.action_fragmentProfileSetting_to_navi_profile)
-            }) {
+                AlertDialog.Builder(context)
+                    .setIcon(R.drawable.ic_running)
+                    .setTitle(R.string.profile_setting_dialog_title)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.profile_setting_dialog_positive_text) { _, _ ->
+                        onNavigate(R.id.action_fragmentProfileSetting_to_navi_profile)
+                    }
+                    .setNegativeButton(R.string.profile_setting_dialog_negative_text) { _, _ -> }
+                    .show()
+            }
+            ) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_back),
                     contentDescription = "back to profile screen"

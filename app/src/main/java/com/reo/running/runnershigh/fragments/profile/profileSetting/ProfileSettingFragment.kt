@@ -33,7 +33,9 @@ class ProfileSettingFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                ProfileSettingsScreen(onNavigate = { dest -> findNavController().navigate(dest) })
+                ProfileSettingsScreen(
+                    context = requireContext(),
+                    onNavigate = { dest -> findNavController().navigate(dest) })
             }
         }
     }
@@ -213,6 +215,4 @@ class ProfileSettingFragment : Fragment() {
 //    private fun makeUid(): String {
 //        return UUID.randomUUID().toString()
 //    }
-
-
 }

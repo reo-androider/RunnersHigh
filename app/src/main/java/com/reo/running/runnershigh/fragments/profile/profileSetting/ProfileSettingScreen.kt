@@ -1,5 +1,6 @@
 package com.reo.running.runnershigh.fragments.profile.profileSetting
 
+import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -11,9 +12,9 @@ import androidx.compose.ui.unit.dp
 import com.reo.running.runnershigh.R
 
 @Composable
-fun ProfileSettingsScreen(onNavigate: (Int) -> Unit) {
+fun ProfileSettingsScreen(context: Context, onNavigate: (Int) -> Unit) {
     Scaffold(
-        topBar = { ToolBar(onNavigate = onNavigate) },
+        topBar = { ToolBar(context = context, onNavigate = onNavigate) },
         content = {
             Column(modifier = Modifier.padding(all = 16.dp)) {
                 Row {
