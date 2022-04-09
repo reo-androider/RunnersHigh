@@ -12,24 +12,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.NavHostController
 import com.reo.running.runnershigh.R
 
 @Composable
-fun ToolBar() {
-    val navController = rememberNavController()
+fun ToolBar(onNavigate: (Int) -> Unit) {
     TopAppBar(
         title = { Text(text = "設定") },
         backgroundColor = Color.White,
         navigationIcon = {
-            Image(
-                painter = painterResource(id = R.drawable.ic_back),
-                contentDescription = null,
-                modifier = Modifier.size(32.dp)
-            )
-        },
-        actions = {
-
+            IconButton(onClick = {
+                onNavigate(R.id.action_fragmentProfileSetting_to_navi_profile)
+            }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_back),
+                    contentDescription = "back to profile screen"
+                )
+            }
         }
     )
 }
@@ -69,19 +68,16 @@ fun MarkerImage(@DrawableRes drawable: Int) {
 }
 
 @Composable
-private fun SaveCheckDialog() {
-    val navController = rememberNavController()
-    val isOpened = remember { mutableStateOf(true) }
-    if (isOpened.value) {
+private fun SaveCheckDialog(isOpened: Boolean, navController: NavHostController) {
+    if (isOpened) {
         AlertDialog(
             onDismissRequest = { },
             title = { Text(text = "記録を保存しますか？") },
             confirmButton = {
                 TextButton(onClick = {
-                    navController.navigate(R.id.action_profileFragment_to_fragmentProfileSetting)
+                    navController.navigate(R.id.action_fragmentProfileSetting_to_navi_profile)
                 }) { Text(text = "はい") }
             }
         )
     }
 }
-

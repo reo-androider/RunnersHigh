@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.reo.running.runnershigh.fragments.profile.profileSetting.ProfileSettingsScreen
 
 class ProfileSettingFragment : Fragment() {
@@ -32,7 +33,7 @@ class ProfileSettingFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                ProfileSettingsScreen()
+                ProfileSettingsScreen(onNavigate = { dest -> findNavController().navigate(dest) })
             }
         }
     }

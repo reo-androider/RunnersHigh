@@ -11,9 +11,9 @@ import androidx.compose.ui.unit.dp
 import com.reo.running.runnershigh.R
 
 @Composable
-fun ProfileSettingsScreen() {
+fun ProfileSettingsScreen(onNavigate: (Int) -> Unit) {
     Scaffold(
-        topBar = { ToolBar() },
+        topBar = { ToolBar(onNavigate = onNavigate) },
         content = {
             Column(modifier = Modifier.padding(all = 16.dp)) {
                 Row {
