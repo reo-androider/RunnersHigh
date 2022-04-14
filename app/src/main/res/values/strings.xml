@@ -121,6 +121,8 @@
     <string name="profile_setting_dialog_title">記録を保存しますか</string>
     <string name="profile_setting_dialog_positive_text">はい</string>
     <string name="profile_setting_dialog_negative_text">いいえ</string>
+    <string name="shared_pref_name">sharedPreference_for_profileData</string>
+    <string name="shared_pref_last_name_key">last_name</string>
 
     <string name="profile_record_run">写真館</string>
     <string name="diet_text">ランニングで痩せるには？</string>
@@ -129,6 +131,7 @@
     <string name="calcalcalcal_draft">calcalcalcal</string>
     <string name="hogehoeg">hogehoeg</string>
     <string name="kmkmkmkkkk">kmkmkmkkkk</string>
+
 
 </resources>
 
