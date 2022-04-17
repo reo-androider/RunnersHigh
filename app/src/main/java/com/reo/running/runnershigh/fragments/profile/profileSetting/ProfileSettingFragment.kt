@@ -6,25 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.reo.running.runnershigh.fragments.profile.profileSetting.ProfileSettingViewModel
 import com.reo.running.runnershigh.fragments.profile.profileSetting.ProfileSettingsScreen
 
 class ProfileSettingFragment : Fragment() {
-
-//    private lateinit var binding: FragmentProfileSettingBinding
-//    lateinit var storage: FirebaseStorage
-//    private lateinit var uri: Uri
-//    private var firstName = ""
-//    private var familyName = ""
-//    private var objective = ""
-//    private var weight = ""
-//    private val db = Firebase.database
-//    private val dbPhoto = Firebase.database.getReference("profile")
-
+    
 //    companion object {
 //        const val READ_REQUEST_CODE = 2
 //    }
 
-    //    var deletePath = "" //写真更新の際削除する為
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -32,7 +23,11 @@ class ProfileSettingFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                ProfileSettingsScreen()
+                ProfileSettingsScreen(
+                    context = requireContext(),
+                    onNavigate = { dest -> findNavController().navigate(dest) },
+                    ProfileSettingViewModel()
+                )
             }
         }
     }
@@ -212,6 +207,4 @@ class ProfileSettingFragment : Fragment() {
 //    private fun makeUid(): String {
 //        return UUID.randomUUID().toString()
 //    }
-
-
 }

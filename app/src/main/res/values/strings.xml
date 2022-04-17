@@ -108,8 +108,7 @@
     <string name="profile_calorie_metaphor_48">おにぎり300個分</string>
     <string name="profile_calorie_metaphor_72">脂肪1キロ分を消費！！！！</string>
 
-
-
+    <!--stringRes for profile setting fragment-->
     <string name="profile">profile</string>
     <string name="profile_photo">写真を変更</string>
     <string name="profile_family_name">姓</string>
@@ -119,6 +118,11 @@
     <string name="profile_marker">マーカー</string>
     <string name="profile_delete">データを削除する</string>
     <string name="profile_marker_image">ランニング中のマーカーの画像を指定</string>
+    <string name="profile_setting_dialog_title">記録を保存しますか</string>
+    <string name="profile_setting_dialog_positive_text">はい</string>
+    <string name="profile_setting_dialog_negative_text">いいえ</string>
+    <string name="shared_pref_name">sharedPreference_for_profileData</string>
+    <string name="shared_pref_last_name_key">last_name</string>
 
     <string name="profile_record_run">写真館</string>
     <string name="diet_text">ランニングで痩せるには？</string>
@@ -127,6 +131,7 @@
     <string name="calcalcalcal_draft">calcalcalcal</string>
     <string name="hogehoeg">hogehoeg</string>
     <string name="kmkmkmkkkk">kmkmkmkkkk</string>
+
 
 </resources>
 
